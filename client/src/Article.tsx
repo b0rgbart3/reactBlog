@@ -4,13 +4,20 @@ import React, { useCallback } from 'react';
 import './Article.css'
 
 export type Article = {
-    title: String;
-    body: String;
+    title: string;
+    body: string;
+    category: string;
 }
 
 export type ArticleProps  = {
     article: Article
 }
+
+export type ArticleCategory = {
+  title: string;
+  articles: Article[];
+}
+
 
 
 

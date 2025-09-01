@@ -1,13 +1,29 @@
 import { useState } from 'react'
-import { ArticleThumbnail } from './Article';
+import { Article, ArticleCategory, ArticleThumbnail } from './Article';
 import './App.css'
 
+
+
 function App() {
-  const [count, setCount] = useState(0)
-  const articles = [
-    { title: 'Equation', body: 'This is the first article'},
-    { title: 'Equation2', body: 'This is the second article'}
+
+  const categoryTitles = [
+    'thoughts on bitcoin', 'life in general'
   ]
+  const articles = [
+    { title: 'Equation', body: 'This is the first article', category: 'thoughts on bitcoin'},
+    { title: 'Equation2', body: 'This is the second article', category: 'thoughts on bitcoin'}
+  ];
+
+
+  const categories : ArticleCategory [] = [{
+    title: categoryTitles[0],
+    articles: articles
+  }
+  // , {
+  //   title:  categoryTitles[1],
+  //   articles: []
+  // }
+]
 
   return (
     <>
@@ -16,17 +32,18 @@ function App() {
       </div>
   
       <div className="card">
-
-{articles.map((article) => {
-
-  return (
- <ArticleThumbnail article={article} />
-  )
-})}
-       
-
+        {categories.map((category) => {
+          return (
+            <div >
+              {category.title }
+              {category.articles.map((article) => {
+                return (
+            <ArticleThumbnail article={article} />)
+              })}
+            </div>
+            )
+          })}
       </div>
-
     </>
   )
 }
