@@ -21,19 +21,19 @@ export type ArticleCategory = {
 
 
 
-export function ArticleThumbnail( props: ArticleProps) {
+// export function ArticleThumbnail( props: ArticleProps) {
 
-    const readArticle = useCallback((article: Article) => {
-    console.log('Article: ', article.title);
-}, []);
+//     const readArticle = useCallback((article: Article) => {
+//     console.log('Article: ', article.title);
+// }, []);
 
 
-    return (
-        <div className='articleThumb' onClick={()=>readArticle(props.article)}>
-            {props.article.title}
-        </div>
-    )
-}
+//     return (
+//         <div className='articleThumb' onClick={()=>readArticle(props.article)}>
+//             {props.article.title}
+//         </div>
+//     )
+// }
 
 export function Article( props: ArticleProps) {
 

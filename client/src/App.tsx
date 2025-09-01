@@ -1,51 +1,17 @@
-import { useState } from 'react'
-import { Article, ArticleCategory, ArticleThumbnail } from './Article';
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import { Home } from "./Home";
+import { ArticlePage } from "./ArticlePage";
 
 
-
-function App() {
-
-  const categoryTitles = [
-    'thoughts on bitcoin', 'life in general'
-  ]
-  const articles = [
-    { title: 'Equation', body: 'This is the first article', category: 'thoughts on bitcoin'},
-    { title: 'Equation2', body: 'This is the second article', category: 'thoughts on bitcoin'}
-  ];
-
-
-  const categories : ArticleCategory [] = [{
-    title: categoryTitles[0],
-    articles: articles
-  }
-  // , {
-  //   title:  categoryTitles[1],
-  //   articles: []
-  // }
-]
-
+export default function App() {
   return (
-    <>
-      <div>
-        b0rgBlog
-      </div>
-  
-      <div className="card">
-        {categories.map((category) => {
-          return (
-            <div >
-              {category.title }
-              {category.articles.map((article) => {
-                return (
-            <ArticleThumbnail article={article} />)
-              })}
-            </div>
-            )
-          })}
-      </div>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/t" element={<Home />} />
+        <Route path="/article/:id" element={<ArticlePage />} />
+      </Routes>
+    </Router>
+  );
 }
-
-export default App
