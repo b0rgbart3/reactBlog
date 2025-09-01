@@ -1,0 +1,13 @@
+
+
+.articleThumb {
+    border: 1px solid #999999;
+    cursor: pointer;
+    font-size: .6em;
+    padding: 20px;
+    user-select: none;
+}
+
+.articleThumb:hover {
+    background-color: rgb(62, 62, 62);
+}
