@@ -1,13 +1,19 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { articles } from "./Home";
+
 
 export function ArticlePage() {
   const { id } = useParams<{ id: string }>();
 
+  console.log('BD: looking for: ', id);
+  const article = articles.find((article) => article.id === id);
+  console.log('BD: aritcle: ', article);
+
   return (
-    <div>
-      <h1>Article Page</h1>
-      <p>Article ID: {id}</p>
+    <div className='article'>
+      <h1>{article?.title }</h1>
+      <p>{article?.body}</p>
     </div>
   );
 }

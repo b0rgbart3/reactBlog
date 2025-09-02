@@ -20,7 +20,7 @@ export function ArticleThumbnail({ article }: ArticleProps) {
 
   return (
     <div
-      style={{ cursor: "pointer", margin: "10px", border: "1px solid black", padding: "5px" }}
+      className="articleThumb"
       onClick={readArticle}
     >
       {article.title}

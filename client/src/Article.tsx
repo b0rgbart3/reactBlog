@@ -1,7 +1,7 @@
 
 import React, { useCallback } from 'react'; 
 
-import './Article.css'
+
 
 export type Article = {
     title: string;
@@ -38,7 +38,7 @@ export type ArticleCategory = {
 export function Article( props: ArticleProps) {
 
     return (
-        <div>
+        <div className="article">
             ARTICLE TITLE
         </div>
     )
