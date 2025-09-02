@@ -1,11 +1,8 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { Article } from "./state/useStore";
 
-export type Article = {
-  id: number;
-  title: string;
-  body: string;
-};
+
 
 export type ArticleProps = {
   article: Article;
