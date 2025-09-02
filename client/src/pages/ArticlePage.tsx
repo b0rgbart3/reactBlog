@@ -1,6 +1,9 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useStore } from "./state/useStore";
+import { useStore } from "../state/useStore";
+import "./articleStyle.css";
+
+
 // import { articles } from "./Home";
 
 
@@ -16,7 +19,7 @@ export function ArticlePage() {
 
 
   return (
-    <div className='article'>
+    <div className={'article'}>
       <h1>{article?.title }</h1>
       <p>{article?.body}</p>
     </div>

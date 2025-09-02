@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Home } from "./Home";
-import { ArticlePage } from "./ArticlePage";
+import { ArticlePage } from "./pages/ArticlePage";
 import { useStore } from "./state/useStore";
 
 
@@ -12,7 +12,7 @@ export default function App() {
 
   const user = useStore((s) => s.user);
   const setUser = useStore((s) => s.setUser);
-  
+
   useEffect(() => {
     setUser(defaultUser);
   },[])
