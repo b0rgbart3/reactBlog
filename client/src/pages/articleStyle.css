@@ -1,5 +1,26 @@
 .article {
     background-color: #555555;
     color: black;
-    padding: 20px;
+    padding: 0;
+    margin:20px;
+}
+
+.articlePageCategory {
+    background-color: rgba(0, 0, 0, .8);
+    color: white;
+    font-weight: 500;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.articlePageCategory:hover {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.articlePageTitle {
+     font-feature-settings: "kern" .5;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 42px;
 }

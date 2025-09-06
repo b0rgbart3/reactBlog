@@ -1,26 +1,26 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../state/useStore";
 import "./articleStyle.css";
-
-
-// import { articles } from "./Home";
+import { useData } from "../data/useData";
 
 
 export function ArticlePage() {
+
+  useData();
   const { id } = useParams<{ id: string }>();
-
-  console.log('BD: looking for: ', id);
-      const articles = useStore((s) => s.articles);
+  const articles = useStore((s) => s.articles);
   const article = articles.find((article) => article.id === id);
-  console.log('BD: aritcle: ', article);
+  const navigate = useNavigate();
 
-
-
-
+  const routeHome= useCallback(() => {
+    navigate(`/t`);
+  },[]);
+  
   return (
     <div className={'article'}>
-      <h1>{article?.title }</h1>
+      <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog :: {article?.category}</div>
+      <div className='articlePageTitle'>{article?.title }</div>
       <p>{article?.body}</p>
     </div>
   );

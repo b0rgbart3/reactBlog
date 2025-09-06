@@ -3,13 +3,20 @@ const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const articleData = [
+    { id: '0', body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001"},
+    { id: '1', body: "The rule of 72", category: 'bitcoin', title: "The Rule of 72", user_id: "001" },
+    { id: '3', body: "Article 3.", category: 'general', title: "Article 3", user_id: "001"},
+    { id: '4', body: "Article 4", category: 'general', title: "Article 4", user_id: "001" },
+    
+  ]
 
 // Serve static files from public
 app.use(express.static(path.join(__dirname, "public")));
 
 // Example API
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello from Express!" });
+app.get("/api/myData", (req, res) => {
+  res.json({ articles: articleData});
 });
 
 // Serve React build if it exists (production)
