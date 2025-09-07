@@ -13,11 +13,14 @@ export function useData() {
 
       if (!articles.length) {
 
-        axios.get("/api/myData") 
+        axios.get("/api/articles") 
         .then((res) => {
-            const cats: string[] = res.data.articles.map((article) => article.category);
+          console.log('BD: res: ', res.data.data);
+          const data = res.data.data;
+
+            const cats: string[] = data.map((article) => article.category);
             const uniqueCategories: string[] = [...new Set(cats)];
-            setArticles(res.data.articles);
+            setArticles(data);
             setCategories(uniqueCategories);
           })
           .catch((err) => {

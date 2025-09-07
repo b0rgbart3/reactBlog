@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Article } from "./models/Article.js";
+import { Articles } from "./models/Articles";
 
 
 // MongoDB connection string
@@ -24,7 +24,7 @@ async function seed() {
     console.log("Database dropped");
 
     // Insert seed data
-    await Article.insertMany(articles);
+    await Articles.insertMany(articles);
     console.log("Seed data inserted");
 
     // Close connection
@@ -37,4 +37,7 @@ async function seed() {
 }
 
 // Run the seed function
-seed();
+seed().catch(err => {
+  console.error(err);
+  process.exit(1);
+});

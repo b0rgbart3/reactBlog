@@ -14,7 +14,7 @@ export function ArticlePage() {
   const navigate = useNavigate();
 
   const routeHome= useCallback(() => {
-    navigate(`/t`);
+    navigate(`/`);
   },[]);
   
   return (

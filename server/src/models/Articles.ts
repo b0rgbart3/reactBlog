@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ArticleSchema = new mongoose.Schema({
+const ArticlesSchema = new mongoose.Schema({
   id: String,
   body: String,
   category: String,
@@ -9,5 +9,5 @@ const ArticleSchema = new mongoose.Schema({
   user_id: String
 });
 
-export const Article = mongoose.model("Data", ArticleSchema);
+export const Articles = mongoose.model("Articles", ArticlesSchema);
 

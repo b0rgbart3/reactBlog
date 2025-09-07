@@ -1,13 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
-import { Data } from "./models/Data";
+import { Articles } from "./models/Articles";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/myapp")
+mongoose.connect("mongodb://127.0.0.1:27017/myblog")
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err: unknown) => {
     if (err instanceof Error) console.error("MongoDB error:", err.message);
@@ -19,9 +19,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 // Save new data
-app.post("/api/myData", async (req: any, res:any) => {
+app.post("/api/articles", async (req: any, res:any) => {
   try {
-    const doc = new Data(req.body);
+    const doc = new Articles(req.body);
     await doc.save();
     res.json(doc);
   } catch (err: any) {
@@ -30,9 +30,9 @@ app.post("/api/myData", async (req: any, res:any) => {
 });
 
 // Fetch all data
-app.get("/api/myData", async (req: any, res: any) => {
+app.get("/api/articles", async (req: any, res: any) => {
   try {
-    const all = await Data.find();
+    const all = await Articles.find();
     res.json({ data: all });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
