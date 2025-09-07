@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "outDir": "./dist",
     "rootDir": "./src",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "strict": true,
     "sourceMap": true
   },
-  "include": ["src", "server.ts"],
+  "include": ["src"],
   "exclude": ["dist", "node_modules"]
 }

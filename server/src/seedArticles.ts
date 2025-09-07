@@ -1,0 +1,40 @@
+import mongoose from "mongoose";
+import { Article } from "./models/Article.js";
+
+
+// MongoDB connection string
+const MONGO_URI = "mongodb://127.0.0.1:27017/myblog"; // replace "myblog" with your DB name
+
+// Seed data
+const articles = [
+  { id: '0', headlineImage: "", body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001"},
+  { id: '1', headlineImage: "", body: "The rule of 72", category: 'bitcoin', title: "The Rule of 72", user_id: "001" },
+  { id: '3', headlineImage: "", body: "Article 3.", category: 'general', title: "Article 3", user_id: "001"},
+  { id: '4', headlineImage: "", body: "Article 4", category: 'general', title: "Article 4", user_id: "001" },
+];
+
+async function seed() {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect(MONGO_URI);
+    console.log("Connected to MongoDB");
+
+    // Optional: drop the entire database
+    await mongoose.connection.dropDatabase();
+    console.log("Database dropped");
+
+    // Insert seed data
+    await Article.insertMany(articles);
+    console.log("Seed data inserted");
+
+    // Close connection
+    await mongoose.disconnect();
+    console.log("Disconnected from MongoDB");
+  } catch (err) {
+    console.error("Error seeding data:", err);
+    process.exit(1);
+  }
+}
+
+// Run the seed function
+seed();

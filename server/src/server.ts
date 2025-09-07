@@ -1,23 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { Data } from "./models/Data";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-import { Data } from "./models/Data.js"; // note .js for ESM
-
-const articleData = [
-    { id: '0', body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001"},
-    { id: '1', body: "The rule of 72", category: 'bitcoin', title: "The Rule of 72", user_id: "001" },
-    { id: '3', body: "Article 3.", category: 'general', title: "Article 3", user_id: "001"},
-    { id: '4', body: "Article 4", category: 'general', title: "Article 4", user_id: "001" },
-    
-  ];
-  
 
 
 mongoose.connect("mongodb://127.0.0.1:27017/myapp")
@@ -30,11 +17,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/myapp")
 // Serve static files from public
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-
-// Example API
-// app.get("/api/myData", (req, res) => {
-//   res.json({ articles: articleData});
-// });
 
 // Save new data
 app.post("/api/myData", async (req: any, res:any) => {
@@ -68,8 +50,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen( PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-
 // Default route to public/index.html if exists
 app.get("/index.html", (req: any, res: any) => {
   const indexPath = path.join(__dirname, "public", "index.html");
@@ -77,4 +57,8 @@ app.get("/index.html", (req: any, res: any) => {
     res.sendFile(indexPath);
   
 });
+
+
+app.listen( PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
 
