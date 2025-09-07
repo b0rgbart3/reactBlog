@@ -3,21 +3,56 @@ const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const { Data } = require("./models/Data");
+
 const articleData = [
     { id: '0', body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001"},
     { id: '1', body: "The rule of 72", category: 'bitcoin', title: "The Rule of 72", user_id: "001" },
     { id: '3', body: "Article 3.", category: 'general', title: "Article 3", user_id: "001"},
     { id: '4', body: "Article 4", category: 'general', title: "Article 4", user_id: "001" },
     
-  ]
+  ];
+  
+  const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://127.0.0.1:27017/myapp", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ MongoDB connected"))
+.catch((err: unknown) => console.error("MongoDB error:", err));
+
 
 // Serve static files from public
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 
 // Example API
-app.get("/api/myData", (req, res) => {
-  res.json({ articles: articleData});
+// app.get("/api/myData", (req, res) => {
+//   res.json({ articles: articleData});
+// });
+
+// Save new data
+app.post("/api/myData", async (req: any, res:any) => {
+  try {
+    const doc = new Data(req.body);
+    await doc.save();
+    res.json(doc);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
+
+// Fetch all data
+app.get("/api/myData", async (req: any, res: any) => {
+  try {
+    const all = await Data.find();
+    res.json({ data: all });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // Serve React build if it exists (production)
 const reactBuildPath = path.join(__dirname, "client", "dist");
@@ -25,7 +60,7 @@ const fs = require("fs");
 if (fs.existsSync(reactBuildPath)) {
   app.use(express.static(reactBuildPath));
   // catch-all route for React SPA
-  app.get("/*", (req, res) => {
+  app.get("/*", (req:any, res:any) => {
     res.sendFile(path.join(reactBuildPath, "index.html"));
   });
 } else {
@@ -33,7 +68,7 @@ if (fs.existsSync(reactBuildPath)) {
 }
 
 // Default route to public/index.html if exists
-app.get("/index.html", (req, res) => {
+app.get("/index.html", (req: any, res: any) => {
   const indexPath = path.join(__dirname, "public", "index.html");
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
