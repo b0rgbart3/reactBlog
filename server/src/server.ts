@@ -1,9 +1,14 @@
-const express = require("express");
-const path = require("path");
+import express from "express";
+import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const { Data } = require("./models/Data");
+import { Data } from "./models/Data.js"; // note .js for ESM
 
 const articleData = [
     { id: '0', body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001"},
@@ -13,15 +18,14 @@ const articleData = [
     
   ];
   
-  const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://127.0.0.1:27017/myapp", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err: unknown) => console.error("MongoDB error:", err));
 
+mongoose.connect("mongodb://127.0.0.1:27017/myapp")
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err: unknown) => {
+    if (err instanceof Error) console.error("MongoDB error:", err.message);
+    else console.error(err);
+  });
 
 // Serve static files from public
 app.use(express.static(path.join(__dirname, "public")));
@@ -55,30 +59,22 @@ app.get("/api/myData", async (req: any, res: any) => {
 
 
 // Serve React build if it exists (production)
-const reactBuildPath = path.join(__dirname, "client", "dist");
-const fs = require("fs");
-if (fs.existsSync(reactBuildPath)) {
-  app.use(express.static(reactBuildPath));
-  // catch-all route for React SPA
-  app.get("/*", (req:any, res:any) => {
-    res.sendFile(path.join(reactBuildPath, "index.html"));
+// Serve React in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
   });
-} else {
-  console.log("React build not found. Skipping React serving.");
 }
+
+app.listen( PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
 // Default route to public/index.html if exists
 app.get("/index.html", (req: any, res: any) => {
   const indexPath = path.join(__dirname, "public", "index.html");
-  if (fs.existsSync(indexPath)) {
+
     res.sendFile(indexPath);
-  } else {
-    res.send("<h1>Welcome! Put an index.html in public/ or build React.</h1>");
-  }
+  
 });
-
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
-
 
