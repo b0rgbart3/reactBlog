@@ -6,9 +6,10 @@ import { Article } from "./state/useStore";
 
 export type ArticleProps = {
   article: Article;
+  key: number;
 };
 
-export function ArticleThumbnail({ article }: ArticleProps) {
+export function ArticleThumbnail({ article, key }: ArticleProps) {
   const navigate = useNavigate();
 
   const readArticle = useCallback(() => {
@@ -19,6 +20,7 @@ export function ArticleThumbnail({ article }: ArticleProps) {
     <div
       className="articleThumb"
       onClick={readArticle}
+      key={key}
     >
       {article.title}
     </div>

@@ -32,7 +32,6 @@ a:hover {
 
 .home {
   margin: 0;
-  display: flex;
   place-content: center;   /* vertical + horizontal */
   min-width: 320px;
   min-height: 100vh;
@@ -44,6 +43,7 @@ a:hover {
   font-size: 64px;
   padding: 10px;
   padding-top: 0;
+  user-select: none;
 }
 
 .mainMenu {
@@ -93,3 +93,22 @@ button:focus-visible {
   background-color: black;
 }
 
+.newArticleButtonContainer {
+    display: block;
+    text-align: center;
+  width: 100%;
+    place-content: center;   /* vertical + horizontal */
+  place-items: center;
+}
+.newArticleButton {
+  border: 2px solid gray;
+  cursor: pointer;
+  display: block;
+  padding: 8px;
+  width: 200px;
+  user-select: none;
+}
+
+.newArticleButton:hover {
+  background-color: black;
+}

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ArticleThumbnail } from "./ArticleThumbnail";
 import { useStore } from "./state/useStore";
 import { useData } from "./data/useData";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 export function Home() {
@@ -10,6 +11,7 @@ export function Home() {
   const user = useStore((s) => s.user);
   const categories = useStore((s) => s.categories);
   const articles = useStore((s) => s.articles);
+  const navigate = useNavigate();
   const [data, setData] = useState([])
 
   useData();
@@ -19,6 +21,9 @@ useEffect(() => {
 },[]);
 
 
+const newArticle= useCallback(() => {
+    navigate(`/article/new`);
+}, []);
 
   return (
     <div className='home'>
@@ -38,6 +43,11 @@ useEffect(() => {
       ))}
 
     </div>
+    <div className="newArticleButtonContainer">
+    <div onClick={newArticle} className="newArticleButton">New Article</div>
+    </div>
     </div>
   );
 }
+
+
