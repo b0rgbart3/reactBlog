@@ -16,38 +16,41 @@ export function Home() {
 
   useData();
 
-useEffect(() => {
 
-},[]);
-
-
-const newArticle= useCallback(() => {
+  const newArticle = useCallback(() => {
     navigate(`/article/new`);
-}, []);
+  }, []);
 
   return (
-    <div className='home'>
-        <div className='mainMenu'>
-      <div className='title'>b0rgBlog</div>
-      <div className='welcome'>Welcome, {user?.name} </div>
-      {categories?.map((c, i) => (
-        <>
-        <div>{c}
-        </div>
-        <div>
-          {articles?.filter((a)=>a.category === c).map((a, i) => (
-            <ArticleThumbnail key={i} article={a} />
-          ))}
-      </div>
-      </>
-      ))}
+    <div className="home">
+      <div className="mainMenu">
+        <div className="title">b0rgBlog</div>
+        <div className="welcome">Welcome, {user?.name}</div>
 
-    </div>
-    <div className="newArticleButtonContainer">
-    <div onClick={newArticle} className="newArticleButton">New Article</div>
-    </div>
+        {categories?.map((category, categoryIndex) => (
+          <div key={`category-${category}-${categoryIndex}`}>
+            <div>{category}</div>
+            <div>
+              {articles
+                ?.filter((a) => a.category === category)
+                .map((a) => (
+                  <React.Fragment key={a.id} >
+                    <ArticleThumbnail article={a} />
+                  </React.Fragment>
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="newArticleButtonContainer">
+        <div onClick={newArticle} className="newArticleButton">
+          New Article
+        </div>
+      </div>
     </div>
   );
+
 }
 
 

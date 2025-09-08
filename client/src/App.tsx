@@ -9,14 +9,14 @@ import { NewArticlePage } from "./pages/NewArticlePage";
 
 
 export default function App() {
-  const defaultUser = {name: "Alice", id: "001"};
+  const defaultUser = { name: "Alice", id: "001" };
 
   const user = useStore((s) => s.user);
   const setUser = useStore((s) => s.setUser);
 
   useEffect(() => {
     setUser(defaultUser);
-  },[])
+  }, [])
 
 
   return (

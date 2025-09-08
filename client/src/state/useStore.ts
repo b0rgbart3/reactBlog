@@ -5,8 +5,9 @@ export type Article = {
   id: string;
   body: string;
   category: string;
-  title: string; 
+  title: string;
   user_id: string;
+  _id: string;
 }
 
 export type User = {
@@ -25,9 +26,9 @@ type State = {
 
 export const useStore = create<State>((set) => ({
   articles: [],
-  setArticles: (articles: Article[]) => set( { articles: articles }),
+  setArticles: (articles: Article[]) => set({ articles: articles }),
   categories: [],
-  setCategories: (categories: string[]) => set( { categories: categories }),
+  setCategories: (categories: string[]) => set({ categories: categories }),
   user: null,
   setUser: (u: User | null) => set({ user: u }),
 }));

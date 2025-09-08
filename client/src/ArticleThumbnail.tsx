@@ -6,11 +6,11 @@ import { Article } from "./state/useStore";
 
 export type ArticleProps = {
   article: Article;
-  key: number;
 };
 
-export function ArticleThumbnail({ article, key }: ArticleProps) {
+export function ArticleThumbnail({ article }: ArticleProps) {
   const navigate = useNavigate();
+
 
   const readArticle = useCallback(() => {
     navigate(`/article/${article.id}`);
@@ -20,7 +20,6 @@ export function ArticleThumbnail({ article, key }: ArticleProps) {
     <div
       className="articleThumb"
       onClick={readArticle}
-      key={key}
     >
       {article.title}
     </div>
