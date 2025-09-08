@@ -4,6 +4,7 @@ import { useStore } from "../state/useStore";
 import "./articleStyle.css";
 import "./newArticleStyle.css";
 import { useData } from "../data/useData";
+import axios from "axios";
 
 
 export function NewArticlePage() {
@@ -21,13 +22,56 @@ export function NewArticlePage() {
 
     useData();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // prevent page reload
-        if (!title || !body) return; // simple validation
-        // onSubmit(title, body);
-        setTitle("");
-        setBody("");
+    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+    //     console.log('Category: ', category);
+    //     console.log('New Category: ', newCategory);
+    //     console.log('Title: ', title);
+    //     console.log('Body: ', body);
+
+
+    //     e.preventDefault(); // prevent page reload
+    //     if (!title || !body) return; // simple validation
+    //     // onSubmit(title, body);
+    //     // setTitle("");
+    //     // setBody("");
+    // };
+    const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+
+    let postedCategory = category;
+    if (newCategory.length) {
+        postedCategory = newCategory;
+    }
+    const newArticle = {
+      title,
+      body,
+      category: postedCategory,
+      user_id: "001", // or get from your user state
+      headlineImage: "",
     };
+
+
+    const response = await axios.post("/api/articles", newArticle);
+
+    console.log("Article saved:", response.data);
+
+    // Optionally reset form
+    // setTitle("");
+    // setBody("");
+    // setCategory("New");
+
+    // Optionally update local state/store
+    // addArticle(response.data);
+        navigate(`/`);
+
+  } catch (err) {
+    console.error("Failed to submit article:", err);
+  }
+};
+
 
     const changeCategory = useCallback((e) => {
         setCategory(e.target.value);
@@ -70,7 +114,7 @@ export function NewArticlePage() {
                                     value={newCategory}
                                     placeholder="Choose-- or enter a new category here"
                                        onChange={changeNewCategory}
-                                    required
+                                   
                                 />
                             </div></div>
 
