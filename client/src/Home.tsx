@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ArticleThumbnail } from "./ArticleThumbnail";
-import { useStore } from "./state/useStore";
+import { Article, useStore } from "./state/useStore";
 import { useData } from "./data/useData";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -10,16 +10,28 @@ export function Home() {
 
   const user = useStore((s) => s.user);
   const categories = useStore((s) => s.categories);
-  const articles = useStore((s) => s.articles);
+  // const articles = useStore((s) => s.articles);
   const navigate = useNavigate();
   const [data, setData] = useState([])
 
-  useData();
+  const { articles, loading, refresh, kill } = useData();
 
+  useEffect(() => {
+    refresh();
+  },[]);
 
   const newArticle = useCallback(() => {
     navigate(`/article/new`);
   }, []);
+
+  const killArticle = useCallback((article: Article) => {
+      console.log('About to kill: ', article._id);
+      kill(article._id);
+          refresh();
+  },[]);
+
+
+  if (loading) return <div>Loading…</div>;
 
   return (
     <div className="home">
@@ -34,7 +46,7 @@ export function Home() {
               {articles
                 ?.filter((a) => a.category === category)
                 .map((a) => (
-                  <React.Fragment key={a.id} >
+                  <React.Fragment key={a._id} >
                     <ArticleThumbnail article={a} />
                   </React.Fragment>
                 ))}
@@ -46,6 +58,27 @@ export function Home() {
       <div className="newArticleButtonContainer">
         <div onClick={newArticle} className="newArticleButton">
           New Article
+        </div>
+
+        <div>
+            {categories?.map((category, categoryIndex) => (
+          <div key={`category-${category}-${categoryIndex}`}>
+            <div>{category}</div>
+            <div>
+              {articles
+                ?.filter((a) => a.category === category)
+                .map((a) => (
+                  <React.Fragment key={a._id} >
+                    <div className="killItem">
+                    <div className="killTitle">{a.title} </div>
+                    <div className="killButton" onClick={()=>killArticle(a)}>X</div>
+                    </div>
+                    <br></br>
+                  </React.Fragment>
+                ))}
+            </div>
+          </div>
+        ))}
         </div>
       </div>
     </div>

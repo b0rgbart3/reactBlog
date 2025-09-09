@@ -10,7 +10,9 @@ export function ArticlePage() {
   useData();
   const { id } = useParams<{ id: string }>();
   const articles = useStore((s) => s.articles);
-  const article = articles.find((article) => article.id === id);
+  console.log('BD: looking for: ', id);
+  console.log('bD: articles: ', articles);
+  const article = articles.find((article) => article._id === id);
   const navigate = useNavigate();
 
   const routeHome= useCallback(() => {

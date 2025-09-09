@@ -39,6 +39,25 @@ app.get("/api/articles", async (req: any, res: any) => {
   }
 });
 
+// Kill (Full delete)
+app.delete("/api/articles/:_id", async (req: any, res: any) => {
+  try {
+    const { _id } = req.params;
+    console.log('Got the kill request.');
+    console.log('About to kill: ', _id);
+        // Use Mongoose's findByIdAndDelete
+    const deleted = await Articles.findByIdAndDelete(_id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json({ success: true, deleted });
+
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // Serve React build if it exists (production)
 // Serve React in production

@@ -15,7 +15,9 @@ export function NewArticlePage() {
     const [newCategory, setNewCategory] = useState('');
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+    const { refresh } = useData();
     const routeHome = useCallback(() => {
+        refresh();
         navigate(`/`);
     }, []);
 

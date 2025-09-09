@@ -13,8 +13,8 @@ export function ArticleThumbnail({ article }: ArticleProps) {
 
 
   const readArticle = useCallback(() => {
-    navigate(`/article/${article.id}`);
-  }, [navigate, article.id]);
+    navigate(`/article/${article._id}`);
+  }, [navigate, article._id]);
 
   return (
     <div

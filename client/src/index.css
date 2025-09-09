@@ -112,3 +112,15 @@ button:focus-visible {
 .newArticleButton:hover {
   background-color: black;
 }
+
+.killItem {
+  background-color: Blue;
+}
+
+.killTitle {
+  float: left;
+}
+
+.killButton {
+ float: right;
+}
