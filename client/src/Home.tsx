@@ -25,6 +25,10 @@ export function Home() {
   }, []);
 
   const killArticle = useCallback((article: Article) => {
+     const confirmDelete = 
+       window.confirm(`Are you sure you want to delete this article, titled: ${article.title} ?\nIt will be complete deleted from the database, and cannot be restored.`);
+  if (!confirmDelete) return; // cancel if user clicks "Cancel"
+
       console.log('About to kill: ', article._id);
       kill(article._id);
           refresh();
@@ -63,17 +67,19 @@ export function Home() {
         <div>
             {categories?.map((category, categoryIndex) => (
           <div key={`category-${category}-${categoryIndex}`}>
-            <div>{category}</div>
+            <div className="killCategory">{category}</div>
             <div>
               {articles
                 ?.filter((a) => a.category === category)
                 .map((a) => (
                   <React.Fragment key={a._id} >
                     <div className="killItem">
-                    <div className="killTitle">{a.title} </div>
-                    <div className="killButton" onClick={()=>killArticle(a)}>X</div>
+                      <div className="killTitle">{a.title} </div>
+           
+                      <div className="killButton" onClick={()=>killArticle(a)}>X</div>
+                              
                     </div>
-                    <br></br>
+        
                   </React.Fragment>
                 ))}
             </div>
