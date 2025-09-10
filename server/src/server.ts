@@ -29,6 +29,26 @@ app.post("/api/articles", async (req: any, res:any) => {
   }
 });
 
+app.patch("/api/articles/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await Articles.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // return the updated document
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json(updated);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Fetch all data
 app.get("/api/articles", async (req: any, res: any) => {
   try {

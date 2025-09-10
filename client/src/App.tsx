@@ -5,6 +5,7 @@ import { Home } from "./Home";
 import { ArticlePage } from "./pages/ArticlePage";
 import { useStore } from "./state/useStore";
 import { NewArticlePage } from "./pages/NewArticlePage";
+import { EditArticlePage } from "./pages/EditArticlePage";
 
 
 
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path='/article/new' element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
+        <Route path="/article/edit/:_id" element={<EditArticlePage />} />
       </Routes>
     </Router>
   );

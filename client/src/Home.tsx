@@ -4,6 +4,7 @@ import { Article, useStore } from "./state/useStore";
 import { useData } from "./data/useData";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { DownloadJsonButton } from "./Download";
 
 
 export function Home() {
@@ -15,6 +16,7 @@ export function Home() {
   const [data, setData] = useState([])
 
   const { articles, loading, refresh, kill } = useData();
+  // const DB_Data = toJSON(articles;
 
   useEffect(() => {
     refresh();
@@ -24,15 +26,23 @@ export function Home() {
     navigate(`/article/new`);
   }, []);
 
+  const editArticle = useCallback((article: Article) => {
+  navigate(`/article/edit/${article._id}`);
+  },[]);
+
   const killArticle = useCallback((article: Article) => {
      const confirmDelete = 
-       window.confirm(`Are you sure you want to delete this article, titled: ${article.title} ?\nIt will be complete deleted from the database, and cannot be restored.`);
+       window.confirm(`Are you sure you want to delete this article, 
+        titled: ${article.title} ?
+        \nIt will be complete deleted from the database, and cannot be restored.`);
   if (!confirmDelete) return; // cancel if user clicks "Cancel"
 
       console.log('About to kill: ', article._id);
       kill(article._id);
           refresh();
   },[]);
+
+
 
 
   if (loading) return <div>Loading…</div>;
@@ -74,7 +84,7 @@ export function Home() {
                 .map((a) => (
                   <React.Fragment key={a._id} >
                     <div className="killItem">
-                      <div className="killTitle">{a.title} </div>
+                      <div className="killTitle" onClick={()=>editArticle(a)}>{a.title} </div>
            
                       <div className="killButton" onClick={()=>killArticle(a)}>X</div>
                               
@@ -85,6 +95,10 @@ export function Home() {
             </div>
           </div>
         ))}
+        </div>
+
+        <div className="JsonData">
+             <DownloadJsonButton articles={articles} />
         </div>
       </div>
     </div>
