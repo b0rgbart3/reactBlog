@@ -7,7 +7,7 @@ import { AdminPanel } from "./admin/AdminPanel";
 import { useNavigate } from "react-router-dom";
 
 export function Home() {
-  const { user, articles, loading, users } = useStore((s) => s);
+  const { user, articles, loading, users, setUser } = useStore((s) => s);
   const { refresh } = useData();
   const navigate = useNavigate();
 
@@ -20,8 +20,14 @@ export function Home() {
       navigate(`/login`);
     }
   })
+  const logout = useCallback(() => {
+    setUser(null);
+  }, []);
+
   if (loading) return <div>Loading…</div>;
-  return (
+  return (<>
+    <div onClick={logout} className="logout">Logout</div>
+
     <div className="home">
       <div className="mainMenu">
         <div className="title">b0rgBlog</div>
@@ -50,6 +56,7 @@ export function Home() {
         </div>
       </div>
     </div>
+  </>
   );
 
 }
