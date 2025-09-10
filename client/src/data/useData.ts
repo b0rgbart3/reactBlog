@@ -1,12 +1,16 @@
 // UseData.ts
 import { useEffect, useCallback, useState } from "react";
-import { useStore } from "../state/useStore";
+import { User, useStore } from "../state/useStore";
 import axios from "axios";
 
 
 export function useData() {
   const {articles, setArticles, setCategories, setLoading, users, setUsers } = useStore((s) => s);
-    const defaultUser = { name: "Alice", id: "001" };
+    const defaultUser : User  = {
+      user_name: "Alice", _id: "00001",
+      status: "active",
+      user_email: undefined
+    };
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -30,8 +34,8 @@ export function useData() {
     try {
     const res = await axios.get("/api/users");
      const data = res.data;
-      console.log('BD: USERS: ', data);
-            setUsers([defaultUser]);
+      console.log('BD: USERS: ', data.data);
+            setUsers(data.data);
       setLoading(false);
     }
     catch (err) {

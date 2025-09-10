@@ -22,6 +22,16 @@ export function Home() {
         <Articles />
       </div>
 
+<div className="userList">
+  <div>Users:</div>
+  {users.map((user) => (
+    <>
+    <div>
+   { user.user_name}
+    </div>
+    </>
+  ))}
+</div>
       <div className="newArticleButtonContainer">
         <div>
           <AdminPanel />

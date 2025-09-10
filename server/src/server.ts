@@ -64,8 +64,11 @@ app.post("/api/users", async (req: any, res:any) => {
 
 app.get("/api/users", async (req: any, res: any) => {
   try {
+    console.log('BD: GOT request for users.');
+
     const all = await Users.find();
     res.json({ data: all });
+    console.log('BD: all users: ', all);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
