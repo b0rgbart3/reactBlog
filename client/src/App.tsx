@@ -6,6 +6,7 @@ import { ArticlePage } from "./pages/ArticlePage";
 import { User, useStore } from "./state/useStore";
 import { NewArticlePage } from "./pages/NewArticlePage";
 import { EditArticlePage } from "./pages/EditArticlePage";
+import { Login } from "./pages/Login";
 
 
 
@@ -21,7 +22,7 @@ export default function App() {
   const setUser = useStore((s) => s.setUser);
 
   useEffect(() => {
-    setUser(defaultUser);
+    setUser(null);
   }, [])
 
 
@@ -29,6 +30,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path='/article/new' element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />

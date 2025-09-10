@@ -11,6 +11,7 @@ export type Article = {
 
 export type User = {
   _id: string;
+  phash: String;
   status: String,
   user_name: string;
   user_email: String

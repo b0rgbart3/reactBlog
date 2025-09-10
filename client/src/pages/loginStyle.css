@@ -1,0 +1,14 @@
+
+.loginForm {
+    background-color: rgb(76, 76, 76);
+    margin:50px;
+    padding:50px;
+}
+
+input {
+    padding: 9px;
+}
+
+label {
+    display: block;
+}

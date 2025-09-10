@@ -4,15 +4,22 @@ import { useData } from "./data/useData";
 import { DownloadJsonButton } from "./Download";
 import { Articles } from "./pages/Articles";
 import { AdminPanel } from "./admin/AdminPanel";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
   const { user, articles, loading, users } = useStore((s) => s);
   const { refresh } = useData();
+  const navigate = useNavigate();
 
   useEffect(() => {
     refresh();
   }, []);
 
+  useEffect(() => {
+    if (!user) {
+      navigate(`/login`);
+    }
+  })
   if (loading) return <div>Loading…</div>;
   return (
     <div className="home">
@@ -22,16 +29,17 @@ export function Home() {
         <Articles />
       </div>
 
-<div className="userList">
-  <div>Users:</div>
-  {users.map((user) => (
-    <>
-    <div>
-   { user.user_name}
-    </div>
-    </>
-  ))}
-</div>
+      <div className="userList">
+        <div>Current User: {user?.user_name}</div>
+        <div>Users:</div>
+        {users.map((user) => (
+          <>
+            <div>
+              {user.user_name}
+            </div>
+          </>
+        ))}
+      </div>
       <div className="newArticleButtonContainer">
         <div>
           <AdminPanel />
