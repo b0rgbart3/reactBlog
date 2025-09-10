@@ -11,6 +11,8 @@ export type Article = {
 
 export type User = {
   _id: string;
+  sensi: boolean;
+  author: boolean;
   phash: String;
   status: String,
   user_name: string;

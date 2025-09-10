@@ -15,8 +15,8 @@ const articles = [
 ];
 
 const users = [
-{ admin: true, author: true, phash: 'xxx', user_name: "bart", status: "active", email: "b0rgbart3Wgmail.com" },
-{ admin: false, author: true, phash: 'yyy', user_name: "dumbo", status: "active", email: "" }
+{ sensi: true, author: true, phash: 'xxx', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
+{ sensi: false, author: true, phash: 'yyy', user_name: "dumbo", status: "active", user_email: "" }
 ];
 
 async function seed() {

@@ -39,47 +39,47 @@ export function NewArticlePage() {
     //     // setBody("");
     // };
     const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+        e.preventDefault();
 
-  try {
+        try {
 
-    let postedCategory = category;
-    if (newCategory.length) {
-        postedCategory = newCategory;
-    }
-    const newArticle = {
-      title,
-      body,
-      category: postedCategory,
-      user_id: "001", // or get from your user state
-      headlineImage: "",
+            let postedCategory = category;
+            if (newCategory.length) {
+                postedCategory = newCategory;
+            }
+            const newArticle = {
+                title,
+                body,
+                category: postedCategory,
+                user_id: "001", // or get from your user state
+                headlineImage: "",
+            };
+
+
+            const response = await axios.post("/api/articles", newArticle);
+
+            console.log("Article saved:", response.data);
+
+            // Optionally reset form
+            // setTitle("");
+            // setBody("");
+            // setCategory("New");
+
+            // Optionally update local state/store
+            // addArticle(response.data);
+            navigate(`/`);
+
+        } catch (err) {
+            console.error("Failed to submit article:", err);
+        }
     };
-
-
-    const response = await axios.post("/api/articles", newArticle);
-
-    console.log("Article saved:", response.data);
-
-    // Optionally reset form
-    // setTitle("");
-    // setBody("");
-    // setCategory("New");
-
-    // Optionally update local state/store
-    // addArticle(response.data);
-        navigate(`/`);
-
-  } catch (err) {
-    console.error("Failed to submit article:", err);
-  }
-};
 
 
     const changeCategory = useCallback((e) => {
         setCategory(e.target.value);
     }, []);
 
-        const changeNewCategory = useCallback((e) => {
+    const changeNewCategory = useCallback((e) => {
         setNewCategory(e.target.value);
     }, []);
 
@@ -115,8 +115,8 @@ export function NewArticlePage() {
                                     type="text"
                                     value={newCategory}
                                     placeholder="Choose-- or enter a new category here"
-                                       onChange={changeNewCategory}
-                                   
+                                    onChange={changeNewCategory}
+
                                 />
                             </div></div>
 

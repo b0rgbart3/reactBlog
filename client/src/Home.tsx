@@ -35,26 +35,31 @@ export function Home() {
         <Articles />
       </div>
 
-      <div className="userList">
-        <div>Current User: {user?.user_name}</div>
-        <div>Users:</div>
-        {users.map((user) => (
-          <>
+      {user?.sensi &&
+        (<>
+          <div className="userList">
+            <div>Current User: {user?.user_name}</div>
+            <div>Users:</div>
+            {users.map((user) => (
+              <>
+                <div>
+                  {user.user_name}
+                </div>
+              </>
+            ))}
+          </div>
+          <div className="newArticleButtonContainer">
             <div>
-              {user.user_name}
+              <AdminPanel />
             </div>
-          </>
-        ))}
-      </div>
-      <div className="newArticleButtonContainer">
-        <div>
-          <AdminPanel />
-        </div>
 
-        <div className="JsonData">
-          <DownloadJsonButton articles={articles} users={users} />
-        </div>
-      </div>
+            <div className="JsonData">
+              <DownloadJsonButton articles={articles} users={users} />
+            </div>
+          </div>
+        </>)}
+
+
     </div>
   </>
   );
