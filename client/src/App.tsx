@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Home } from "./Home";
 import { ArticlePage } from "./pages/ArticlePage";
-import { useStore } from "./state/useStore";
+import { User, useStore } from "./state/useStore";
 import { NewArticlePage } from "./pages/NewArticlePage";
 import { EditArticlePage } from "./pages/EditArticlePage";
 
@@ -11,7 +11,11 @@ import { EditArticlePage } from "./pages/EditArticlePage";
 
 
 export default function App() {
-  const defaultUser = { name: "Alice", id: "001" };
+  const defaultUser : User = {
+    user_name: "Alice", _id: "001",
+    status: undefined,
+    user_email: undefined
+  };
 
   const user = useStore((s) => s.user);
   const setUser = useStore((s) => s.setUser);

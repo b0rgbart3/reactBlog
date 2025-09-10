@@ -1,14 +1,12 @@
 // UseData.ts
-import { useEffect, useCallback, useState} from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useStore } from "../state/useStore";
 import axios from "axios";
-  
+
 
 export function useData() {
-  const articles = useStore((s) => s.articles);
-  const setArticles = useStore((s) => s.setArticles);
-  const setCategories = useStore((s) => s.setCategories);
-  const [loading, setLoading] = useState(true);
+  const {articles, setArticles, setCategories, setLoading, users, setUsers } = useStore((s) => s);
+    const defaultUser = { name: "Alice", id: "001" };
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -19,7 +17,7 @@ export function useData() {
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
       setCategories(uniqueCategories);
-      setArticles(data);
+     
     } catch (err) {
       console.error("Failed to fetch articles:", err);
     } finally {
@@ -27,11 +25,29 @@ export function useData() {
     }
   }, []);
 
-  const kill = useCallback(async (killID: string) => {
+  const fetchUsers = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
+    const res = await axios.get("/api/users");
+     const data = res.data;
+      console.log('BD: USERS: ', data);
+            setUsers([defaultUser]);
+      setLoading(false);
+    }
+    catch (err) {
+      console.error("Failed to fetch users:", err);
+      setUsers([defaultUser]);
+          setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  })
+
+  const kill = useCallback(async (killID: string) => {
+    setLoading(true);
+    try {
       await axios.delete(`/api/articles/${killID}`);
-    } catch(err) {
+    } catch (err) {
       console.error("Failed to kill article: ", killID);
     } finally {
       setLoading(false);
@@ -40,28 +56,15 @@ export function useData() {
 
 
   useEffect(() => {
-
-      if (!articles.length) {
-        fetchArticles();
-        // axios.get("/api/articles") 
-        // .then((res) => {
-        //   console.log('BD: res: ', res.data.data);
-        //   const data = res.data.data;
-
-        //     const cats: string[] = data.map((article) => article.category);
-        //     const uniqueCategories: string[] = [...new Set(cats)];
-        //     setArticles(data);
-        //     setCategories(uniqueCategories);
-        //   })
-        //   .catch((err) => {
-        //     console.error("API error:", err);
-        //   });
-       
-      }
-
+    if (!articles.length) {
+      fetchArticles();
+    }
+    if (!users.length) {
+      fetchUsers();
+    }
   }, [setArticles, setCategories]);
 
-  return { articles, loading, refresh: fetchArticles, kill};
+  return { articles, refresh: fetchArticles, kill };
 }
 
 

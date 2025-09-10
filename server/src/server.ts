@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { Articles } from "./models/Articles";
+import { Users } from "./models/Users";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,6 +51,26 @@ app.patch("/api/articles/:id", async (req, res) => {
 });
 
 // Fetch all data
+
+app.post("/api/users", async (req: any, res:any) => {
+  try {
+    const doc = new Users(req.body);
+    await doc.save();
+    res.json(doc);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/users", async (req: any, res: any) => {
+  try {
+    const all = await Users.find();
+    res.json({ data: all });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get("/api/articles", async (req: any, res: any) => {
   try {
     const all = await Articles.find();
