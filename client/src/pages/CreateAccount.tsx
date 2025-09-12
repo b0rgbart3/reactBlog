@@ -4,13 +4,14 @@ import { User, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import { useNavigate } from "react-router-dom";
 
-export function Login() {
+export function CreateAccount() {
 
     const { user, articles, loading, users, setUser } = useStore((s) => s);
-    const { refresh, login } = useData();
+    const { refresh, createUser } = useData();
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
-    const [loginWord, setLoginWord] = useState("");
+    const [phash, setPHash] = useState("");
+    const [userEmail, setUserEmail] = useState("");
 
 
 
@@ -18,26 +19,27 @@ export function Login() {
         e.preventDefault();
 
         // form processing.
+
+        const newUser: User = {
+            user_name: userName,
+            user_email: userEmail,
+            phash: phash,
+            _id: "",
+            sensi: false,
+            author: false,
+            status: undefined
+        }
+
         if (userName !== "") {
-            const activeUser: Partial<User> = {
-                user_name: userName,
-                loginWord: loginWord,
-            }
-            const match = await login(activeUser);
-            console.log('Login as: ', JSON.stringify(activeUser));
+        
 
-            
-            // const userFound = users.find((user) => user.user_name === userName);
-            // console.log('Found the user: ', userFound);
+            const preExisting = users.find((user) => user.user_email=== userEmail);
+ 
+            console.log('match: ', preExisting);
 
-            // console.log('phash: ', userFound.phash);
-
-            // const match = userFound && userFound.phash === phash;
-            // console.log('match: ', match);
-
-            if (match) {
-                console.log('Server found a match: ', match);
-                // setUser(match)
+            if (!preExisting) {
+                createUser(newUser);
+                setUser(newUser)
                 navigate(`/`);
             }
         }
@@ -52,8 +54,9 @@ export function Login() {
 
     return (
         <>
+        <div>   Welcome to B0rgBart - please choose a username and password.</div>
             <div className="loginForm">
-                Please Log In:
+             
 
                 <form onSubmit={handleSubmit} >
                     <label>User Name: </label>
@@ -61,8 +64,12 @@ export function Login() {
                         onChange={(e) => setUserName(e.target.value)}></input>
                     <br></br>
                     <label>Password: </label>
-                    <input type='password' id="phash" value={loginWord}
-                        onChange={(e) => setLoginWord(e.target.value)} size='50'></input>
+                    <input type='password' id="phash" value={phash}
+                        onChange={(e) => setPHash(e.target.value)} size='50'></input>
+                    <br></br>
+                     <label>Email: </label>
+                                     <input type='text' id="user_email" value={userEmail}
+                        onChange={(e) => setPHash(e.target.value)} size='50'></input>
                     <br></br>
                     <button type="submit">Login</button>
                 </form>

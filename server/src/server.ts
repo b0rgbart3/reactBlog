@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { Articles } from "./models/Articles";
 import { Users } from "./models/Users";
+import bcrypt from "bcrypt";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,7 +21,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 // Save new data
-app.post("/api/articles", async (req: any, res:any) => {
+app.post("/api/articles", async (req: any, res: any) => {
   try {
     const doc = new Articles(req.body);
     await doc.save();
@@ -52,8 +53,40 @@ app.patch("/api/articles/:id", async (req, res) => {
 
 // Fetch all data
 
-app.post("/api/users", async (req: any, res:any) => {
+app.post("/api/login", async (req: any, res: any) => {
+  console.log('-----------------');
+  console.log('GOT Login request: ', JSON.stringify(req.body));
+
+  let match = false;
+  let foundUser = undefined;
+  const newUser = req.body;
   try {
+    const all = await Users.find();
+    foundUser = all.find((user) => user.user_name === newUser.user_name);
+
+    if (foundUser?.phash) {
+      match = await bcrypt.compare(newUser.loginWord, foundUser.phash);
+    }
+
+     if (match) {
+      console.log('BD: returning: ', foundUser); 
+      res.json( foundUser );
+    }
+    else {
+
+       res.status(401).json({ error: "Invalid username or password" });
+
+    };
+  } catch (e) {
+      res.status(401).json({ error: "Error retrieving the user info from the DB." });
+  }
+});
+
+app.post("/api/users", async (req: any, res: any) => {
+  try {
+    const newUser = req.body;
+    const newHash = await bcrypt.hash("mypassword", 10);
+    newUser.phash = newHash;
     const doc = new Users(req.body);
     await doc.save();
     res.json(doc);
@@ -89,7 +122,7 @@ app.delete("/api/articles/:_id", async (req: any, res: any) => {
     const { _id } = req.params;
     console.log('Got the kill request.');
     console.log('About to kill: ', _id);
-        // Use Mongoose's findByIdAndDelete
+    // Use Mongoose's findByIdAndDelete
     const deleted = await Articles.findByIdAndDelete(_id);
 
     if (!deleted) {
@@ -117,11 +150,11 @@ if (process.env.NODE_ENV === "production") {
 app.get("/index.html", (req: any, res: any) => {
   const indexPath = path.join(__dirname, "public", "index.html");
 
-    res.sendFile(indexPath);
-  
+  res.sendFile(indexPath);
+
 });
 
 
-app.listen( PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
 

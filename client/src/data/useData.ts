@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 export function useData() {
-  const {articles, setArticles, setCategories, setLoading, users, setUsers } = useStore((s) => s);
+  const {articles, setArticles, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
     const defaultUser : User  = {
       user_name: "Alice", _id: "00001",
       status: "active",
@@ -35,15 +35,26 @@ export function useData() {
     const res = await axios.get("/api/users");
      const data = res.data;
       console.log('BD: USERS: ', data.data);
-            setUsers(data.data);
+      setUsers(data.data);
       setLoading(false);
     }
     catch (err) {
       console.error("Failed to fetch users:", err);
       setUsers([defaultUser]);
-          setLoading(false);
+      setLoading(false);
     } finally {
       setLoading(false);
+    }
+  })
+
+  const createUser = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post("/api/users");
+      const data = res;
+      console.log('RESPONSE: ', res);
+    } finally {
+      fetchUsers();
     }
   })
 
@@ -58,6 +69,21 @@ export function useData() {
     }
   }, [])
 
+  const login = useCallback(async (newUser: Partial<User>) => {
+    let match: User;
+    setLoading(true);
+    try {
+      match = await axios.post('/api/login/', newUser);
+    } catch (err) {
+      console.log('Failed to login.');
+    } finally {
+      setLoading(false);
+      setUser(match);
+      return match;
+    }
+
+  })
+
 
   useEffect(() => {
     if (!articles.length) {
@@ -68,7 +94,7 @@ export function useData() {
     }
   }, [setArticles, setCategories]);
 
-  return { articles, refresh: fetchArticles, kill };
+  return { articles, refresh: fetchArticles, createUser, kill, login };
 }
 
 

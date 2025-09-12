@@ -15,8 +15,8 @@ const articles = [
 ];
 
 const users = [
-{ sensi: true, author: true, phash: 'xxx', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
-{ sensi: false, author: true, phash: 'yyy', user_name: "dumbo", status: "active", user_email: "" }
+{ sensi: true, author: true, phash: '$2b$10$wk1yvgv2aSN0oJWAG0Oyy.vy7MNZQaB60tMmIu1oA5oNEOzXQfcjm', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
+{ sensi: false, author: true, phash: '$2b$10$o8cwVPnN5llecMAg.5UvZOroV7Pmf/nvtIp5oGp4CKutESCn8qDpW', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
 
 async function seed() {

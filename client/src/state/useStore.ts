@@ -13,6 +13,7 @@ export type User = {
   _id: string;
   sensi: boolean;
   author: boolean;
+  loginWord: string;
   phash: String;
   status: String,
   user_name: string;

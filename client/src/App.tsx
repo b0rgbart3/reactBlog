@@ -7,6 +7,7 @@ import { User, useStore } from "./state/useStore";
 import { NewArticlePage } from "./pages/NewArticlePage";
 import { EditArticlePage } from "./pages/EditArticlePage";
 import { Login } from "./pages/Login";
+import { CreateAccount } from "./pages/CreateAccount";
 
 
 
@@ -31,6 +32,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/newUser' element={<CreateAccount />} />
         <Route path='/article/new' element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />
