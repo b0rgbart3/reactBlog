@@ -15,8 +15,8 @@ const articles = [
 ];
 
 const users = [
-{ sensi: true, author: true, phash: '$2b$10$wk1yvgv2aSN0oJWAG0Oyy.vy7MNZQaB60tMmIu1oA5oNEOzXQfcjm', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
-{ sensi: false, author: true, phash: '$2b$10$o8cwVPnN5llecMAg.5UvZOroV7Pmf/nvtIp5oGp4CKutESCn8qDpW', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
+{ sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
+{ sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
 
 async function seed() {

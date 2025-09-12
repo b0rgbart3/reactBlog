@@ -35,9 +35,9 @@ export function Login() {
             // const match = userFound && userFound.phash === phash;
             // console.log('match: ', match);
 
-            if (match) {
-                console.log('Server found a match: ', match);
-                // setUser(match)
+            if (match && match.data) {
+                console.log('Server found a match: ', match.data);
+                setUser(match.data)
                 navigate(`/`);
             }
         }

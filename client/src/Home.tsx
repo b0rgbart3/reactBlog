@@ -18,6 +18,8 @@ export function Home() {
   useEffect(() => {
     if (!user) {
       navigate(`/login`);
+    } else {
+      console.log('BD: user on homepage: ', user);
     }
   })
   const logout = useCallback(() => {
