@@ -3,14 +3,13 @@ import { useEffect, useCallback, useState } from "react";
 import { User, useStore } from "../state/useStore";
 import axios from "axios";
 
+export type AuthObject = {
+  id: string;
+  key: string;
+}
 
 export function useData() {
   const {articles, setArticles, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
-    const defaultUser : User  = {
-      user_name: "Alice", _id: "00001",
-      status: "active",
-      user_email: undefined
-    };
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -40,7 +39,6 @@ export function useData() {
     }
     catch (err) {
       console.error("Failed to fetch users:", err);
-      setUsers([defaultUser]);
       setLoading(false);
     } finally {
       setLoading(false);
@@ -84,6 +82,22 @@ export function useData() {
 
   })
 
+  const wipeAndSeed = useCallback(async (auth: AuthObject ) => {
+    let wiped;
+    // setLoading(true);
+    try {
+      wiped = await axios.post('/api/wipe/', auth);
+      console.log('BD wiped: ', wiped);
+    }
+    catch(err) {
+      console.log('Failed to wipe database.');
+    }
+    finally {
+      console.log('Done wiping the database.');
+      return wiped;
+    }
+  })
+
 
   useEffect(() => {
     if (!articles.length) {
@@ -94,7 +108,7 @@ export function useData() {
     }
   }, [setArticles, setCategories]);
 
-  return { articles, refresh: fetchArticles, createUser, kill, login };
+  return { articles, refresh: fetchArticles, createUser, kill, login, wipeAndSeed };
 }
 
 

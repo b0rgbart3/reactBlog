@@ -19,7 +19,7 @@ const users = [
 { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
 
-async function seed() {
+export async function seed() {
   try {
     // Connect to MongoDB
     await mongoose.connect(MONGO_URI);

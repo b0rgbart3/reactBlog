@@ -2,13 +2,14 @@ import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Article, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
+import "./adminStyle.css";
 
 export function AdminPanel() {
     const user = useStore((s) => s.user);
     const categories = useStore((s) => s.categories);
     const loading = useStore((s) => s.loading);
     const navigate = useNavigate();
-    const { articles, refresh, kill } = useData();
+    const { articles, refresh, kill, wipeAndSeed } = useData();
     const editArticle = useCallback((article: Article) => {
         navigate(`/article/edit/${article._id}`);
     }, []);
@@ -26,6 +27,22 @@ export function AdminPanel() {
     const newArticle = useCallback(() => {
         navigate(`/article/new`);
     }, []);
+
+    const clearOut = useCallback(async () => {
+        let wiped;
+        console.log('BD: about to wipe and re-seed the database.');
+        try {
+            wiped = await wipeAndSeed({ id: user._id, key: user.phash });
+            console.log('BD: wiped in the admin panel: ', wiped);
+        } catch (err) {
+            console.log('Error wiping the DB.');
+        } finally {
+            if (wiped.status === 200) {
+                refresh();
+            }
+        }
+    }, []);
+
 
     return (
         <>
@@ -49,6 +66,9 @@ export function AdminPanel() {
                     </div>
                 </div>
             ))}
+            <div className='dangerous' onClick={() => clearOut()}>
+                Wipe out the DataBase, and start over with original seed data.
+            </div>
         </>
     )
 }

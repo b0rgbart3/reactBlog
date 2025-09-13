@@ -4,12 +4,27 @@ import path from "path";
 import { Articles } from "./models/Articles";
 import { Users } from "./models/Users";
 import bcrypt from "bcrypt";
+import { seed } from "./seedMongoDB";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MONGO_URI = "mongodb://127.0.0.1:27017/myblog";
+
+const articles = [
+  { headlineImage: "", body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001" },
+  { headlineImage: "", body: "The rule of 72", category: 'bitcoin', title: "The Rule of 72", user_id: "001" },
+  { headlineImage: "", body: "Article 3.", category: 'general', title: "Article 3", user_id: "001" },
+  { headlineImage: "", body: "Article 4", category: 'general', title: "Article 4", user_id: "001" },
+];
+
+const users = [
+  { sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
+  { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
+];
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/myblog")
+
+mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err: unknown) => {
     if (err instanceof Error) console.error("MongoDB error:", err.message);
@@ -51,6 +66,8 @@ app.patch("/api/articles/:id", async (req, res) => {
   }
 });
 
+
+
 // Fetch all data
 
 app.post("/api/login", async (req: any, res: any) => {
@@ -60,25 +77,29 @@ app.post("/api/login", async (req: any, res: any) => {
   let match = false;
   let foundUser = undefined;
   const newUser = req.body;
+  console.log('BD: about login user: ', newUser);
   try {
     const all = await Users.find();
+    console.log('BD: all: ', all);
     foundUser = all.find((user) => user.user_name === newUser.user_name);
+    console.log('Found user: ', foundUser);
 
     if (foundUser?.phash) {
       match = await bcrypt.compare(newUser.loginWord, foundUser.phash);
     }
 
-     if (match) {
-      console.log('BD: returning: ', foundUser); 
-      res.json( foundUser );
+    console.log('Match: ', match);
+    if (match) {
+      console.log('BD: returning: ', foundUser);
+      res.json(foundUser);
     }
     else {
 
-       res.status(401).json({ error: "Invalid username or password" });
+      res.status(401).json({ error: "Invalid username or password" });
 
     };
   } catch (e) {
-      res.status(401).json({ error: "Error retrieving the user info from the DB." });
+    res.status(401).json({ error: "Error retrieving the user info from the DB." });
   }
 });
 
@@ -135,6 +156,24 @@ app.delete("/api/articles/:_id", async (req: any, res: any) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.post("/api/wipe", async (req: any, res: any) => {
+  const auth = req.body;
+  let wipeStatus = 500;
+  console.log('Got request to wipe, with auth: ', auth);
+  try {
+    mongoose.connection.dropDatabase();
+    await Articles.insertMany(articles);
+    console.log("Seeded articles.");
+
+    await Users.insertMany(users);
+    console.log('Seeded users.');
+    wipeStatus = 200;
+  } catch (e) { console.log('BD:unable to wipe the db.'); wipeStatus = 500; } finally {
+    res.status(wipeStatus).send();
+  }
+});
+
 
 // Serve React build if it exists (production)
 // Serve React in production
