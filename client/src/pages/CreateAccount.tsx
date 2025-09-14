@@ -31,10 +31,10 @@ export function CreateAccount() {
         }
 
         if (userName !== "") {
-        
 
-            const preExisting = users.find((user) => user.user_email=== userEmail);
- 
+
+            const preExisting = users.find((user) => user.user_email === userEmail);
+
             console.log('match: ', preExisting);
 
             if (!preExisting) {
@@ -48,17 +48,21 @@ export function CreateAccount() {
 
     }
 
-    const newUser = useCallback(() => {
-        navigate(`/newUser`);
+    const jumpToLogin = useCallback(() => {
+        navigate(`/login`);
     }, []);
 
     return (
         <>
-        <div>   Welcome to B0rgBart - please choose a username and password.</div>
+            <div className='navBannter'>
+                <div className='borgLogo' onClick={ (e) => { e.stopPropagation(); navigate(`/`); }}>b0rgBlog</div>
+            </div>
             <div className="loginForm">
-             
+
 
                 <form onSubmit={handleSubmit} >
+                    <div>   Welcome to the B0rgBlog - <br></br>please choose a username and password, to create an account.</div>
+                    <br></br>
                     <label>User Name: </label>
                     <input type='text' id="user_name" size='50' value={userName}
                         onChange={(e) => setUserName(e.target.value)}></input>
@@ -67,15 +71,15 @@ export function CreateAccount() {
                     <input type='password' id="phash" value={phash}
                         onChange={(e) => setPHash(e.target.value)} size='50'></input>
                     <br></br>
-                     <label>Email: </label>
-                                     <input type='text' id="user_email" value={userEmail}
+                    <label>Email: </label>
+                    <input type='text' id="user_email" value={userEmail}
                         onChange={(e) => setPHash(e.target.value)} size='50'></input>
-                    <br></br>
-                    <button type="submit">Login</button>
+                    <br></br><br></br>
+                    <button type="submit">Create a new Account</button>
                 </form>
             </div>
 
-            <div onClick={newUser}>New to B0rgBlog?</div>
+            <div className='newToBorg'><button onClick={jumpToLogin}>Already have an account? - then click here to Login.</button></div>
         </>
     )
 }

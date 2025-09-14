@@ -1,6 +1,8 @@
 
 .loginForm {
-    background-color: rgb(76, 76, 76);
+    background-color: rgb(50, 50, 50);
+    border-radius: 8px;
+    box-shadow:  0 0 12px black;
     margin:50px;
     padding:50px;
 }
@@ -10,5 +12,6 @@ input {
 }
 
 label {
+    padding-top: 1em;
     display: block;
 }

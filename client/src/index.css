@@ -1,3 +1,9 @@
+html, body {
+    box-sizing: border-box;
+  margin:0;
+  padding:0;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -59,24 +65,28 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  background-color: #222; /* dark charcoal gray */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  border-radius: 6px;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 0 6px rgba(0, 61, 88, 0.4); /* subtle blue glow */
 }
 
+button:hover {
+   background-color: #0f2435;
+  box-shadow: 0 0 12px rgba(0, 180, 255, 0.7); /* stronger glow on hover */
+}
+
+button:active {
+  background-color: #0f2435;
+  box-shadow: 0 0 22px rgba(0, 180, 255, 1); /* brightest glow when clicked */
+  transform: scale(0.97); /* slight "press down" effect */
+}
 
 .articleThumb {
   border: 1px solid #aaaaaa;
@@ -167,4 +177,59 @@ button:focus-visible {
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
+  display: inline-block;
+  float: right;
+}
+.newToBorg {
+  text-align: right;
+  padding-right: 40px;
+}
+
+.newToBorg button {
+  background-color: rgb(7, 12, 24);
+  opacity: .75;
+}
+
+.newToBorg button:hover {
+  opacity: 1;
+}
+
+
+
+
+.borgLogo {
+  background-color: black;
+  display: inline-block;
+  margin: 0;
+  padding: 8px;
+  padding-left: 20px;
+  font-weight: bold;
+  float: left;
+  width: 200px;
+  max-height: 40px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.borgLogo:hover {
+   background-color: #00345f;
+}
+
+
+.navBannter  {
+  display: flex;
+  width: 100%;
+  height: 50px;
+}
+
+.left {
+  width: 200px;
+}
+
+.middle {
+  flex: 1; /* take up all remaining space */
+}
+
+.right {
+  width: 100px;
 }

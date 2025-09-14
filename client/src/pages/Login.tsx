@@ -50,8 +50,17 @@ export function Login() {
         navigate(`/newUser`);
     }, []);
 
+    const goHome = useCallback(() => {
+        navigate(`/`);
+    }, []);
+
+
     return (
         <>
+        <div className='navBannter'>
+            <div className='left borgLogo' onClick={goHome}>b0rgBlog</div>
+      
+        </div>
             <div className="loginForm">
                 Please Log In:
 
@@ -63,12 +72,12 @@ export function Login() {
                     <label>Password: </label>
                     <input type='password' id="phash" value={loginWord}
                         onChange={(e) => setLoginWord(e.target.value)} size='50'></input>
-                    <br></br>
+                    <br></br><br></br>
                     <button type="submit">Login</button>
                 </form>
             </div>
 
-            <div onClick={newUser}>New to B0rgBlog?</div>
+            <div className="newToBorg"><button onClick={newUser}>New to the B0rgBlog?</button></div>
         </>
     )
 }

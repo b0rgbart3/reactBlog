@@ -15,20 +15,35 @@ export function Home() {
     refresh();
   }, []);
 
-  useEffect(() => {
-    if (!user) {
-      navigate(`/login`);
-    } else {
-      console.log('BD: user on homepage: ', user);
-    }
-  })
+  console.log('user: ', user);
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate(`/login`);
+  //   } else {
+  //     console.log('BD: user on homepage: ', user);
+  //   }
+  // })
   const logout = useCallback(() => {
     setUser(null);
   }, []);
+  const login = useCallback(() => {
+    navigate('/login');
+  }, []);
+
+
 
   if (loading) return <div>Loading…</div>;
   return (<>
-    <div onClick={logout} className="logout">Logout</div>
+    <div className='navBannter'>
+      <div className='left borgLogo'>b0rgBlog</div>
+      <div className='middle'>
+        {user && (`Logged in as: ${user.user_name}`)}
+        </div>
+      <div onClick={(e) => { e.stopPropagation(); user ? logout() : login(); }} className="right logout">{user && (`Logout`)}{!user &&(`Login`)}</div>
+    </div>
+
+
 
     <div className="home">
       <div className="mainMenu">
