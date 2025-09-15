@@ -5,6 +5,7 @@ import { DownloadJsonButton } from "./Download";
 import { Articles } from "./pages/Articles";
 import { AdminPanel } from "./admin/AdminPanel";
 import { useNavigate } from "react-router-dom";
+import { BannerNav } from "./components/banner-nav";
 
 export function Home() {
   const { user, articles, loading, users, setUser } = useStore((s) => s);
@@ -17,13 +18,7 @@ export function Home() {
 
   console.log('user: ', user);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate(`/login`);
-  //   } else {
-  //     console.log('BD: user on homepage: ', user);
-  //   }
-  // })
+
   const logout = useCallback(() => {
     setUser(null);
   }, []);
@@ -35,13 +30,7 @@ export function Home() {
 
   if (loading) return <div>Loading…</div>;
   return (<>
-    <div className='navBannter'>
-      <div className='left borgLogo'>b0rgBlog</div>
-      <div className='middle'>
-        {user && (`Logged in as: ${user.user_name}`)}
-        </div>
-      <div onClick={(e) => { e.stopPropagation(); user ? logout() : login(); }} className="right logout">{user && (`Logout`)}{!user &&(`Login`)}</div>
-    </div>
+<BannerNav />
 
 
 

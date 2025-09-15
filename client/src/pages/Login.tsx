@@ -3,6 +3,7 @@ import "./loginStyle.css";
 import { User, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import { useNavigate } from "react-router-dom";
+import { BannerNav } from "../components/banner-nav";
 
 export function Login() {
 
@@ -57,10 +58,8 @@ export function Login() {
 
     return (
         <>
-        <div className='navBannter'>
-            <div className='left borgLogo' onClick={goHome}>b0rgBlog</div>
-      
-        </div>
+     <BannerNav page='login'/>
+
             <div className="loginForm">
                 Please Log In:
 

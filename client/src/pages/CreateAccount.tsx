@@ -3,6 +3,7 @@ import "./loginStyle.css";
 import { User, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import { useNavigate } from "react-router-dom";
+import { BannerNav } from "../components/banner-nav";
 
 export function CreateAccount() {
 
@@ -54,9 +55,7 @@ export function CreateAccount() {
 
     return (
         <>
-            <div className='navBannter'>
-                <div className='borgLogo' onClick={ (e) => { e.stopPropagation(); navigate(`/`); }}>b0rgBlog</div>
-            </div>
+            <BannerNav page="create"/>
             <div className="loginForm">
 
 
