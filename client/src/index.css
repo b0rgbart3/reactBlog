@@ -176,6 +176,7 @@ button:active {
   width: 50px;
   cursor: pointer;
   user-select: none;
+  text-align: center;
 }
 
 .newToBorg {
@@ -235,4 +236,13 @@ button:active {
 
 .mildWarning {
   border-top: 4px solid rgb(149, 82, 0);
+    padding:10px;
+  background-color: rgba(0,0,0,.5);
+}
+
+.loggedInAs {
+  border-top: 4px solid blue;
+  border-bottom: 1px solid black;
+  padding:10px;
+  background-color: rgba(0,0,0,.5);
 }

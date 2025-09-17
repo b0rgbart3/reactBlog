@@ -38,7 +38,7 @@ export function BannerNav(props) {
                 }
             </div>
             {user &&
-                <div>
+                <div className='loggedInAs'>
                     You are logged in as: {user?.user_name}
                 </div>}
             {!user && page !== 'login' && page !== 'create' && 

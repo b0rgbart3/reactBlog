@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../state/useStore";
 import "./articleStyle.css";
 import { useData } from "../data/useData";
+import { BannerNav } from "../components/banner-nav";
 
 
 export function ArticlePage() {
@@ -20,10 +21,13 @@ export function ArticlePage() {
   },[]);
   
   return (
+    <>
+    <BannerNav page='article'/>
     <div className={'article'}>
-      <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog :: {article?.category}</div>
+      <div className="articlePageCategory" >{article?.category}</div>
       <div className='articlePageTitle'>{article?.title }</div>
       <p>{article?.body}</p>
     </div>
+    </>
   );
 }

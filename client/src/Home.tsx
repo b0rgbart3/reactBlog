@@ -30,9 +30,7 @@ export function Home() {
 
   if (loading) return <div>Loading…</div>;
   return (<>
-<BannerNav />
-
-
+    <BannerNav />
 
     <div className="home">
       <div className="mainMenu">
