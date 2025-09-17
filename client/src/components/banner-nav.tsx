@@ -10,15 +10,15 @@ export type BannerNavProps = {
 export function BannerNav(props) {
     const { page } = props;
     const { user, articles, loading, users, setUser } = useStore((s) => s);
-    const { refresh } = useData();
+    const { refresh, logout } = useData();
 
     const navigate = useNavigate();
 
     const goHome = useCallback(() => {
         navigate(`/`);
     }, []);
-    const logout = useCallback(() => {
-        setUser(null);
+    const goLogout = useCallback(() => {
+        logout();
     }, []);
     const login = useCallback(() => {
         navigate('/login');
@@ -34,7 +34,7 @@ export function BannerNav(props) {
 
                 </div>
                 {showLogin &&
-                    <div onClick={(e) => { e.stopPropagation(); user ? logout() : login(); }} className="right logout">{user && (`Logout`)}{!user && (`Login`)}</div>
+                    <div onClick={(e) => { e.stopPropagation(); user ? goLogout() : login(); }} className="right logout">{user && (`Logout`)}{!user && (`Login`)}</div>
                 }
             </div>
             {user &&
@@ -48,9 +48,5 @@ export function BannerNav(props) {
         </>
 
     )
-}
-
-function useMemo(arg0: () => boolean, p0: any[]) {
-    throw new Error("Function not implemented.");
 }
 

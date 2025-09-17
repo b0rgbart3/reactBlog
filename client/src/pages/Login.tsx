@@ -27,23 +27,13 @@ export function Login() {
             const match = await login(activeUser);
             console.log('Login as: ', JSON.stringify(activeUser));
 
-            
-            // const userFound = users.find((user) => user.user_name === userName);
-            // console.log('Found the user: ', userFound);
+        
 
-            // console.log('phash: ', userFound.phash);
-
-            // const match = userFound && userFound.phash === phash;
-            // console.log('match: ', match);
-
-            if (match && match.data) {
-                console.log('Server found a match: ', match.data);
-                setUser(match.data)
+            if (match) {
+ 
                 navigate(`/`);
             }
         }
-
-        // re-route to homepage.
 
     }
 

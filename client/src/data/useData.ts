@@ -9,7 +9,7 @@ export type AuthObject = {
 }
 
 export function useData() {
-  const {articles, setArticles, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
+  const { articles, setArticles, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -20,7 +20,7 @@ export function useData() {
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
       setCategories(uniqueCategories);
-     
+
     } catch (err) {
       console.error("Failed to fetch articles:", err);
     } finally {
@@ -31,9 +31,9 @@ export function useData() {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-    const res = await axios.get("/api/users");
-     const data = res.data;
-      console.log('BD: USERS: ', data.data);
+      const res = await axios.get("/api/users");
+      const data = res.data;
+      console.log('BD: fetched USERS: ', data.data);
       setUsers(data.data);
       setLoading(false);
     }
@@ -42,6 +42,7 @@ export function useData() {
       setLoading(false);
     } finally {
       setLoading(false);
+      return;
     }
   })
 
@@ -68,28 +69,45 @@ export function useData() {
   }, [])
 
   const login = useCallback(async (newUser: Partial<User>) => {
+    let loginResponse;
     let match: User;
     setLoading(true);
     try {
-      match = await axios.post('/api/login/', newUser);
+      loginResponse = await axios.post('/api/login/', newUser);
     } catch (err) {
       console.log('Failed to login.');
     } finally {
       setLoading(false);
-      setUser(match);
-      return match;
+      const user = loginResponse.data;
+      setUser(user);
+
+      console.log('Server found a match: ', user);
+
+      // When login succeeds
+      console.log('BD: setting local storage to: ', JSON.stringify({ user: user._id }));
+      localStorage.setItem("user", JSON.stringify({ user: user._id }));
+
+
+      setUser(user)
+
+      return user;
     }
 
   })
 
-  const wipeAndSeed = useCallback(async (auth: AuthObject ) => {
+  const logout = useCallback(() => {
+    setUser(null);
+    localStorage.setItem("user", null);
+  })
+
+  const wipeAndSeed = useCallback(async (auth: AuthObject) => {
     let wiped;
     // setLoading(true);
     try {
       wiped = await axios.post('/api/wipe/', auth);
       console.log('BD wiped: ', wiped);
     }
-    catch(err) {
+    catch (err) {
       console.log('Failed to wipe database.');
     }
     finally {
@@ -98,6 +116,11 @@ export function useData() {
     }
   })
 
+  const refresh = useCallback(async () => {
+
+    await fetchArticles();
+    await fetchUsers();
+  })
 
   useEffect(() => {
     if (!articles.length) {
@@ -105,10 +128,20 @@ export function useData() {
     }
     if (!users.length) {
       fetchUsers();
+    } else {
+      const localStorageUser = localStorage.getItem("user");
+      console.log('BD local stored user: ', localStorageUser);
+      if (localStorageUser) {
+        const savedUser = JSON.parse(localStorageUser);
+        const match = users?.find((u) => u._id === savedUser?.user);
+        if (match) {
+          setUser(match);
+        }
+      }
     }
   }, [setArticles, setCategories]);
 
-  return { articles, refresh: fetchArticles, createUser, kill, login, wipeAndSeed };
+  return { articles, refresh, logout, createUser, kill, login, wipeAndSeed };
 }
 
 

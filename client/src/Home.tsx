@@ -16,7 +16,7 @@ export function Home() {
     refresh();
   }, []);
 
-  console.log('user: ', user);
+
 
 
   const logout = useCallback(() => {
