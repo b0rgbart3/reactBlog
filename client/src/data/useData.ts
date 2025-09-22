@@ -18,7 +18,7 @@ export function useData() {
       const res = await axios.get("/api/articles");
       const data = res.data.data;
       console.log('BD: got articles: ', data);
-      
+
       const cats: string[] = data.map((article) => article.category);
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
@@ -86,13 +86,13 @@ export function useData() {
 
       // const { token } = await loginResponse.json();
       console.log('TOKEN: ', loginResponse.data.token);
-     const decoded = jwtDecode<User>(loginResponse.data.token);
-     console.log('decoded: ', decoded);
-setUser(decoded);
+      const decoded = jwtDecode<User>(loginResponse.data.token);
+      console.log('decoded: ', decoded);
+      setUser(decoded);
 
 
-// Save token to localStorage
-localStorage.setItem("jwt", loginResponse.data.token);
+      // Save token to localStorage
+      localStorage.setItem("jwt", loginResponse.data.token);
 
       console.log('Server found a match: ', decoded);
 
@@ -110,7 +110,7 @@ localStorage.setItem("jwt", loginResponse.data.token);
 
   const logout = useCallback(() => {
     setUser(null);
-    localStorage.setItem("user", null);
+    localStorage.removeItem("jwt");
   })
 
   const wipeAndSeed = useCallback(async (auth: AuthObject) => {
@@ -142,14 +142,27 @@ localStorage.setItem("jwt", loginResponse.data.token);
     if (!users.length) {
       fetchUsers();
     } else {
-      const localStorageUser = localStorage.getItem("user");
-      console.log('BD local stored user: ', localStorageUser);
-      if (localStorageUser) {
-        const savedUser = JSON.parse(localStorageUser);
-        const match = users?.find((u) => u._id === savedUser?.user);
-        if (match) {
-          setUser(match);
+      const localStorageUserToken = localStorage.getItem("jwt");
+      console.log('local stored user: ', localStorageUserToken);
+
+      if (localStorageUserToken && localStorageUserToken !== 'null') {
+        const decoded: any = jwtDecode(localStorageUserToken);
+        const now = Date.now() / 1000; // in seconds
+
+        if (decoded.exp && decoded.exp > now) {
+          // token still valid
+          const match = users?.find((u) => u._id === decoded?._id);
+          if (match) {
+            setUser(match);
+          }
+
+        } else {
+          // expired
+          localStorage.removeItem("jwt");
+          setUser(null);
         }
+
+
       }
     }
   }, [setArticles, setCategories]);

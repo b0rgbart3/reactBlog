@@ -111,7 +111,7 @@ app.post("/api/login", async (req: any, res: any) => {
       const secret: Secret = process.env.JWT_SECRET as string;
 
       const options: SignOptions = {
-        expiresIn: (process.env.JWT_EXPIRES_IN || "1h") as StringValue,
+        expiresIn: (process.env.JWT_EXPIRES_IN || "2h") as StringValue,
       };
 
       const token = jwt.sign(payload, secret, options);
