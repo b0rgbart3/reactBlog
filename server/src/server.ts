@@ -1,10 +1,20 @@
+
+
+import dotenv from "dotenv";
+dotenv.config();
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
+
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import { Articles } from "./models/Articles";
 import { Users } from "./models/Users";
+import jwt, { Secret, SignOptions, StringValue } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { seed } from "./seedMongoDB";
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,7 +28,7 @@ const articles = [
 ];
 
 const users = [
-  { sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3Wgmail.com" },
+  { sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3@gmail.com" },
   { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
 
@@ -91,7 +101,34 @@ app.post("/api/login", async (req: any, res: any) => {
     console.log('Match: ', match);
     if (match) {
       console.log('BD: returning: ', foundUser);
-      res.json(foundUser);
+
+
+      const payload = {
+        _id: foundUser?._id, user_name: foundUser?.user_name, user_email: foundUser?.user_email,
+        author: foundUser?.author, status: foundUser?.status, sensi: foundUser?.sensi
+      };
+
+      const secret: Secret = process.env.JWT_SECRET as string;
+
+      const options: SignOptions = {
+        expiresIn: (process.env.JWT_EXPIRES_IN || "1h") as StringValue,
+      };
+
+      const token = jwt.sign(payload, secret, options);
+
+      console.log('payload: ', payload);
+      console.log('SECRET: ', process.env.JWT_SECRET);
+
+      // const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
+      //   expiresIn: process.env.JWT_EXPIRES_IN || "1h",
+      // });
+      console.log('TOKEN: ', token);
+
+      // 5. Return token (instead of full user object)
+      res.json({ token });
+
+
+      // res.json(foundUser);
     }
     else {
 
@@ -131,6 +168,7 @@ app.get("/api/users", async (req: any, res: any) => {
 app.get("/api/articles", async (req: any, res: any) => {
   try {
     const all = await Articles.find();
+    console.log('Articles: ', all);
     res.json({ data: all });
   } catch (err: any) {
     res.status(500).json({ error: err.message });

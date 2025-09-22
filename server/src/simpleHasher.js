@@ -7,4 +7,4 @@ async function simpleHash(valueToHash) {
    return hashedValue;
 }
 
-simpleHash('xxx');
+simpleHash('bbb');

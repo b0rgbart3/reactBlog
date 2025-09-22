@@ -1,6 +1,7 @@
 // UseData.ts
 import { useEffect, useCallback, useState } from "react";
 import { User, useStore } from "../state/useStore";
+import { jwtDecode } from "jwt-decode"; // or write a tiny decoder
 import axios from "axios";
 
 export type AuthObject = {
@@ -16,6 +17,8 @@ export function useData() {
     try {
       const res = await axios.get("/api/articles");
       const data = res.data.data;
+      console.log('BD: got articles: ', data);
+      
       const cats: string[] = data.map((article) => article.category);
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
@@ -78,19 +81,29 @@ export function useData() {
       console.log('Failed to login.');
     } finally {
       setLoading(false);
-      const user = loginResponse.data;
-      setUser(user);
+      // const user = loginResponse.data;
+      // setUser(user);
 
-      console.log('Server found a match: ', user);
+      // const { token } = await loginResponse.json();
+      console.log('TOKEN: ', loginResponse.data.token);
+     const decoded = jwtDecode<User>(loginResponse.data.token);
+     console.log('decoded: ', decoded);
+setUser(decoded);
+
+
+// Save token to localStorage
+localStorage.setItem("jwt", loginResponse.data.token);
+
+      console.log('Server found a match: ', decoded);
 
       // When login succeeds
-      console.log('BD: setting local storage to: ', JSON.stringify({ user: user._id }));
-      localStorage.setItem("user", JSON.stringify({ user: user._id }));
+      console.log('BD: setting local storage to: ', JSON.stringify({ user: decoded._id }));
+      // localStorage.setItem("user", JSON.stringify({ user: decoded._id }));
 
 
-      setUser(user)
+      // setUser(user)
 
-      return user;
+      return decoded;
     }
 
   })
