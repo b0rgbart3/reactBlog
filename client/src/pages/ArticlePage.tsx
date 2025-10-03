@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../state/useStore";
 import "./articleStyle.css";
@@ -10,24 +10,30 @@ export function ArticlePage() {
 
   useData();
   const { id } = useParams<{ id: string }>();
-  const articles = useStore((s) => s.articles);
-  console.log('BD: looking for: ', id);
-  console.log('bD: articles: ', articles);
+
+  const { user, articles, loading, users, setUser } = useStore((s) => s);
+  const { refresh } = useData();
+
   const article = articles.find((article) => article._id === id);
   const navigate = useNavigate();
 
-  const routeHome= useCallback(() => {
+  const routeHome = useCallback(() => {
     navigate(`/`);
-  },[]);
-  
+  }, []);
+
+
   return (
     <>
-    <BannerNav page='article'/>
-    <div className={'article'}>
-      <div className="articlePageCategory" >{article?.category}</div>
-      <div className='articlePageTitle'>{article?.title }</div>
-      <p>{article?.body}</p>
-    </div>
+      <BannerNav page='article' />
+      <div className={'article'}>
+        <div className="articlePageCategory" >{article?.category}</div>
+        <div className='articlePageTitle'>{article?.title}</div>
+
+        <p>{article?.body}</p>
+
+        <img src={`${article?.headlineImage}`} alt="headline" />
+
+      </div>
     </>
   );
 }

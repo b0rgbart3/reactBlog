@@ -35,7 +35,8 @@ export function Home() {
     <div className="home">
       <div className="mainMenu">
         <div className="title">b0rgBlog</div>
-        <div className="welcome">Welcome, {user?.user_name}</div>
+        {user?.user_name && (
+        <div className="welcome">Welcome, {user?.user_name}</div>)}
         <Articles />
       </div>
 

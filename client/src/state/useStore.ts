@@ -4,6 +4,7 @@ import { create } from "zustand";
 export type Article = {
   body: string;
   category: string;
+  headlineImage?: string;
   title: string;
   user_id: string;
   _id: string;
@@ -41,7 +42,9 @@ export const useStore = create<State>((set) => ({
   loading: false,
   setLoading: (isLoading: boolean) => set({ loading: isLoading }),
   user: null,
-  setUser: (u: User | null) => set({ user: u }),
+  setUser: (u: User | null) => { 
+    console.log('setting the current user to: ', u);
+    set({ user: u })},
   users: [],
   setUsers: (users: User[] | null) => set({ users: users })
 }));

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStore } from "../state/useStore";
+import { Article, useStore } from "../state/useStore";
 import "./articleStyle.css";
 import "./newArticleStyle.css";
 import { useData } from "../data/useData";
@@ -9,35 +9,27 @@ import axios from "axios";
 
 export function NewArticlePage() {
     const navigate = useNavigate();
-    const categories = useStore((s) => s.categories);
-
+    const { user, categories, articles, loading, users, setUser } = useStore((s) => s);
     const [category, setCategory] = useState(categories[0] || "");
     const [newCategory, setNewCategory] = useState('');
     const [title, setTitle] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [body, setBody] = useState("");
     const { refresh } = useData();
     const routeHome = useCallback(() => {
         refresh();
         navigate(`/`);
     }, []);
+    console.log('Current User: ', user);
 
+      // Runs when user picks a file
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
     useData();
-
-    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-
-    //     console.log('Category: ', category);
-    //     console.log('New Category: ', newCategory);
-    //     console.log('Title: ', title);
-    //     console.log('Body: ', body);
-
-
-    //     e.preventDefault(); // prevent page reload
-    //     if (!title || !body) return; // simple validation
-    //     // onSubmit(title, body);
-    //     // setTitle("");
-    //     // setBody("");
-    // };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -47,28 +39,22 @@ export function NewArticlePage() {
             if (newCategory.length) {
                 postedCategory = newCategory;
             }
-            const newArticle = {
+            const newArticle : Partial<Article> = {
                 title,
                 body,
                 category: postedCategory,
-                user_id: "001", // or get from your user state
+                user_id: user._id,
                 headlineImage: "",
             };
+            if(selectedFile) {
+                newArticle.headlineImage = selectedFile
+            }
 
+            const response = await axios.post("/api/articles", newArticle, {headers: {
+                "Content-Type":"multipart/form-data"}});
+            console.log('Saved article: ', response.data);
 
-            const response = await axios.post("/api/articles", newArticle);
-
-            console.log("Article saved:", response.data);
-
-            // Optionally reset form
-            // setTitle("");
-            // setBody("");
-            // setCategory("New");
-
-            // Optionally update local state/store
-            // addArticle(response.data);
             navigate(`/`);
-
         } catch (err) {
             console.error("Failed to submit article:", err);
         }
@@ -130,6 +116,9 @@ export function NewArticlePage() {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                     />
+                </div>
+                <div>
+                     <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
                 </div>
 
                 <div>

@@ -11,9 +11,10 @@ import path from "path";
 import { Articles } from "./models/Articles";
 import { Users } from "./models/Users";
 import jwt, { Secret, SignOptions, StringValue } from "jsonwebtoken";
+import multer from "multer";
 import bcrypt from "bcrypt";
 import { seed } from "./seedMongoDB";
-
+import cors from "cors";
 
 
 const app = express();
@@ -32,6 +33,16 @@ const users = [
   { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
 
+// store in "uploads" folder locally
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage });
 
 
 mongoose.connect(MONGO_URI)
@@ -45,10 +56,20 @@ mongoose.connect(MONGO_URI)
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
+app.use(cors({
+  origin: "http://localhost:5173", credentials: true
+}));
+
+app.use("/uploads", express.static("uploads"));
+
 // Save new data
-app.post("/api/articles", async (req: any, res: any) => {
+app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
   try {
     const doc = new Articles(req.body);
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    if (imagePath) {
+      doc.headlineImage = imagePath; }
+
     await doc.save();
     res.json(doc);
   } catch (err: any) {

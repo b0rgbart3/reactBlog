@@ -6,6 +6,7 @@ import "./adminStyle.css";
 
 export function AdminPanel() {
     const user = useStore((s) => s.user);
+    console.log('In admin: user=', user);
     const categories = useStore((s) => s.categories);
     const loading = useStore((s) => s.loading);
     const navigate = useNavigate();

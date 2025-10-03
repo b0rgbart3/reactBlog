@@ -141,18 +141,28 @@ export function useData() {
     }
     if (!users.length) {
       fetchUsers();
-    } else {
+    } 
       const localStorageUserToken = localStorage.getItem("jwt");
       console.log('local stored user: ', localStorageUserToken);
 
       if (localStorageUserToken && localStorageUserToken !== 'null') {
         const decoded: any = jwtDecode(localStorageUserToken);
+
+        console.log('BD: decoded: ', decoded);
         const now = Date.now() / 1000; // in seconds
+
+        console.log('decoded.exp: ', decoded.exp);
+        console.log('now: ', now);
 
         if (decoded.exp && decoded.exp > now) {
           // token still valid
-          const match = users?.find((u) => u._id === decoded?._id);
+          console.log('Token still valid.');
+          console.log('users: ', users);
+          
+          const match : User = users?.find((u) => u._id === decoded?._id);
+          console.log('BD: MATCHED Jwt: ', match);
           if (match) {
+                console.log('BD: matched user: ', match);
             setUser(match);
           }
 
@@ -163,9 +173,9 @@ export function useData() {
         }
 
 
-      }
+      
     }
-  }, [setArticles, setCategories]);
+  }, [setArticles, setCategories, users]);
 
   return { articles, refresh, logout, createUser, kill, login, wipeAndSeed };
 }
