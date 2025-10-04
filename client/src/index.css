@@ -123,52 +123,6 @@ button:active {
   background-color: black;
 }
 
-.killCategory {
-  background-color: black;
-  text-align: left;
-}
-
-.killItem {
-  background-color: rgb(86, 86, 86);
-  border-radius: 8px;
-  padding: 4px;
-  border: 1px solid black;
-  display: block;
-  height: 40px;
-  margin:0;
-}
-
-.killTitle {
-  float: left;
-  background-color: rgb(56, 56, 56);
-  cursor: pointer;
-  user-select: none;
-}
-
-.killTitle:hover {
-  background-color: green;
-}
-
-.killButton {
-  border-radius: 50%;
- float: right;
- padding: 4px;
- border: 2px solid gray;
- cursor: pointer;
- user-select: none;
- margin:0;
- width: 20px;
- height: 20px;
-}
-
-.killButton:hover {
-  border: 2px solid white;
-  background-color: red;
-}
-
-.killButton:active {
-  background-color: black;
-}
 
 .logout {
   background-color: black;

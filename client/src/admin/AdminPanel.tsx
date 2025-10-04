@@ -58,9 +58,12 @@ export function AdminPanel() {
                             ?.filter((a) => a.category === category)
                             .map((a) => (
                                 <React.Fragment key={a._id} >
-                                    <div className="killItem">
-                                        <div className="killTitle" onClick={() => editArticle(a)}>{a.title} </div>
+                                    <div className="aaRow">
+                                        <div className="aaItem" onClick={() => editArticle(a)}>
+                                            {a.title}</div>
                                         <div className="killButton" onClick={() => killArticle(a)}>X</div>
+
+
                                     </div>
                                 </React.Fragment>
                             ))}

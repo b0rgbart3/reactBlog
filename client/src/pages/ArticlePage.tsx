@@ -27,11 +27,16 @@ export function ArticlePage() {
       <BannerNav page='article' />
       <div className={'article'}>
         <div className="articlePageCategory" >{article?.category}</div>
+
+        {article?.headlineImage !== '' && (
+    <div className='headlineImageContainer'><img src={`${article?.headlineImage}`} alt="headline" /></div>
+)}
+    
         <div className='articlePageTitle'>{article?.title}</div>
+ <div className='articleBody'>
+        <p>{article?.body}</p></div>
 
-        <p>{article?.body}</p>
 
-        <img src={`${article?.headlineImage}`} alt="headline" />
 
       </div>
     </>
