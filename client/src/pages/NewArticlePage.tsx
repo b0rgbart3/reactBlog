@@ -114,6 +114,7 @@ export function NewArticlePage() {
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
                 handleFileChange={handleFileChange}
+                editing={false}
                 changeCategory={handleChange}
                 changeNewCategory={changeNewCategory}
                 newCategory={newCategory}

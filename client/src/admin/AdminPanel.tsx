@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Article, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import "./adminStyle.css";
+import { DownloadJsonButton } from "../Download";
 
 export function AdminPanel() {
-    const user = useStore((s) => s.user);
-    console.log('In admin: user=', user);
+
+
     const categories = useStore((s) => s.categories);
-    const loading = useStore((s) => s.loading);
+    const { user, articles, loading, users, setUser } = useStore((s) => s);
     const navigate = useNavigate();
-    const { articles, refresh, kill, wipeAndSeed } = useData();
+    const { refresh, kill, wipeAndSeed } = useData();
     const editArticle = useCallback((article: Article) => {
         navigate(`/article/edit/${article._id}`);
     }, []);
@@ -46,33 +47,61 @@ export function AdminPanel() {
 
 
     return (
-        <>
-            <div onClick={newArticle} className="newArticleButton">
-                New Article
-            </div>
-            {categories?.map((category, categoryIndex) => (
-                <div key={`category-${category}-${categoryIndex}`}>
-                    <div className="killCategory">{category}</div>
-                    <div>
-                        {articles
-                            ?.filter((a) => a.category === category)
-                            .map((a) => (
-                                <React.Fragment key={a._id} >
-                                    <div className="aaRow">
-                                        <div className="aaItem" onClick={() => editArticle(a)}>
-                                            {a.title}</div>
-                                        <div className="killButton" onClick={() => killArticle(a)}>X</div>
 
+        <div className='adminPanel'>
+            <div className='adminPanelTitlebar'>Admin Panel</div>
+            <div className='adminContent'>
+                <div>Current User: {user?.user_name}
+                    {user.author && ' | author'}
+                    {user.sensi && ' | sensi'}</div>
+                <div className="userList">
 
-                                    </div>
-                                </React.Fragment>
-                            ))}
-                    </div>
+                    <div>Users:</div>
+                    {user.sensi && users.map((user) => (
+
+                        <div>
+                            {user.user_name}
+                        </div>
+
+                    ))}
                 </div>
-            ))}
-            <div className='dangerous' onClick={() => clearOut()}>
-                Wipe out the DataBase, and start over with original seed data.
+
+                <div onClick={newArticle} className="newArticleButton">
+                    New Article
+                </div>
+                {categories?.map((category, categoryIndex) => (
+                    <div key={`category-${category}-${categoryIndex}`}>
+                        <div className="killCategory">{category}</div>
+                        <div>
+                            {articles
+                                ?.filter((a) => a.category === category)
+                                .map((a) => (
+                                    <React.Fragment key={a._id} >
+                                        <div className="aaRow">
+                                            <div className="aaItem" onClick={() => editArticle(a)}>
+                                                {a.title}</div>
+                                            <div className="killButton" onClick={() => killArticle(a)}>X</div>
+
+
+                                        </div>
+                                    </React.Fragment>
+                                ))}
+                        </div>
+                    </div>
+                ))}
+                {user.sensi && (
+                    <>
+                        <div className='dangerous' onClick={() => clearOut()}>
+                            Wipe out the DataBase, and start over with original seed data.
+                        </div>
+
+                        <div className="JsonData">
+                            <DownloadJsonButton articles={articles} users={users} />
+                        </div></>
+                )}
+
             </div>
-        </>
+        </div>
+
     )
 }

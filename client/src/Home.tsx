@@ -16,9 +16,6 @@ export function Home() {
     refresh();
   }, []);
 
-
-
-
   const logout = useCallback(() => {
     setUser(null);
   }, []);
@@ -36,35 +33,14 @@ export function Home() {
       <div className="mainMenu">
         <div className="title">b0rgBlog</div>
         {user?.user_name && (
-        <div className="welcome">Welcome, {user?.user_name}</div>)}
+          <div className="welcome">Welcome, {user?.user_name}</div>)}
         <Articles />
       </div>
 
-      {user?.sensi &&
-        (<>
-          <div className="userList">
-            <div>Current User: {user?.user_name}</div>
-            <div>Users:</div>
-            {users.map((user) => (
-              <>
-                <div>
-                  {user.user_name}
-                </div>
-              </>
-            ))}
-          </div>
-          <div className="newArticleButtonContainer">
-            <div>
-              <AdminPanel />
-            </div>
-
-            <div className="JsonData">
-              <DownloadJsonButton articles={articles} users={users} />
-            </div>
-          </div>
-        </>)}
-
-
+      {user?.author &&
+        (
+          <AdminPanel />
+        )}
     </div>
   </>
   );

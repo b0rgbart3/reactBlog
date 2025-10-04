@@ -8,6 +8,7 @@ export type ArticleFormProps = {
     article: Article;
     changeCategory: () => void;
     changeNewCategory: (e: React.FormEvent) => void;
+    editing: boolean;
     handleChange: (e: React.FormEvent) => void;
     handleFileChange: (e: React.FormEvent) => void;
     handleSubmit: (e: React.FormEvent) => Promise<void>;
@@ -15,7 +16,7 @@ export type ArticleFormProps = {
 }
 
 export function ArticleForm(props: ArticleFormProps) {
-    const { article, changeCategory, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange } = props;
+    const { article, changeCategory, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange } = props;
 
     const navigate = useNavigate();
     const { user, categories, articles, loading, users, setUser } = useStore((s) => s);
@@ -70,6 +71,13 @@ export function ArticleForm(props: ArticleFormProps) {
             </div>
             <div>
                 <label htmlFor='headlineImage'>Headline Image:</label>
+
+{editing && article.headlineImage !== '' && (
+                <div className='headlineImagePreview'>
+        
+                    <img src={`${article?.headlineImage}`} />
+         
+                    </div>)}
                 <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
             </div>
 
@@ -85,7 +93,7 @@ export function ArticleForm(props: ArticleFormProps) {
                 />
             </div>
 
-            <button type="submit">Add Article</button>
+            <button type="submit">{editing ? 'Submit Changes' : 'Post Article'}</button>
         </form>
     )
 

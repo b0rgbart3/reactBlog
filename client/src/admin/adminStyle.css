@@ -1,3 +1,21 @@
+.adminPanel {
+  box-sizing: border-box;
+  border: 2px solid black;
+  box-shadow: 0 0 8px black;
+  background-color: rgb(96, 96, 96);
+  max-width: 100%;
+  width: calc(100% - 40px);
+  margin:20px;
+}
+
+.adminPanelTitlebar {
+  background-color: black;
+}
+
+.adminContent {
+  padding: 20px;
+}
+
 .dangerous {
     background-color: rgb(133, 1, 1);
     border-radius: 8px;
@@ -24,6 +42,7 @@
   justify-content: space-between; /* push them apart horizontally */
   width: 100%;
   user-select: none;
+  color: rgb(255,255,255,.5);
 }
 
 .aaItem {
@@ -36,6 +55,7 @@
 
 .aaRow:hover {
     background-color: rgba(0,0,0,.25);
+    color: rgb(255,255,255,1);
 }
 
 .aaRow:hover:has(.killButton:hover) {

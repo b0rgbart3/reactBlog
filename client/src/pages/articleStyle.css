@@ -45,3 +45,16 @@
     margin-left: 14px;
     margin-right: 14px;
 }
+
+.headlineImagePreview {
+    background-color: purple;
+    width: 100%;
+    height: 200px;
+}
+
+.headlineImagePreview img {
+    width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center; /* centers vertically and horizontally */
+}
