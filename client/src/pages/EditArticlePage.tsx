@@ -1,29 +1,22 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStore } from "../state/useStore";
+import { Article, useStore } from "../state/useStore";
 import "./articleStyle.css";
 import "./newArticleStyle.css";
 import { useData } from "../data/useData";
 import axios from "axios";
+import { ArticleForm } from "./ArticleForm";
 
 
 export function EditArticlePage() {
-        useData();
+    useData();
     const navigate = useNavigate();
-
-
-
     const { _id } = useParams<{ _id: string }>();
-    console.log('_ID: ', _id);
-
     const articles = useStore((s) => s.articles);
-    console.log('articles: ', articles);
     const categories = useStore((s) => s.categories);
-    const article = articles.find((article) => article._id === _id);
-
-    
-
+    const [article, setArticle]  = useState<Article>(articles.find((article) => article._id === _id));
     const [category, setCategory] = useState(article.category);
+    const [selectedFile, setSelectedFile] = useState<File | null>(article?.headlineImage);
     const [newCategory, setNewCategory] = useState('');
     const [title, setTitle] = useState(article.title);
     const [body, setBody] = useState(article.body);
@@ -33,63 +26,61 @@ export function EditArticlePage() {
         navigate(`/`);
     }, []);
 
+    console.log('BD: headlineImage: ', selectedFile);
 
+    // Runs when user picks a file
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0]);
+        }
+    };
 
-
-    // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-
-    //     console.log('Category: ', category);
-    //     console.log('New Category: ', newCategory);
-    //     console.log('Title: ', title);
-    //     console.log('Body: ', body);
-
-
-    //     e.preventDefault(); // prevent page reload
-    //     if (!title || !body) return; // simple validation
-    //     // onSubmit(title, body);
-    //     // setTitle("");
-    //     // setBody("");
-    // };
     const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+        e.preventDefault();
 
-  try {
+        try {
 
-    let postedCategory = category;
-    if (newCategory.length) {
-        postedCategory = newCategory;
-    }
+            let postedCategory = category;
+            if (newCategory.length) {
+                postedCategory = newCategory;
+            }
 
+            const response = await axios.patch(`/api/articles/${article._id}`, {
+                title: article?.title,
+                body: article?.body,
+                category: article?.category
+            });
 
-  const response = await axios.patch(`/api/articles/${article._id}`, {
-  title: title,
-  body: body,
-  category: postedCategory
-});
+            navigate(`/`);
 
-
-    // Optionally reset form
-    // setTitle("");
-    // setBody("");
-    // setCategory("New");
-
-    // Optionally update local state/store
-    // addArticle(response.data);
-        navigate(`/`);
-
-  } catch (err) {
-    console.error("Failed to submit article:", err);
-  }
-};
+        } catch (err) {
+            console.error("Failed to submit edited article:", err);
+        }
+    };
 
 
-    const changeCategory = useCallback((e) => {
-        setCategory(e.target.value);
-    }, []);
+        const changeNewCategory = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+            console.log(e?.target?.value);
+            setNewCategory(e.target.value);
+            // article.category = e?.target?.value;
+            setArticle((prev) => ({
+                ...prev,
+                category: e?.target?.value,
+            }));
+        }, []);
 
-        const changeNewCategory = useCallback((e) => {
-        setNewCategory(e.target.value);
-    }, []);
+        // Generic change handler
+        const handleChange = useCallback(
+            (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+                const { name, value } = e.target;
+                setArticle((prev) => ({
+                    ...prev,
+                    [name]: value,
+                }));
+            },
+            []
+        );
+    
 
     return (
 
@@ -98,61 +89,15 @@ export function EditArticlePage() {
             <div className='articlePageTitle'>{`Edit Article:`}</div>
 
 
-            <form onSubmit={handleSubmit} className="new-article-form">
-                <div>
-                    <label htmlFor="category">Category:</label>
-
-                    {category !== "New" && (
-                        <div className="row">
-                            <select
-                                id="category"
-                                value={category}
-                                onChange={changeCategory}
-                                required
-                            >
-                                {categories.map((cat) => (
-                                    <option key={cat} value={cat}>
-                                        {cat}
-                                    </option>
-                                ))}
-
-                            </select>
-                            <div>
-                                <input
-                                    id="newCategory"
-                                    type="text"
-                                    value={newCategory}
-                                    placeholder="Choose-- or enter a new category here"
-                                       onChange={changeNewCategory}
-                                   
-                                />
-                            </div></div>
-
-                    )}
-
-                    <label htmlFor="title">Title:</label>
-                    <input
-                        id="title"
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="body">Body:</label>
-                    <textarea
-                        id="body"
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                        required
-                        rows={6}
-                    />
-                </div>
-
-                <button type="submit">Update Article</button>
-            </form>
+            <ArticleForm
+                article={article}
+                handleSubmit={handleSubmit}
+                handleChange={handleChange}
+                handleFileChange={handleFileChange}
+                changeCategory={handleChange}
+                changeNewCategory={changeNewCategory}
+                newCategory={newCategory}
+            />
 
             <div>
             </div>

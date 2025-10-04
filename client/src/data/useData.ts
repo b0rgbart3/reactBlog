@@ -36,7 +36,6 @@ export function useData() {
     try {
       const res = await axios.get("/api/users");
       const data = res.data;
-      console.log('BD: fetched USERS: ', data.data);
       setUsers(data.data);
       setLoading(false);
     }
@@ -81,27 +80,12 @@ export function useData() {
       console.log('Failed to login.');
     } finally {
       setLoading(false);
-      // const user = loginResponse.data;
-      // setUser(user);
 
-      // const { token } = await loginResponse.json();
-      console.log('TOKEN: ', loginResponse.data.token);
       const decoded = jwtDecode<User>(loginResponse.data.token);
-      console.log('decoded: ', decoded);
       setUser(decoded);
-
 
       // Save token to localStorage
       localStorage.setItem("jwt", loginResponse.data.token);
-
-      console.log('Server found a match: ', decoded);
-
-      // When login succeeds
-      console.log('BD: setting local storage to: ', JSON.stringify({ user: decoded._id }));
-      // localStorage.setItem("user", JSON.stringify({ user: decoded._id }));
-
-
-      // setUser(user)
 
       return decoded;
     }
@@ -143,29 +127,21 @@ export function useData() {
       fetchUsers();
     } 
       const localStorageUserToken = localStorage.getItem("jwt");
-      console.log('local stored user: ', localStorageUserToken);
+
 
       if (localStorageUserToken && localStorageUserToken !== 'null') {
         const decoded: any = jwtDecode(localStorageUserToken);
-
-        console.log('BD: decoded: ', decoded);
         const now = Date.now() / 1000; // in seconds
-
-        console.log('decoded.exp: ', decoded.exp);
-        console.log('now: ', now);
 
         if (decoded.exp && decoded.exp > now) {
           // token still valid
-          console.log('Token still valid.');
-          console.log('users: ', users);
-          
+ 
           const match : User = users?.find((u) => u._id === decoded?._id);
-          console.log('BD: MATCHED Jwt: ', match);
+
           if (match) {
-                console.log('BD: matched user: ', match);
+      
             setUser(match);
           }
-
         } else {
           // expired
           localStorage.removeItem("jwt");
