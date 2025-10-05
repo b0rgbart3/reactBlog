@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../state/useStore";
 import { useData } from "../data/useData";
+import "./banner-nav.css";
+
 export type BannerNavProps = {
     page: string;
 
@@ -31,12 +33,16 @@ export function BannerNav(props) {
     return (
         <>
             <div className='navBanner'>
-                <div className='left borgLogo' onClick={goHome}>b0rgBlog</div>
+                <div className='left borgLogo titleType' onClick={goHome}>b0rgBlog</div>
+
                 <div className='middle'>
 
                 </div>
                 {showLogin &&
-                    <div onClick={(e) => { e.stopPropagation(); user ? goLogout() : login(); }} className="right logout">{user && (`Logout`)}{!user && (`Login`)}</div>
+                    <div className='newToBorg'>
+                        <button onClick={(e) => { e.stopPropagation(); user ? goLogout() : login(); }}
+                            className="right logout">{user && (`Logout`)}{!user && (`Login`)}</button>
+                    </div>
                 }
             </div>
             {user &&

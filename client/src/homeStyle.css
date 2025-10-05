@@ -1,0 +1,13 @@
+.home {
+    box-sizing: border-box;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+
+.mainMenu {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 100%;
+}

@@ -6,6 +6,7 @@ import { Articles } from "./pages/Articles";
 import { AdminPanel } from "./admin/AdminPanel";
 import { useNavigate } from "react-router-dom";
 import { BannerNav } from "./components/banner-nav";
+import "./homeStyle.css";
 
 export function Home() {
   const { user, articles, loading, users, setUser } = useStore((s) => s);
@@ -31,7 +32,7 @@ export function Home() {
 
     <div className="home">
       <div className="mainMenu">
-        <div className="title">b0rgBlog</div>
+  
         {user?.user_name && (
           <div className="welcome">Welcome, {user?.user_name}</div>)}
         <Articles />
