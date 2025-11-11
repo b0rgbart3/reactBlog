@@ -17,7 +17,7 @@ export function useData() {
     try {
       const res = await axios.get("/api/articles");
       const data = res.data.data;
-      console.log('BD: got articles: ', data);
+   
 
       const cats: string[] = data.map((article) => article.category);
       const uniqueCategories: string[] = [...new Set(cats)];
@@ -53,7 +53,7 @@ export function useData() {
     try {
       const res = await axios.post("/api/users");
       const data = res;
-      console.log('RESPONSE: ', res);
+  
     } finally {
       fetchUsers();
     }

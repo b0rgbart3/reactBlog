@@ -5,8 +5,9 @@ const ArticlesSchema = new mongoose.Schema({
   category: String,
   headlineImage: String,
   title: String,
-  user_id: String
+  authorEmail: String,
+  authorID: String
 });
 
-export const Articles = mongoose.model("Articles", ArticlesSchema);
+export const Articles = mongoose.model("articles", ArticlesSchema);
 

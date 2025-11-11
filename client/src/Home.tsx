@@ -31,11 +31,9 @@ export function Home() {
     <BannerNav />
 
     <div className="home">
-      <div className="mainMenu">
-  
-        {user?.user_name && (
-          <div className="welcome">Welcome, {user?.user_name}</div>)}
-        <Articles />
+      <div className="basicBox">
+        <div className="articleList">
+        <Articles /></div>
       </div>
 
       {user?.author &&

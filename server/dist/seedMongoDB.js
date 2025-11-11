@@ -1,11 +1,9 @@
 // import mongoose from "mongoose";
 // import { Articles } from "./models/Articles.ts";
 // import { Users } from "./models/Users.ts";
-
-
+export {};
 // // MongoDB connection string
 // const MONGO_URI = "mongodb://127.0.0.1:27017/myblog"; // replace "myblog" with your DB name
-
 // // Seed data
 // const articles = [
 //   {  headlineImage: "", body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001"},
@@ -13,30 +11,23 @@
 //   {  headlineImage: "", body: "Article 3.", category: 'general', title: "Article 3", user_id: "001"},
 //   { headlineImage: "", body: "Article 4", category: 'general', title: "Article 4", user_id: "001" },
 // ];
-
 // const users = [
 // { auto_generated: true, sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3@gmail.com" },
 // { auto_generated: true, sensi: false, author: true, phash: '$2b$10$Agd0mKCRXAx5EOX94ddtguk273X7Mf4lJdXmdik5BbNN4KxpHbfPG', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
-                                
 // ];
-
 // export async function seed() {
 //   try {
 //     // Connect to MongoDB
 //     await mongoose.connect(MONGO_URI);
 //     console.log("Connected to MongoDB");
-
 //     // Optional: drop the entire database
 //     await mongoose.connection.dropDatabase();
 //     console.log("Database dropped");
-
 //     // Insert seed data
 //     await Articles.insertMany(articles);
 //     console.log("Seeded articles.");
-
 //     await Users.insertMany(users);
 //     console.log('Seeded users.');
-
 //     // Close connection
 //     await mongoose.disconnect();
 //     console.log("Disconnected from MongoDB");
@@ -45,9 +36,9 @@
 //     process.exit(1);
 //   }
 // }
-
 // // Run the seed function
 // seed().catch(err => {
 //   console.error(err);
 //   process.exit(1);
 // });
+//# sourceMappingURL=seedMongoDB.js.map

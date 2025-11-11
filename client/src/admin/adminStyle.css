@@ -8,9 +8,7 @@
   margin:20px;
 }
 
-.adminPanelTitlebar {
-  background-color: black;
-}
+
 
 .adminContent {
   padding: 20px;
@@ -80,4 +78,25 @@
 
 .killButton:active {
     background-color: black;
+}
+
+.bRow {
+  border: 1px solid black;
+  display: flex;
+  width: 100%;
+}
+
+.bLabel {
+  background-color: rgba(0,0,0,.2);
+  max-width: 120px;
+  width: 120px;
+}
+.bItem {
+  flex: 1;
+  overflow: hidden;
+}
+
+.bUser {
+  border: 1px solid black;
+  padding: 10px;
 }

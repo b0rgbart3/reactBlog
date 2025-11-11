@@ -15,3 +15,10 @@ label {
     padding-top: 1em;
     display: block;
 }
+
+.loggedInAs {
+  border-top: 4px solid blue;
+
+  padding:10px;
+  padding-left: 20px;
+}

@@ -66,20 +66,7 @@ button:active {
   transform: scale(0.97); /* slight "press down" effect */
 }
 
-.articleThumb {
-  border: 1px solid #aaaaaa;
-  cursor: pointer;
-  padding: 8px;
-  user-select: none;
-}
 
-.articleThumb:hover {
-  background-color: #333333;
-}
-
-.articleThumb:active {
-  background-color: black;
-}
 
 .newArticleButtonContainer {
     display: block;
@@ -127,9 +114,11 @@ button:active {
   background-color: rgba(0,0,0,.5);
 }
 
-.loggedInAs {
-  border-top: 4px solid blue;
-  border-bottom: 1px solid black;
-  padding:10px;
-  background-color: rgba(0,0,0,.5);
+
+
+.titleBar {
+  height: 40px;
+  border-bottom: 2px solid black;
+  padding-top: 20px;
+  padding-left: 20px;
 }

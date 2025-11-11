@@ -26,8 +26,6 @@ export function BannerNav(props) {
         navigate('/login');
     }, []);
 
-    console.log('Page =', page);
-    console.log('user: ', user);
     const showLogin = page !== "login" && page !== "create";
 
     return (
@@ -47,7 +45,9 @@ export function BannerNav(props) {
             </div>
             {user &&
                 <div className='loggedInAs'>
-                    You are logged in as: {user?.user_name}
+                    You are logged in as: {user?.user_name} 
+                    {user?.author && ' - author'}
+                    {user?.sensi && ' & admin'}
                 </div>}
             {!user && page !== 'login' && page !== 'create' &&
                 <div className='mildWarning'>

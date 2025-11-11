@@ -36,7 +36,7 @@ export function CreateAccount() {
 
             const preExisting = users.find((user) => user.user_email === userEmail);
 
-            console.log('match: ', preExisting);
+    
 
             if (!preExisting) {
                 createUser(newUser);

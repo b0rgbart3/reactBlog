@@ -17,8 +17,8 @@ export type User = {
   loginWord: string;
   phash: String;
   status: String,
-  user_name: string;
-  user_email: String
+  userName: string;
+  userEmail: String
 }
 
 type State = {
@@ -43,7 +43,6 @@ export const useStore = create<State>((set) => ({
   setLoading: (isLoading: boolean) => set({ loading: isLoading }),
   user: null,
   setUser: (u: User | null) => { 
-    console.log('setting the current user to: ', u);
     set({ user: u })},
   users: [],
   setUsers: (users: User[] | null) => set({ users: users })

@@ -26,7 +26,7 @@ export function EditArticlePage() {
         navigate(`/`);
     }, []);
 
-    console.log('BD: headlineImage: ', selectedFile);
+
 
     // Runs when user picks a file
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

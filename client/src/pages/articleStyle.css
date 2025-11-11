@@ -58,3 +58,27 @@
   object-fit: cover;
   object-position: center center; /* centers vertically and horizontally */
 }
+
+.articleList {
+    padding: 20px;
+}
+
+.articleThumb {
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  padding: 8px;
+  user-select: none;
+}
+
+.articleThumb:hover {
+  background-color: #333333;
+}
+
+.articleThumb:active {
+  background-color: black;
+}
+
+.articleBlock {
+    padding-left: 30px;
+    padding-bottom: 20px;
+}

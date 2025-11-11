@@ -21,13 +21,12 @@ export function Login() {
         // form processing.
         if (userName !== "") {
             const activeUser: Partial<User> = {
-                user_name: userName,
+                userName: userName,
                 loginWord: loginWord,
             }
             const match = await login(activeUser);
-            console.log('Login as: ', JSON.stringify(activeUser));
 
-        
+    
 
             if (match) {
  

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { ArticleThumbnail } from "../ArticleThumbnail";
 import { useData } from "../data/useData";
 import { useStore } from "../state/useStore";
+import "./articleStyle.css";
 
 
 export function Articles() {
@@ -14,7 +15,7 @@ export function Articles() {
             {categories?.map((category, categoryIndex) => (
                 <div key={`category-${category}-${categoryIndex}`}>
                     <div>{category}</div>
-                    <div>
+                    <div className='articleBlock'>
                         {articles
                             ?.filter((a) => a.category === category)
                             .map((a) => (
