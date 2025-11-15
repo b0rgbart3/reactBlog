@@ -45,11 +45,24 @@ export function EditArticlePage() {
                 postedCategory = newCategory;
             }
 
-            const response = await axios.patch(`/api/articles/${article._id}`, {
-                title: article?.title,
-                body: article?.body,
-                category: article?.category
+           if (selectedFile) {
+                article.headlineImage = selectedFile
+            }
+
+            console.log('BD: selected file: ', selectedFile);
+            console.log('BD: about to save article: ', article);
+            
+            const response = await axios.patch(`/api/articles/${article._id}`, article, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
             });
+
+            // const response = await axios.patch(`/api/articles/${article._id}`, {
+            //     title: article?.title,
+            //     body: article?.body,
+            //     category: article?.category
+            // });
 
             navigate(`/`);
 

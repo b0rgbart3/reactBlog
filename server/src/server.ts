@@ -3,7 +3,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
-console.log('MY NODE ENV: ', process.env.NODE_ENV);
+// console.log('MY NODE ENV: ', process.env.NODE_ENV);
 
 import express from "express";
 import mongoose from "mongoose";
@@ -90,9 +90,18 @@ app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
   }
 });
 
-app.patch("/api/articles/:id", async (req, res) => {
+app.patch("/api/articles/:id", upload.single("headlineImage"), async (req, res) => {
   try {
     const { id } = req.params;
+    let headlineImage;
+
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    if (imagePath) {
+      headlineImage = imagePath; }
+
+      req.body.headlineImage = headlineImage;
+
+      console.log('BD: REQ body: ', req.body);
 
     const updated = await Articles.findByIdAndUpdate(
       id,
@@ -120,22 +129,22 @@ app.post("/api/login", async (req: any, res: any) => {
   let match = false;
   let foundUser = undefined;
   const newUser = req.body;
-  console.log('BD: about login user: ', newUser);
+  // console.log('BD: about login user: ', newUser);
   try {
     const all = await Users.find();
-    console.log('BD: all: ', all);
-    console.log('BD: looking for: ', newUser.userName);
-    
+    // console.log('BD: all: ', all);
+    // console.log('BD: looking for: ', newUser.userName);
+
     foundUser = all.find((user) => user.userName === newUser.userName);
-    console.log('Found user: ', foundUser);
+    // console.log('Found user: ', foundUser);
 
     if (foundUser?.phash) {
       match = await bcrypt.compare(newUser.loginWord, foundUser.phash);
     }
 
-    console.log('Match: ', match);
+    // console.log('Match: ', match);
     if (match) {
-      console.log('BD: returning: ', foundUser);
+      // console.log('BD: returning: ', foundUser);
 
 
       const payload = {
@@ -151,13 +160,13 @@ app.post("/api/login", async (req: any, res: any) => {
 
       const token = jwt.sign(payload, secret, options);
 
-      console.log('payload: ', payload);
-      console.log('SECRET: ', process.env.JWT_SECRET);
+      // console.log('payload: ', payload);
+      // console.log('SECRET: ', process.env.JWT_SECRET);
 
       // const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
       //   expiresIn: process.env.JWT_EXPIRES_IN || "1h",
       // });
-      console.log('TOKEN: ', token);
+      // console.log('TOKEN: ', token);
 
       // 5. Return token (instead of full user object)
       res.json({ token });
@@ -190,11 +199,11 @@ app.post("/api/users", async (req: any, res: any) => {
 
 app.get("/api/users", async (req: any, res: any) => {
   try {
-    console.log('BD: GOT request for users.');
+    // console.log('BD: GOT request for users.');
 
     const all = await Users.find();
     res.json({ data: all });
-    console.log('BD: all users: ', all);
+    // console.log('BD: all users: ', all);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
@@ -203,7 +212,7 @@ app.get("/api/users", async (req: any, res: any) => {
 app.get("/api/articles", async (req: any, res: any) => {
   try {
     const all = await Articles.find();
-    console.log('Articles: ', all);
+    // console.log('Articles: ', all);
     res.json({ data: all });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
@@ -214,8 +223,8 @@ app.get("/api/articles", async (req: any, res: any) => {
 app.delete("/api/articles/:_id", async (req: any, res: any) => {
   try {
     const { _id } = req.params;
-    console.log('Got the kill request.');
-    console.log('About to kill: ', _id);
+    // console.log('Got the kill request.');
+    // console.log('About to kill: ', _id);
     // Use Mongoose's findByIdAndDelete
     const deleted = await Articles.findByIdAndDelete(_id);
 
@@ -233,7 +242,7 @@ app.delete("/api/articles/:_id", async (req: any, res: any) => {
 app.post("/api/wipe", async (req: any, res: any) => {
   const auth = req.body;
   let wipeStatus = 500;
-  console.log('Got request to wipe, with auth: ', auth);
+  // console.log('Got request to wipe, with auth: ', auth);
   try {
     mongoose.connection.dropDatabase();
     // await Articles.insertMany(articles);
