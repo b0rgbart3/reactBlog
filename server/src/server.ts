@@ -16,8 +16,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import { Articles } from "./models/Articles.js";
-import { Users } from "./models/Users.js";
+import { Articles } from "./models/Articles.ts";
+
+import { Users } from "./models/Users.ts";
 
 //  import pkg, { Secret, SignOptions } from 'jsonwebtoken';
 // const { Secret, SignOptions, StringValue } = pkg;

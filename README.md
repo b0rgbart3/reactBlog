@@ -1,4 +1,4 @@
-# MyBlog
+# b0rgBlog
 
 A full-stack web application with a **Node.js + Express backend** using **TypeScript** and a **React frontend** using **Vite**, with MongoDB as the database. This setup supports development and production environments, with separate dev servers for backend and frontend, and proper build pipelines.
 
@@ -172,7 +172,7 @@ const response = await axios.get("/api/myData");
 
 ## Notes
 
-- Keep **`node_modules`** and compiled output (`dist/`) out of Git  
+- Keep **`node_modules`**, environment and compiled output (`dist/`) out of Git  
 - Development ports:  
   - Backend: 3000  
   - Frontend (Vite): 5173  
