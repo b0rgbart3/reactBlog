@@ -3,7 +3,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
-// console.log('MY NODE ENV: ', process.env.NODE_ENV);
+console.log('MY NODE ENV: ', process.env.NODE_ENV);
 
 import express from "express";
 import mongoose from "mongoose";
@@ -15,6 +15,7 @@ import { fileURLToPath } from "url";
 // Recreate CommonJS globals
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const MONGO_URI = process.env.MONGO_URI;
 
 import { Articles } from "./models/Articles.ts";
 
@@ -30,10 +31,20 @@ import bcrypt from "bcrypt";
 import cors from "cors";
 
 
+function getRandomHexColor(): string {
+  // Generate a random number between 0 and 0xFFFFFF
+  const randomNum = Math.floor(Math.random() * 0xffffff);
+  
+  // Convert it to a hexadecimal string and pad with zeros if necessary
+  const hexString = randomNum.toString(16).padStart(6, '0');
+  
+  // Return as a CSS color string
+  return `#${hexString}`;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGO_URI = "mongodb://127.0.0.1:27017/myblog";
+
 
 const articles = [
   { headlineImage: "", body: "The bitcoin issuance equation is more mysterious than you might have realized.", category: 'bitcoin', title: "Issuance Equation", user_id: "001" },
@@ -58,13 +69,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-
+if (MONGO_URI) {
 mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err: unknown) => {
     if (err instanceof Error) console.error("MongoDB error:", err.message);
     else console.error(err);
   });
+} else {
+  console.error('NO mongo URI.');
+}
 
 // Serve static files from public
 app.use(express.static(path.join(__dirname, "public")));
@@ -83,6 +97,8 @@ app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
     if (imagePath) {
       doc.headlineImage = imagePath; }
+
+      doc.randomColor = getRandomHexColor();
 
     await doc.save();
     res.json(doc);

@@ -4,7 +4,7 @@ import { useStore } from "../state/useStore";
 import "./articleStyle.css";
 import { useData } from "../data/useData";
 import { BannerNav } from "../components/banner-nav";
-
+import parse from "html-react-parser";
 
 export function splitIntoParagraphs(body: string): string[] {
   const text = JSON.stringify(body);
@@ -51,6 +51,7 @@ export function ArticlePage() {
   const article = articles.find((article) => article._id === id);
   const navigate = useNavigate();
   const paragraphs = splitIntoLines(article.body);
+  const hasHeadlineImage = article?.headlineImage && article?.headlineImage !== '';
 
 
   const routeHome = useCallback(() => {
@@ -64,15 +65,28 @@ export function ArticlePage() {
       <div className={'article'}>
         <div className="articlePageCategory" >{article?.category}</div>
 
-        {article?.headlineImage !== '' && (
-    <div className='headlineImageContainer'><img src={`${article?.headlineImage}`} alt="headline" /></div>
+        {hasHeadlineImage && (
+    <div className='headlineImageContainer'>
+      <img src={`${article?.headlineImage}`} alt="headline" />
+      </div>
 )}
+{
+  !hasHeadlineImage && (
+    <div className='noHeadlineImageContainer'       style={{
+
+            backgroundColor: article?.randomColor ? `#${article.randomColor}` : undefined,
+      
+        }}>
+ 
+      </div>
+  )
+}
     <div className='articleContainer'>
         <div className='articlePageTitle'>{article?.title}</div>
  <div className='articleBody'>
        
 {paragraphs.map((par, index) => (
-  <p key={index} dangerouslySetInnerHTML={{ __html: par }} />
+    <p key={index}>{parse(par)}</p>
 ))}
 
         </div>

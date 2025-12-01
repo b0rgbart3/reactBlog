@@ -57,6 +57,11 @@
     letter-spacing: -.025em;
 }
 
+.noHeadlineImageContainer {
+  height: 300px;
+  width: 100%;
+}
+
 .headlineImageContainer {
     box-sizing: border-box;
     width: 100%;

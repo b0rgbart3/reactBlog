@@ -20,7 +20,7 @@ export function DownloadJsonButton({ articles, users }: Props) {
     URL.revokeObjectURL(url); // cleanup
   };
   
-    const handleDownloadUsers = () => {
+const handleDownloadUsers = () => {
     const json = JSON.stringify(users, null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);

@@ -149,9 +149,17 @@ export function AdminPanel() {
                         Wipe out the DataBase, and start over with original seed data.
                     </div>
 
+                    {/* <div className="JsonData">
+                        Stringify Existing Data:<br></br>
+                        <div>Stringify existing data to the server.</div>
+                    </div> */}
+
                     <div className="JsonData">
+                        Download data to your local download folder:<br></br>
                         <DownloadJsonButton articles={articles} users={users} />
-                    </div></>
+                    </div>
+                    
+                </>
             )}
 
         </div>

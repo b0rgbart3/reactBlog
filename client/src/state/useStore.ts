@@ -5,6 +5,7 @@ export type Article = {
   body: string;
   category: string;
   headlineImage?: string;
+  randomColor?: string;
   title: string;
   user_id: string;
   _id: string;
