@@ -8,6 +8,7 @@ export type Article = {
   originDate: string;
   lastModifiedDate: string;
   randomColor?: string;
+  readyToPublish: boolean;
   title: string;
   userID: string;
   _id: string;

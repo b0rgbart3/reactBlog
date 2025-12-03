@@ -6,11 +6,11 @@ import "./banner-nav.css";
 
 export type BannerNavProps = {
     page: string;
-
+    adminCallback: () => void;
 }
 
 export function BannerNav(props) {
-    const { page } = props;
+    const { adminCallback, page } = props;
     const { user, articles, loading, users, setUser } = useStore((s) => s);
     const { refresh, logout } = useData();
 
@@ -30,6 +30,7 @@ export function BannerNav(props) {
     })
 
     const showLogin = page !== "login" && page !== "create";
+    const showAdminButton = (page === "home" && user?.sensi);
 
     return (
         <>
@@ -37,7 +38,7 @@ export function BannerNav(props) {
                 <div className='left borgLogo titleType' onClick={goHome}>b0rgBlog</div>
 
                 <div className='middle'>
-
+                {user?.sensi && showAdminButton && (<div className='bButton grayButton midSizeButton adminButton' onClick={adminCallback}>Admin</div>)}
                 </div>
                 {showLogin &&
                     <div className='userAccountIconContainer'>

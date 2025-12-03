@@ -28,6 +28,7 @@
 
 .middle {
   flex: 1; /* take up all remaining space */
+  text-align: center;
 }
 
 
@@ -80,4 +81,29 @@
   width: 250px;
   top: 0;
   right: 0;
+}
+
+.grayButton {
+  background-color: rgb(55, 55, 55);
+  padding:8px;
+  border-radius: 6px;
+  height: 20px;
+}
+
+.grayButton:hover {
+  background-color: rgb(67, 67, 67);
+  padding:8px;
+  border-radius: 6px;
+  height: 20px;
+}
+
+.midSizeButton {
+  width: 200px;
+ box-shadow: 2px 2px 8px rgba(0,0,0,.4);
+}
+
+.adminButton {
+    margin-left: auto;
+  margin-right:auto;
+  margin-top: 14px;
 }

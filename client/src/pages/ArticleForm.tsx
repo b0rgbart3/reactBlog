@@ -21,11 +21,33 @@ export function ArticleForm(props: ArticleFormProps) {
     const navigate = useNavigate();
     const { user, categories, articles, loading, users, setUser } = useStore((s) => s);
     const { refresh } = useData();
+    const [isReady, setIsReady] = useState(article.readyToPublish ? article.readyToPublish  : false);
 
+    const toggleReadyStatus = useCallback(() => {
+       const newReadyStatus = isReady;
+       console.log('BD: setting isReady to: ', !newReadyStatus);
+        setIsReady(!newReadyStatus);
+    }, [isReady]);
+
+    const handleFormSubmit = useCallback((e) => {
+        article.readyToPublish = isReady;
+        handleSubmit(e);
+    })
 
     return (
-        <form onSubmit={handleSubmit} className="new-article-form">
+        <form onSubmit={handleFormSubmit} className="new-article-form">
             <div>
+                <label htmlFor="readyToPublish">Ready to Publish</label>
+                <br></br>
+                {isReady && (<div className='lineContainer'>
+                    <div className='bButton checkBoxSelected' onClick={toggleReadyStatus}></div>
+                    Ready to publish</div>
+                )}
+                {!isReady && (<div className='lineContainer'>
+                    <div className='bButton checkBox' onClick={toggleReadyStatus}></div>
+                    Ready to publish</div>
+                )}
+
                 <label htmlFor="category">Category:</label>
 
                 {article?.category !== "New" && (
@@ -72,11 +94,11 @@ export function ArticleForm(props: ArticleFormProps) {
             <div>
                 <label htmlFor='headlineImage'>Headline Image:</label>
 
-{editing && article.headlineImage !== '' && (
-                <div className='headlineImagePreview'>
-        
-                    <img src={`${article?.headlineImage}`} />
-         
+                {editing && article.headlineImage !== '' && (
+                    <div className='headlineImagePreview'>
+
+                        <img src={`${article?.headlineImage}`} />
+
                     </div>)}
                 <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
             </div>

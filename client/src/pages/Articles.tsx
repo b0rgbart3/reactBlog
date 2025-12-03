@@ -13,13 +13,15 @@ export function Articles() {
     const { articles, loading, refresh, kill } = useData();
     return (
         <>
-        <div className='articleBlock'>
-            {articles.map((a) => (
-                    <React.Fragment key={a._id} >
-                        <ArticleThumbnail article={a} />
-                    </React.Fragment>
-                ))}
-        </div>
+            <div className='articleBlock'>
+                {articles
+                    .filter(a => a.readyToPublish)
+                    .map(a => (
+                        <React.Fragment key={a._id}>
+                            <ArticleThumbnail article={a} />
+                        </React.Fragment>
+                    ))}
+            </div>
         </>
     )
 }

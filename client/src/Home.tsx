@@ -24,11 +24,17 @@ export function Home() {
     navigate('/login');
   }, []);
 
+  const [page, setPage] = useState('home');
+
+ const adminCallback= useCallback(() => {
+    navigate('/admin');
+ })
 
 
   if (loading) return <div>Loading…</div>;
   return (<>
-    <BannerNav />
+    <BannerNav 
+    adminCallback={adminCallback} page='home'/>
 
     <div className="home">
 
@@ -36,10 +42,10 @@ export function Home() {
         <Articles /></div>
       </div>
 
-      {user?.author &&
+      {/* {user?.author &&
         (
           <AdminPanel />
-        )}
+        )} */}
  
   </>
   );
