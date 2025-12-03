@@ -12,7 +12,7 @@ export function EditArticlePage() {
     useData();
     const navigate = useNavigate();
     const { _id } = useParams<{ _id: string }>();
-    const articles = useStore((s) => s.articles);
+    const { user, articles, loading, users, setUser } = useStore((s) => s);
     const categories = useStore((s) => s.categories);
     const [article, setArticle]  = useState<Article>(articles.find((article) => article._id === _id));
     const [category, setCategory] = useState(article.category);
@@ -48,6 +48,8 @@ export function EditArticlePage() {
            if (selectedFile) {
                 article.headlineImage = selectedFile
             }
+
+            article.userID = user._id;
 
             console.log('BD: selected file: ', selectedFile);
             console.log('BD: about to save article: ', article);

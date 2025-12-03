@@ -25,6 +25,9 @@ export function BannerNav(props) {
     const login = useCallback(() => {
         navigate('/login');
     }, []);
+    const editUser = useCallback(() => {
+        navigate('/user');
+    })
 
     const showLogin = page !== "login" && page !== "create";
 
@@ -37,9 +40,11 @@ export function BannerNav(props) {
 
                 </div>
                 {showLogin &&
-                    <div className='newToBorg'>
+                    <div className='userAccountIconContainer'>
                         <button onClick={(e) => { e.stopPropagation(); user ? goLogout() : login(); }}
-                            className="right logout">{user && (`Logout`)}{!user && (`Login`)}</button>
+                            className="bButton logout">{user && (`Logout`)}
+                            {!user && (`Login`)}</button>
+                        {user && (<div className='bButton userIcon' onClick={editUser}></div>)}
                     </div>
                 }
             </div>

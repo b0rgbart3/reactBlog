@@ -30,7 +30,7 @@ export function NewArticlePage() {
                 body: "",
                 category: categories[0] || "",
                 title: "",
-                user_id: user._id
+                userId: user._id
             };
             setArticle(freshArticle);
         }
@@ -57,6 +57,7 @@ export function NewArticlePage() {
             if (selectedFile) {
                 article.headlineImage = selectedFile
             }
+            article.userId = user._id;
 
             const response = await axios.post("/api/articles", article, {
                 headers: {

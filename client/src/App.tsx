@@ -6,6 +6,7 @@ import { ArticlePage } from "./pages/ArticlePage";
 import { User, useStore } from "./state/useStore";
 import { NewArticlePage } from "./pages/NewArticlePage";
 import { EditArticlePage } from "./pages/EditArticlePage";
+import { EditUserPage } from "./pages/EditUserPage";
 import { Login } from "./pages/Login";
 import { CreateAccount } from "./pages/CreateAccount";
 
@@ -36,6 +37,7 @@ export default function App() {
         <Route path='/article/new' element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />
+        <Route path="/user" element={<EditUserPage />} />
       </Routes>
     </Router>
   );

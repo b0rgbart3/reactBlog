@@ -89,25 +89,6 @@ button:active {
 }
 
 
-
-
-.newToBorg {
-  text-align: right;
-  padding-right: 20px;
-}
-
-.newToBorg button {
-  background-color: rgb(7, 12, 24);
-  opacity: .75;
-}
-
-.newToBorg button:hover {
-  opacity: 1;
-}
-
-
-
-
 .mildWarning {
   border-top: 4px solid rgb(149, 82, 0);
     padding:10px;
@@ -121,4 +102,29 @@ button:active {
   border-bottom: 2px solid black;
   padding-top: 20px;
   padding-left: 20px;
+}
+
+.newToBorg {
+  text-align: right;
+  padding-left: 40px;
+  padding-right: 20px;
+  position: relative;
+  width: 250px;
+}
+
+.newToBorg button {
+  background-color: rgb(7, 12, 24);
+  opacity: .75;
+  margin-right:80px;
+  width: 300px;
+}
+
+.newToBorg button:hover {
+  opacity: 1;
+}
+
+
+.bButton {
+    cursor: pointer;
+  user-select: none;
 }

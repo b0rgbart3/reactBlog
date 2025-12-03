@@ -1,0 +1,39 @@
+
+
+.titleText {
+    color: white;
+    font-family: "Noto Serif", serif;
+    font-size: 26px;
+}
+
+.pageLayout {
+    padding:40px;
+}
+
+.editUserForm {
+    padding: 40px;
+}
+
+.checkBox {
+    border: 2px solid rgb(149, 149, 149);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 12px;
+    display: inline-block;
+}
+
+.checkBoxSelected {
+    background-image: url('../assets/checkmark.svg');
+    border: 2px solid rgb(149, 149, 149);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 12px;
+    display: inline-block;
+}
+
+.lineContainer {
+    border: 1px solid black;
+    display: block;
+}

@@ -22,3 +22,10 @@ label {
   padding:10px;
   padding-left: 20px;
 }
+.errorMessage {
+    background-color: rgb(78, 16, 16);
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 12px;
+}

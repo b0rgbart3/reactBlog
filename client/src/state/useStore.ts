@@ -5,9 +5,11 @@ export type Article = {
   body: string;
   category: string;
   headlineImage?: string;
+  originDate: string;
+  lastModifiedDate: string;
   randomColor?: string;
   title: string;
-  user_id: string;
+  userID: string;
   _id: string;
 }
 
@@ -15,6 +17,7 @@ export type User = {
   _id: string;
   sensi: boolean;
   author: boolean;
+  authorName: string;
   loginWord: string;
   phash: String;
   status: String,

@@ -79,6 +79,7 @@ export function useData() {
     } catch (err) {
       console.log('Failed to login.');
     } finally {
+      if (loginResponse) {
       setLoading(false);
 
       const decoded = jwtDecode<User>(loginResponse.data.token);
@@ -88,6 +89,9 @@ export function useData() {
       localStorage.setItem("jwt", loginResponse.data.token);
 
       return decoded;
+      } else {
+        return undefined;
+      }
     }
 
   })

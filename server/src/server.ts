@@ -39,7 +39,7 @@ function getRandomHexColor(): string {
   const hexString = randomNum.toString(16).padStart(6, '0');
   
   // Return as a CSS color string
-  return `#${hexString}`;
+  return `${hexString}`;
 }
 
 const app = express();
@@ -98,7 +98,8 @@ app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
     if (imagePath) {
       doc.headlineImage = imagePath; }
 
-      doc.randomColor = getRandomHexColor();
+    doc.randomColor = getRandomHexColor();
+    doc.originDate = new Date().toISOString().split("T")[0];
 
     await doc.save();
     res.json(doc);
@@ -117,10 +118,34 @@ app.patch("/api/articles/:id", upload.single("headlineImage"), async (req, res) 
       headlineImage = imagePath; }
 
       req.body.headlineImage = headlineImage;
+      req.body.lastModifiedDate = new Date().toISOString().split("T")[0];
+      req.body.randomColor = getRandomHexColor();
 
       console.log('BD: REQ body: ', req.body);
 
     const updated = await Articles.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // return the updated document
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json(updated);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch("/api/user/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+      console.log('BD: REQ body: ', req.body);
+
+    const updated = await Users.findByIdAndUpdate(
       id,
       req.body,
       { new: true } // return the updated document

@@ -8,18 +8,16 @@ import parse from "html-react-parser";
 
 export function splitIntoParagraphs(body: string): string[] {
   const text = JSON.stringify(body);
+
+
+
   if (!text) return [];
 
   // Normalize Windows line breaks to Unix (\r\n → \n)
   const normalized = text.replace(/\r\n/g, '\n');
 
-  console.log('BD: normalized: ', normalized);
-
-
   // Split on two or more newlines (blank line)
   const paragraphs = normalized.split(/\n{1,}/);
-
-  console.log('BD: pars: ', paragraphs);
 
   // Clean up spaces around each paragraph
   return paragraphs.map(p => p.trim()).filter(Boolean);
@@ -31,12 +29,10 @@ export function splitIntoLines(text: string): string[] {
   const normalized = text.replace(/\r\n/g, '\n');
 
   const splitLines = normalized.split('\n');
-  console.log('BD: splitLines: ', splitLines);
   return splitLines;
 }
 
 export function parseHTML(paragraph: string) {
-
   boldText = paragraph.split('<b>');
 }
 
@@ -53,6 +49,8 @@ export function ArticlePage() {
   const paragraphs = splitIntoLines(article.body);
   const hasHeadlineImage = article?.headlineImage && article?.headlineImage !== '';
 
+
+  const authorUser = users.find((user) => user._id === article.userID);
 
   const routeHome = useCallback(() => {
     navigate(`/`);
@@ -83,13 +81,18 @@ export function ArticlePage() {
 }
     <div className='articleContainer'>
         <div className='articlePageTitle'>{article?.title}</div>
+        <div className='authorName'>Author: {authorUser?.authorName ? authorUser.authorName : authorUser.userName}</div>
+        <div className='originDate'>Originally published: {article?.originDate ? article.originDate : `2025-12-01`}</div>
+        <div className='modifiedDate'>Last modified: {article?.lastModifiedDate}</div>
+
+        </div>
  <div className='articleBody'>
        
 {paragraphs.map((par, index) => (
     <p key={index}>{parse(par)}</p>
 ))}
 
-        </div>
+        
 </div>
 
 

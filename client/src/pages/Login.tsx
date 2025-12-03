@@ -12,6 +12,7 @@ export function Login() {
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [loginWord, setLoginWord] = useState("");
+    const [errorState, setErrorState] = useState(false);
 
 
 
@@ -26,11 +27,14 @@ export function Login() {
             }
             const match = await login(activeUser);
 
-    
+            
 
             if (match) {
  
                 navigate(`/`);
+            }
+            if (!match) {
+                setErrorState(true);
             }
         }
 
@@ -60,6 +64,9 @@ export function Login() {
                     <label>Password: </label>
                     <input type='password' id="phash" value={loginWord}
                         onChange={(e) => setLoginWord(e.target.value)} size='50'></input>
+                   
+                   
+                   {errorState && (<div className='errorMessage'>Not able to login, please try again.</div>)}
                     <br></br><br></br>
                     <button type="submit">Login</button>
                 </form>
