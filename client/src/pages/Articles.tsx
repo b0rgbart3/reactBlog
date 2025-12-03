@@ -3,6 +3,7 @@ import { ArticleThumbnail } from "../ArticleThumbnail";
 import { useData } from "../data/useData";
 import { useStore } from "../state/useStore";
 import "./articleStyle.css";
+import { all } from "axios";
 
 
 export function Articles() {
@@ -12,20 +13,13 @@ export function Articles() {
     const { articles, loading, refresh, kill } = useData();
     return (
         <>
-            {categories?.map((category, categoryIndex) => (
-                <div key={`category-${category}-${categoryIndex}`}>
-                    <div>{category}</div>
-                    <div className='articleBlock'>
-                        {articles
-                            ?.filter((a) => a.category === category)
-                            .map((a) => (
-                                <React.Fragment key={a._id} >
-                                    <ArticleThumbnail article={a} />
-                                </React.Fragment>
-                            ))}
-                    </div>
-                </div>
-            ))}
+        <div className='articleBlock'>
+            {articles.map((a) => (
+                    <React.Fragment key={a._id} >
+                        <ArticleThumbnail article={a} />
+                    </React.Fragment>
+                ))}
+        </div>
         </>
     )
 }

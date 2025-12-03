@@ -31,7 +31,7 @@ export function Home() {
     <BannerNav />
 
     <div className="home">
-      <div className="basicBox">
+
         <div className="articleList">
         <Articles /></div>
       </div>
@@ -40,7 +40,7 @@ export function Home() {
         (
           <AdminPanel />
         )}
-    </div>
+ 
   </>
   );
 
