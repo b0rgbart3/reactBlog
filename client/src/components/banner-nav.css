@@ -107,3 +107,39 @@
   margin-right:auto;
   margin-top: 14px;
 }
+
+/* ADMIN stuff ------- */
+
+.expandableTable {
+  border: 2px solid black;
+  box-sizing: border-box;
+  border-radius: 12px 12px 8px 8px;
+  overflow: hidden;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  box-shadow: 4px 4px 4px 4px rgba(0,0,0,.24);
+}
+
+.expandableTable .expanded{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: max-content;
+}
+
+.expandableTableHeaderRow {
+  background-color: rgb(82, 82, 82);
+  height: 24px;
+  user-select: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.expandableTableHeaderRow:hover {
+  background-color: black;
+}
+
+.expandableTableContent {
+  height: 0px;
+  overflow: hidden;
+  padding: 20px;
+}
