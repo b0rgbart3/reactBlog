@@ -115,6 +115,22 @@ export function useData() {
       console.log('Done wiping the database.');
       return wiped;
     }
+  });
+
+  const backUpDB = useCallback(async (auth: AuthObject) => {
+    let backedUp;
+    try {
+      backedUp = await axios.post('/api/backup/', auth);
+      console.log('BD backedUp: ', backedUp);
+    }
+    catch (err) {
+      console.log('Failed to back up database.');
+    }
+    finally {
+      console.log('Done backing up the database.');
+      return backedUp;
+    }
+
   })
 
   const refresh = useCallback(async () => {
@@ -157,7 +173,7 @@ export function useData() {
     }
   }, [setArticles, setCategories, users]);
 
-  return { articles, refresh, logout, createUser, kill, login, wipeAndSeed };
+  return { articles, backUpDB, refresh, logout, createUser, kill, login, wipeAndSeed };
 }
 
 

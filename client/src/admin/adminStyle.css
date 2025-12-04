@@ -14,12 +14,32 @@
   padding: 20px;
 }
 
+.caution {
+    background-color: rgb(164, 82, 1);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    user-select: none;
+     margin-bottom: 20px;
+}
+
+.caution:hover {
+    background-color: rgb(203, 104, 6);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    user-select: none;
+     margin-bottom: 20px;
+}
+
+
 .dangerous {
     background-color: rgb(133, 1, 1);
     border-radius: 8px;
     padding: 8px;
     cursor: pointer;
     user-select: none;
+   
 }
 
 .dangerous:hover {

@@ -14,7 +14,7 @@ export function AdminPanel() {
     const categories = useStore((s) => s.categories);
     const { user, articles, loading, users, setUser } = useStore((s) => s);
     const navigate = useNavigate();
-    const { refresh, kill, wipeAndSeed } = useData();
+    const { refresh, kill, backUpDB, wipeAndSeed } = useData();
     const editArticle = useCallback((article: Article) => {
         navigate(`/article/edit/${article._id}`);
     }, []);
@@ -47,7 +47,21 @@ export function AdminPanel() {
             }
         }
     }, []);
+    
+    const backUp = useCallback(async () => {
+        let wiped;
 
+        try {
+            wiped = await backUpDB({ id: user._id, key: user.phash });
+
+        } catch (err) {
+
+        } finally {
+            if (wiped.status === 200) {
+                refresh();
+            }
+        }
+    }, []);
 
     return (
 
@@ -90,6 +104,10 @@ export function AdminPanel() {
                     <>
                         <div className='dangerous' onClick={() => clearOut()}>
                             Wipe out the DataBase, and start over with original seed data.
+                        </div>
+                        <br></br>
+                        <div className='caution' onClick={() => backUp()}>
+                           Backup the current DataBase.
                         </div>
 
                         <div className="JsonData">

@@ -7,6 +7,7 @@ console.log('MY NODE ENV: ', process.env.NODE_ENV);
 
 import express from "express";
 import mongoose from "mongoose";
+import fs from "fs";
 
 // At the top of your file
 import path from "path";
@@ -16,6 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const MONGO_URI = process.env.MONGO_URI;
+const MONGO_DUMP_PATH = process.env.MONGO_DUMP_PATH;
 
 import { Articles } from "./models/Articles.ts";
 
@@ -29,6 +31,7 @@ import multer from "multer";
 import bcrypt from "bcrypt";
 // import { seed } from "./seedMongoDB.ts";
 import cors from "cors";
+import { exec } from "child_process";
 
 
 function getRandomHexColor(): string {
@@ -298,6 +301,63 @@ app.post("/api/wipe", async (req: any, res: any) => {
   }
 });
 
+function getIsoFolderName() {
+  return new Date().toISOString().split("T")[0];
+}
+
+app.post("/api/backup", async (req: any, res: any) => {
+  const auth = req.body;
+  let backupStatus = 500;
+  try {
+    const todaysDate = new Date();
+      let localeString = todaysDate.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    console.log('BD: todays date: ', localeString);
+
+        // Optional: build an absolute output path
+
+        const folderName = getIsoFolderName();
+const backupPath = path.join(process.cwd(), "adminBackup", folderName);
+
+
+//  const backupPath = path.join(process.cwd(), "adminBackup");
+
+
+    // Your MongoDB backup command
+  
+
+    console.log('BD: MONGO DUMP PATH: ', MONGO_DUMP_PATH);
+
+    if (!fs.existsSync(backupPath)) {
+      fs.mkdirSync(backupPath, { recursive: true });
+    }
+
+    const cmd = `${MONGO_DUMP_PATH}/mongodump --uri="mongodb://127.0.0.1:27017/myblog" --out="${backupPath}"`;
+
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        console.error("Backup failed:", error);
+        console.error("stderr:", stderr);
+        return res.status(500).json({ message: "Backup failed" });
+      }
+
+      console.log("Backup completed:", stdout);
+      res.status(200).json({ message: "Backup completed", output: stdout });
+    });
+
+    
+
+    
+    backupStatus = 200;
+  } catch (e) { console.log('BD:unable to backup the db.'); backupStatus = 500;
+
+  res.status(backupStatus).send();
+   } 
+
+});
 
 
 // Serve React build if it exists (production)
