@@ -6,20 +6,14 @@ import { ArticlePage } from "./pages/ArticlePage";
 import { User, useStore } from "./state/useStore";
 import { NewArticlePage } from "./pages/NewArticlePage";
 import { EditArticlePage } from "./pages/EditArticlePage";
-import { EditUserPage } from "./pages/EditUserPage";
 import { Login } from "./pages/Login";
 import { CreateAccount } from "./pages/CreateAccount";
 import { AdminPage } from "./pages/AdminPage";
-
-
-
+import { NewProductPage } from "./pages/NewProductPage";
+import { EditUserPage } from "./pages/EditUserPage";
+import { EditProductPage } from "./pages/EditProductPage";
 
 export default function App() {
-  const defaultUser : User = {
-    user_name: "Alice", _id: "001",
-    status: undefined,
-    user_email: undefined
-  };
 
   const user = useStore((s) => s.user);
   const setUser = useStore((s) => s.setUser);
@@ -39,6 +33,8 @@ export default function App() {
         <Route path='/article/new' element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />
+        <Route path='/product/new' element={<NewProductPage />} />
+        <Route path="/product/edit/:_id" element={<EditProductPage />} />
         <Route path="/user" element={<EditUserPage />} />
       </Routes>
     </Router>

@@ -26,6 +26,15 @@ export type User = {
   userEmail: String
 }
 
+export type Product = {
+  _id: string;
+  category: string;
+  productDescription: string;
+  productName: string;
+  mainImage: string;
+  readyToPublish: boolean;
+}
+
 type State = {
   articles: Article[];
   setArticles: (articles: Article[]) => void;
@@ -33,6 +42,10 @@ type State = {
   setCategories: (categories: string[]) => void;
   loading: boolean;
   setLoading: (boolean) => void;
+  products: Product[];
+  setProducts: (products: Product[]) => void;
+  productCategories: string[];
+  setProductCategories: (categories: string[]) => void;
   user: User | null;
   setUser: (u: User | null) => void;
   users: User[] | null;
@@ -45,6 +58,10 @@ export const useStore = create<State>((set) => ({
   categories: [],
   setCategories: (categories: string[]) => set({ categories: categories }),
   loading: false,
+  products: [],
+  setProducts: (products: Product[]) => set({ products: products }),
+  productCategories: [],
+  setProductCategories: (categories: string[]) => set({ categories: categories}),
   setLoading: (isLoading: boolean) => set({ loading: isLoading }),
   user: null,
   setUser: (u: User | null) => { 

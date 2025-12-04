@@ -2,10 +2,10 @@
 import React, { useCallback, useState } from "react";
 import { useData } from "../data/useData";
 import { useNavigate } from "react-router-dom";
-import { Article, useStore } from "../state/useStore";
+import { Product, useStore } from "../state/useStore";
 
-export type ArticleFormProps = {
-    article: Article;
+export type ProductFormProps = {
+    product: Product;
     changeCategory: () => void;
     changeNewCategory: (e: React.FormEvent) => void;
     editing: boolean;
@@ -15,21 +15,28 @@ export type ArticleFormProps = {
     newCategory: string;
 }
 
-export function ArticleForm(props: ArticleFormProps) {
-    const { article, changeCategory, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange } = props;
+export function ProductForm(props: ProductFormProps) {
+    const { product, changeCategory, editing, changeNewCategory, 
+        handleSubmit, newCategory, handleChange, handleFileChange } = props;
 
+         console.log('BD: new product: ', product);
     const navigate = useNavigate();
-    const { user, categories, articles, loading, users, setUser } = useStore((s) => s);
+    const { user, categories, articles, products, 
+        productCategories, loading, users, setUser } = useStore((s) => s);
     const { refresh } = useData();
-    const [isReady, setIsReady] = useState(article.readyToPublish ? article.readyToPublish  : false);
+
+    console.log('BD: products: ', products);
+
+    const [isReady, setIsReady] = useState(product?.readyToPublish ? product?.readyToPublish  : false);
 
     const toggleReadyStatus = useCallback(() => {
        const newReadyStatus = isReady;
+       console.log('BD: setting isReady to: ', !newReadyStatus);
         setIsReady(!newReadyStatus);
     }, [isReady]);
 
     const handleFormSubmit = useCallback((e) => {
-        article.readyToPublish = isReady;
+        product.readyToPublish = isReady;
         handleSubmit(e);
     })
 
@@ -49,14 +56,13 @@ export function ArticleForm(props: ArticleFormProps) {
 
                 <label htmlFor="category">Category:</label>
 
-                {article?.category !== "New" && (
+                {product?.category !== "New" && (
                     <div className="row">
                         <select
                             id="category"
                             name='category'
-                            value={article?.category}
+                            value={product?.category}
                             onChange={handleChange}
-                            required
                         >
                             {categories?.map((cat) => (
                                 <option key={cat} value={cat}>
@@ -80,41 +86,41 @@ export function ArticleForm(props: ArticleFormProps) {
 
                 )}
 
-                <label htmlFor="title">Title:</label>
+                <label htmlFor="productName">Product Name:</label>
                 <input
-                    id="title"
+                    id="productName"
                     type="text"
-                    name='title'
-                    value={article?.title ?? ''}
+                    name='productName'
+                    value={product?.productName ?? ''}
                     onChange={handleChange}
                     required
                 />
             </div>
             <div>
-                <label htmlFor='headlineImage'>Headline Image:</label>
+                <label htmlFor='headlineImage'>Main Image:</label>
 
-                {editing && article.headlineImage !== '' && (
+                {editing && product.mainImage !== '' && (
                     <div className='headlineImagePreview'>
 
-                        <img src={`${article?.headlineImage}`} />
+                        <img src={`${product?.mainImage}`} />
 
                     </div>)}
                 <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
             </div>
 
             <div>
-                <label htmlFor="body">Body:</label>
+                <label htmlFor="body">Product Description:</label>
                 <textarea
-                    id="body"
-                    name='body'
-                    value={article?.body ?? ''}
+                    id="productDescription"
+                    name='productDescription'
+                    value={product?.productDescription ?? ''}
                     onChange={handleChange}
                     required
                     rows={6}
                 />
             </div>
 
-            <button type="submit">{editing ? 'Submit Changes' : 'Post Article'}</button>
+            <button type="submit">{editing ? 'Submit Changes' : 'Post Product'}</button>
         </form>
     )
 

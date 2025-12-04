@@ -10,19 +10,34 @@ export type AuthObject = {
 }
 
 export function useData() {
-  const { articles, setArticles, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
+  const { articles, setArticles, setProducts, setProductCategories, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get("/api/articles");
       const data = res.data.data;
-   
-
       const cats: string[] = data.map((article) => article.category);
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
       setCategories(uniqueCategories);
+
+    } catch (err) {
+      console.error("Failed to fetch articles:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+    const fetchProducts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/products");
+      const data = res.data.data;
+      const cats: string[] = data.map((product) => product.category);
+      const uniqueCategories: string[] = [...new Set(cats)];
+      setProducts(data);
+      setProductCategories(uniqueCategories);
 
     } catch (err) {
       console.error("Failed to fetch articles:", err);
@@ -136,6 +151,7 @@ export function useData() {
   const refresh = useCallback(async () => {
 
     await fetchArticles();
+    await fetchProducts();
     await fetchUsers();
   })
 

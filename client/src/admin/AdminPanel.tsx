@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Article, useStore } from "../state/useStore";
+import { Article, Product, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import "./adminStyle.css";
 import { DownloadJsonButton } from "../Download";
@@ -12,11 +12,15 @@ export function AdminPanel() {
 
 
     const categories = useStore((s) => s.categories);
-    const { user, articles, loading, users, setUser } = useStore((s) => s);
+    const { user, articles, loading, products, users, setUser } = useStore((s) => s);
     const navigate = useNavigate();
     const { refresh, kill, backUpDB, wipeAndSeed } = useData();
     const editArticle = useCallback((article: Article) => {
         navigate(`/article/edit/${article._id}`);
+    }, []);
+
+    const editProduct = useCallback((product: Product) => {
+        navigate(`/product/edit/${product._id}`);
     }, []);
 
     const killArticle = useCallback((article: Article) => {
@@ -31,6 +35,10 @@ export function AdminPanel() {
 
     const newArticle = useCallback(() => {
         navigate(`/article/new`);
+    }, []);
+
+    const newProduct = useCallback(() => {
+        navigate(`/product/new`);
     }, []);
 
     const clearOut = useCallback(async () => {
@@ -97,6 +105,30 @@ export function AdminPanel() {
                         </div>
                     </div>
                 ))}
+               </ExpandableTable>
+
+                <ExpandableTable title='merchandise' open={false}>
+                <div onClick={newProduct} className="newArticleButton">
+                    New Product
+                </div>
+
+                {products && ( <>
+                Products:
+                <br>
+                </br>
+                {products.map((product) => {
+                    return (
+                        <div>
+                        <div  onClick={() => editProduct(product)}>
+                            {product.productName}
+                        </div>
+                        <div>{product.productDescription}</div>
+                        </div>
+                    )
+                })}
+
+
+                </>)}
                </ExpandableTable>
 
                 <ExpandableTable title='database' open={false}>

@@ -32,6 +32,7 @@ import bcrypt from "bcrypt";
 // import { seed } from "./seedMongoDB.ts";
 import cors from "cors";
 import { exec } from "child_process";
+import { Products } from "./models/Products.ts";
 
 
 function getRandomHexColor(): string {
@@ -110,6 +111,49 @@ app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.post("/api/products", upload.single("mainImage"), async (req, res) => {
+  try {
+    const doc = new Products(req.body);
+    console.log('BD: about to save a product: ', req.body);
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    if (imagePath) {
+      doc.mainImage = imagePath; }
+
+    await doc.save();
+    res.json(doc);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch("/api/products/:id", upload.single("mainImage"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    let mainImage;
+
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    if (imagePath) {
+      mainImage = imagePath; }
+
+      req.body.mainImage = mainImage;
+
+    const updated = await Products.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true } // return the updated document
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json(updated);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.patch("/api/articles/:id", upload.single("headlineImage"), async (req, res) => {
   try {
@@ -247,6 +291,18 @@ app.get("/api/users", async (req: any, res: any) => {
     // console.log('BD: GOT request for users.');
 
     const all = await Users.find();
+    res.json({ data: all });
+    // console.log('BD: all users: ', all);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/products", async (req: any, res: any) => {
+  try {
+    // console.log('BD: GOT request for users.');
+
+    const all = await Products.find();
     res.json({ data: all });
     // console.log('BD: all users: ', all);
   } catch (err: any) {

@@ -11,10 +11,8 @@ export function ExpandableTable(props: ExpandableTableProps) {
     const {children, open, title} = props;
 
     const [expanded, setExpanded] = useState(open);
-    console.log('BD: expanded: ', expanded);
 
     const toggleExpansion = useCallback(() => {
-        console.log('BD: expanded: ', expanded);
         setExpanded(!expanded);
     },[expanded]);
 
