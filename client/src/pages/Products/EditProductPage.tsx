@@ -1,11 +1,10 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Article, Product, useStore } from "../state/useStore";
-import "./articleStyle.css";
-import "./newArticleStyle.css";
-import { useData } from "../data/useData";
+import { Article, Product, useStore } from "../../state/useStore";
+import "../articleStyle.css";
+import "../newArticleStyle.css";
+import { useData } from "../../data/useData";
 import axios from "axios";
-import { ArticleForm } from "./ArticleForm";
 import { ProductForm } from "./ProductForm";
 
 

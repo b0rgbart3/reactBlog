@@ -1,9 +1,9 @@
 import React, { useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useStore } from "../state/useStore";
-import "./articleStyle.css";
-import { useData } from "../data/useData";
-import { BannerNav } from "../components/banner-nav";
+import { useStore } from "../../state/useStore";
+import "../articleStyle.css";
+import { useData } from "../../data/useData";
+import { BannerNav } from "../../components/banner-nav";
 import parse from "html-react-parser";
 
 export function splitIntoParagraphs(body: string): string[] {
@@ -33,6 +33,7 @@ export function splitIntoLines(text: string): string[] {
 }
 
 export function parseHTML(paragraph: string) {
+  let boldText;
   boldText = paragraph.split('<b>');
 }
 

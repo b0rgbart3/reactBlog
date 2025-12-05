@@ -2,16 +2,18 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Home } from "./Home";
-import { ArticlePage } from "./pages/ArticlePage";
+import { ArticlePage } from "./pages/Articles/ArticlePage";
 import { User, useStore } from "./state/useStore";
-import { NewArticlePage } from "./pages/NewArticlePage";
-import { EditArticlePage } from "./pages/EditArticlePage";
+import { NewArticlePage } from "./pages/Articles/NewArticlePage";
+import { EditArticlePage } from "./pages/Articles/EditArticlePage";
 import { Login } from "./pages/Login";
 import { CreateAccount } from "./pages/CreateAccount";
 import { AdminPage } from "./pages/AdminPage";
-import { NewProductPage } from "./pages/NewProductPage";
+import { NewProductPage } from "./pages/Products/NewProductPage";
 import { EditUserPage } from "./pages/EditUserPage";
-import { EditProductPage } from "./pages/EditProductPage";
+import { ProductPage } from "./pages/Products/ProductPage";
+import { EditProductPage } from "./pages/Products/EditProductPage";
+
 
 export default function App() {
 
@@ -34,6 +36,7 @@ export default function App() {
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />
         <Route path='/product/new' element={<NewProductPage />} />
+        <Route path='/product/:id' element={<ProductPage />} />
         <Route path="/product/edit/:_id" element={<EditProductPage />} />
         <Route path="/user" element={<EditUserPage />} />
       </Routes>

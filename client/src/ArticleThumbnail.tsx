@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Article } from "./state/useStore";
-import { splitIntoLines } from "./pages/ArticlePage";
+import { splitIntoLines } from "./pages/Articles/ArticlePage";
 import parse from "html-react-parser";
 
 

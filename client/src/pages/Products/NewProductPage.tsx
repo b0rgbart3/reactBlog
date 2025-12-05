@@ -1,17 +1,17 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Article, useStore } from "../state/useStore";
-import "./articleStyle.css";
-import "./newArticleStyle.css";
-import { useData } from "../data/useData";
+import { Article, Product, useStore } from "../../state/useStore";
+import "../articleStyle.css";
+import "../newArticleStyle.css";
+import { useData } from "../../data/useData";
 import axios from "axios";
-import { ArticleForm } from "./ArticleForm";
+import { ProductForm } from "./ProductForm";
 
 
-export function NewArticlePage() {
+export function NewProductPage() {
     const navigate = useNavigate();
 
-    const { user, categories, articles, loading, users, setUser } = useStore((s) => s);
+    const { user, categories, products, productCategories, articles, loading, users, setUser } = useStore((s) => s);
     const [category, setCategory] = useState(categories[0] || "");
     const [newCategory, setNewCategory] = useState('');
 
@@ -23,16 +23,17 @@ export function NewArticlePage() {
         refresh();
         navigate(`/`);
     }, []);
-    const [article, setArticle] = useState<Partial<Article> | null>(null);
+
+    const [product, setProduct] = useState<Partial<Product> | null>(null);
+
     useEffect(() => {
-        if (!article) {
-            const freshArticle: Partial<Article> = {
-                body: "",
-                category: categories[0] || "",
-                title: "",
-                userId: user._id
+        if (!product) {
+            const freshProduct: Partial<Product> = {
+                productDescription: "",
+                category: productCategories[0] || "",
+                productName: "New Product",
             };
-            setArticle(freshArticle);
+            setProduct(freshProduct);
         }
     }, []);
 
@@ -55,28 +56,27 @@ export function NewArticlePage() {
             }
 
             if (selectedFile) {
-                article.headlineImage = selectedFile
+                product.mainImage = selectedFile
             }
-            article.userId = user._id;
 
-            const response = await axios.post("/api/articles", article, {
+            const response = await axios.post("/api/products", product, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log('Saved article: ', response.data);
+            console.log('Saved product: ', response.data);
 
             navigate(`/`);
         } catch (err) {
-            console.error("Failed to submit article:", err);
+            console.error("Failed to submit product:", err);
         }
     };
 
 
     const changeCategory = useCallback((e) => {
         setCategory(e.target.value);
-        article.category = e?.target?.value;
-        setArticle((prev) => ({
+        product.category = e?.target?.value;
+        setProduct((prev) => ({
             ...prev,
             category: e?.target?.value,
         }));
@@ -86,7 +86,7 @@ export function NewArticlePage() {
         console.log(e?.target?.value);
         setNewCategory(e.target.value);
         // article.category = e?.target?.value;
-        setArticle((prev) => ({
+        setProduct((prev) => ({
             ...prev,
             category: e?.target?.value,
         }));
@@ -97,7 +97,7 @@ export function NewArticlePage() {
     const handleChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
             const { name, value } = e.target;
-            setArticle((prev) => ({
+            setProduct((prev) => ({
                 ...prev,
                 [name]: value,
             }));
@@ -108,10 +108,12 @@ export function NewArticlePage() {
 
     return (
         <div className={'article'}>
+
+
             <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
-            <div className='articlePageTitle'>{`New Article:`}</div>
-            <ArticleForm
-                article={article}
+            <div className='articlePageTitle'>{`New Product:`}</div>
+            <ProductForm
+                product={product}
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
                 handleFileChange={handleFileChange}
@@ -119,7 +121,7 @@ export function NewArticlePage() {
                 changeCategory={handleChange}
                 changeNewCategory={changeNewCategory}
                 newCategory={newCategory}
-            />
+            /> 
             <div>
             </div>
         </div>

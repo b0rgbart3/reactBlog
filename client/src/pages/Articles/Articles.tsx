@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { ArticleThumbnail } from "../ArticleThumbnail";
-import { useData } from "../data/useData";
-import { useStore } from "../state/useStore";
-import "./articleStyle.css";
+
+import "../articleStyle.css";
 import { all } from "axios";
+import { ArticleThumbnail } from "../../ArticleThumbnail";
+import { useStore } from "../../state/useStore";
+import { useData } from "../../data/useData";
 
 
 export function Articles() {
 
     const user = useStore((s) => s.user);
     const categories = useStore((s) => s.categories);
-    const { articles, loading, refresh, kill } = useData();
+    const { articles, refresh, kill } = useData();
     return (
         <>
             <div className='articleBlock'>

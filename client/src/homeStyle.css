@@ -102,19 +102,41 @@
 
   .merchList {
     flex: 1;                /* 1/3 width */
+    padding-right: 40px;
   }
 }
 
-.productDiv {
-  width: 100%;
-}
-
-.productDiv img {
-  max-width: 100%;
-}
 
 .productBox {
   margin-bottom: 30px;
-  background-color: rgb(53, 53, 53);
+  background-color: rgba(0,0,0,.25);
   padding: 18px;
+  border-radius: 12px;
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+}
+
+.productBox:hover {
+  background-color: black;
+}
+
+.productBoxImage {
+  max-width: 200px;
+  margin:auto;
+}
+
+.productBoxImage img {
+  max-width: 200px;
+}
+
+.productBeauty {
+  margin: auto;
+  width: 40%;
+  border: 1px solid gray;
+}
+
+.productBeauty img {
+  max-width: 80%;
+  margin:auto;
 }

@@ -45,7 +45,7 @@ type State = {
   products: Product[];
   setProducts: (products: Product[]) => void;
   productCategories: string[];
-  setProductCategories: (categories: string[]) => void;
+  setProductCategories: ( productCategories: string[]) => void;
   user: User | null;
   setUser: (u: User | null) => void;
   users: User[] | null;
@@ -61,7 +61,7 @@ export const useStore = create<State>((set) => ({
   products: [],
   setProducts: (products: Product[]) => set({ products: products }),
   productCategories: [],
-  setProductCategories: (categories: string[]) => set({ categories: categories}),
+  setProductCategories: (productCategories: string[]) => set({ categories: productCategories}),
   setLoading: (isLoading: boolean) => set({ loading: isLoading }),
   user: null,
   setUser: (u: User | null) => { 

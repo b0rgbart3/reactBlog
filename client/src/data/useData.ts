@@ -20,6 +20,7 @@ export function useData() {
       const cats: string[] = data.map((article) => article.category);
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
+      //  console.log('BD: unique article categories:', uniqueCategories);
       setCategories(uniqueCategories);
 
     } catch (err) {
@@ -29,13 +30,14 @@ export function useData() {
     }
   }, []);
 
-    const fetchProducts = useCallback(async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const res = await axios.get("/api/products");
       const data = res.data.data;
       const cats: string[] = data.map((product) => product.category);
       const uniqueCategories: string[] = [...new Set(cats)];
+      // console.log('BD: unique product categories:', uniqueCategories);
       setProducts(data);
       setProductCategories(uniqueCategories);
 

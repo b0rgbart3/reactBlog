@@ -3,16 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Article, Product, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import "./adminStyle.css";
-import { DownloadJsonButton } from "../Download";
+import { DownloadJsonButton } from "./Download";
 import { UsersForm } from "./UsersForm";
 import { TableHeader } from "./TableHeader";
 import { ExpandableTable } from "./ExpandableTable";
 
 export function AdminPanel() {
 
-
-    const categories = useStore((s) => s.categories);
-    const { user, articles, loading, products, users, setUser } = useStore((s) => s);
+    const { user, articles, categories, loading, products, productCategories, users, setUser } = useStore((s) => s);
+    console.log('BD: categories: ', categories);
     const navigate = useNavigate();
     const { refresh, kill, backUpDB, wipeAndSeed } = useData();
     const editArticle = useCallback((article: Article) => {

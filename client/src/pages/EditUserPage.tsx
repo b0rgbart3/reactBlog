@@ -6,7 +6,7 @@ import "./newArticleStyle.css";
 import "./editUserStyle.css";
 import { useData } from "../data/useData";
 import axios from "axios";
-import { ArticleForm } from "./ArticleForm";
+import { ArticleForm } from "./Articles/ArticleForm";
 import { BannerNav } from "../components/banner-nav";
 
 

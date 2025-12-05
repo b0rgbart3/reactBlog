@@ -1,5 +1,5 @@
 import React from "react";
-import { Article, User } from "./state/useStore";
+import { Article, User } from "../state/useStore";
 
 interface Props {
   articles: Article[];
