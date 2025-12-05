@@ -127,16 +127,26 @@ app.post("/api/products", upload.single("mainImage"), async (req, res) => {
   }
 });
 
-app.patch("/api/products/:id", upload.single("mainImage"), async (req, res) => {
+app.patch("/api/products/:id", upload.array("images", 10), async (req, res) => {
   try {
     const { id } = req.params;
-    let mainImage;
+    // let mainImage;
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-    if (imagePath) {
-      mainImage = imagePath; }
+    // console.log('BD: REQ: ', req);
 
-      req.body.mainImage = mainImage;
+    const files = req.files as Express.Multer.File[];
+    console.log('BD: files: ', files);
+
+      const uploadedImages = files?.map((file) => `/uploads/${file.filename}`);
+
+      req.body.images = uploadedImages;
+      
+
+    // const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    // if (imagePath) {
+    //   mainImage = imagePath; }
+
+    //   req.body.mainImage = mainImage;
 
     const updated = await Products.findByIdAndUpdate(
       id,

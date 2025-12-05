@@ -62,7 +62,7 @@ export function Home() {
                   <div className='productBoxImage'>
                   {
                     product.mainImage && (
-                      <img src={`${product.mainImage}`} alt={`${product.productName}`} />)}
+                      <img src={`${product.images[0]}`} alt={`${product.productName}`} />)}
                       </div>
 
                   <div>

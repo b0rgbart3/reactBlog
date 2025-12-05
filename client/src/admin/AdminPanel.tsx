@@ -11,7 +11,7 @@ import { ExpandableTable } from "./ExpandableTable";
 export function AdminPanel() {
 
     const { user, articles, categories, loading, products, productCategories, users, setUser } = useStore((s) => s);
-    console.log('BD: categories: ', categories);
+    // console.log('BD: categories: ', categories);
     const navigate = useNavigate();
     const { refresh, kill, backUpDB, wipeAndSeed } = useData();
     const editArticle = useCallback((article: Article) => {

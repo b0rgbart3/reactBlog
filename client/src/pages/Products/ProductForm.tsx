@@ -18,20 +18,17 @@ export type ProductFormProps = {
 export function ProductForm(props: ProductFormProps) {
     const { product, changeCategory, editing, changeNewCategory, 
         handleSubmit, newCategory, handleChange, handleFileChange } = props;
-
-         console.log('BD: product: ', product);
     const navigate = useNavigate();
     const { user, categories, articles, products, 
         productCategories, loading, users, setUser } = useStore((s) => s);
     const { refresh } = useData();
+    const [imageCount, setImageCount] = useState<number>(product?.imageCount ? product.imageCount : 0);
+    const [images, setImages] = useState<string[]>(product?.images ? product.images : []);
 
-
-
-    const [isReady, setIsReady] = useState(product?.readyToPublish ? product?.readyToPublish  : false);
+    const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ? product?.readyToPublish  : false);
 
     const toggleReadyStatus = useCallback(() => {
        const newReadyStatus = isReady;
-       console.log('BD: setting isReady to: ', !newReadyStatus);
         setIsReady(!newReadyStatus);
     }, [isReady]);
 
@@ -39,6 +36,12 @@ export function ProductForm(props: ProductFormProps) {
         product.readyToPublish = isReady;
         handleSubmit(e);
     })
+
+    const addAnotherImage = useCallback((e) => {
+        const newImageCount = imageCount + 1;
+        setImageCount(newImageCount);
+        setImages(prev => [...prev, ""]);
+    },[]);
 
     return (
         <form onSubmit={handleFormSubmit} className="new-article-form">
@@ -99,13 +102,27 @@ export function ProductForm(props: ProductFormProps) {
             <div>
                 <label htmlFor='headlineImage'>Main Image:</label>
 
-                {editing && product.mainImage !== '' && (
+                {/* {editing && product?.mainImage !== '' && (
                     <div className='headlineImagePreview'>
 
                         <img src={`${product?.mainImage}`} />
 
-                    </div>)}
-                <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
+                    </div>)} */}
+                {/* <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} /> */}
+            </div>
+
+            <div className='imageUploadContainer'>
+                {images.map((productImage, imageNumber) => (
+                    <>
+                    <div className='productImagePreview'>
+                           <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images"/>
+                    </div>
+                    </>
+                ))}
+            </div>
+            
+            <div onClick={addAnotherImage}>
+                Add another image
             </div>
 
             <div>

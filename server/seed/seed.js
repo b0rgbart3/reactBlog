@@ -17,7 +17,7 @@ async function seed() {
   console.log("🌱 Seeding users...");
   const userMap = {}; // email → ObjectId
   for (const user of usersSeed) {
-    console.log('BD: about to seed: ', user);
+    // console.log('BD: about to seed: ', user);
     const { insertedId } = await db.collection("users").insertOne(user);
     userMap[user.userEmail] = insertedId;
   }

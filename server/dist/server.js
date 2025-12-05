@@ -81,7 +81,7 @@ app.patch("/api/articles/:id", upload.single("headlineImage"), async (req, res) 
             headlineImage = imagePath;
         }
         req.body.headlineImage = headlineImage;
-        console.log('BD: REQ body: ', req.body);
+        // console.log('BD: REQ body: ', req.body);
         const updated = await Articles.findByIdAndUpdate(id, req.body, { new: true } // return the updated document
         );
         if (!updated) {

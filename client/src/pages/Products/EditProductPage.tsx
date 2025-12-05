@@ -16,7 +16,10 @@ export function EditProductPage() {
     const [category, setCategory] = useState(categories[0] || "");
     const [newCategory, setNewCategory] = useState('');
 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [images, setImages] = useState<File[]>([]);
+
+    const [fileCount, setFileCount] = useState<number>(0);
 
     const { refresh } = useData();
 
@@ -26,9 +29,6 @@ export function EditProductPage() {
     }, []);
 
     const [product, setProduct] = useState<Product>(products.find((product) => product._id === _id));
-
-    console.log('BD: about to edit product: ', product);
-
 
     useEffect(() => {
         if (!product) {
@@ -44,8 +44,12 @@ export function EditProductPage() {
     // Runs when user picks a file
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
-            setSelectedFile(e.target.files[0]);
+            // setFileCount(fileCount + 1);
+            // const newFiles = [...selectedFiles, e.target.files[0]];
+            // setSelectedFiles(newFiles);
+                setImages(prev => [...prev, e.target.files[0]]);
         }
+        console.log('BD: images: ', images);
     };
 
     useData();
@@ -54,21 +58,31 @@ export function EditProductPage() {
 
         try {
 
+
+                const formData = new FormData();
+
+    // Add text fields
+    formData.append("productName", product.productName);
+    formData.append("productDeescription", product.productDescription);
+    formData.append("readyToPublish", product.readyToPublish);
+    formData.append("category", newCategory.length ? newCategory : category);
+
+    // Add images (very important!)
+    images.forEach((img) => {
+      formData.append("images", img);   // <--- name must match upload.array("images")
+    });
+
+
             let postedCategory = category;
             if (newCategory.length) {
                 postedCategory = newCategory;
             }
 
-            if (selectedFile) {
-                product.mainImage = selectedFile
-            }
-
-            const response = await axios.patch(`/api/products/${product._id}`, product, {
+            const response = await axios.patch(`/api/products/${product._id}`, formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    // "Content-Type": "multipart/form-data"
                 }
             });
-            console.log('Saved product: ', response.data);
 
             navigate(`/`);
         } catch (err) {

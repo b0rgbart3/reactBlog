@@ -26,7 +26,7 @@ export function EditUserPage() {
 
     const toggleAuthorStatus = useCallback(() => {
         const updatedUser = { ...editUser };
-        console.log('BD: useditUserr.author: ', editUser.author);
+        // console.log('BD: useditUserr.author: ', editUser.author);
         updatedUser.author = !updatedUser.author;
         setEditUser(updatedUser)
 
@@ -34,7 +34,7 @@ export function EditUserPage() {
 
     useEffect(() => {
         if (!user) {
-            console.log('BD: user not logged in.');
+            // console.log('BD: user not logged in.');
             routeHome();
         }
     },[user]);
@@ -61,8 +61,8 @@ export function EditUserPage() {
             (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
                 const { name, value } = e.target;
 
-                console.log('BD: fieldName: ', name);
-                console.log('BD: value: ', value);
+                // console.log('BD: fieldName: ', name);
+                // console.log('BD: value: ', value);
 
                 editUser[name] = value;
 
