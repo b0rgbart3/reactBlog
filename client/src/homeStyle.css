@@ -112,3 +112,9 @@
 .productDiv img {
   max-width: 100%;
 }
+
+.productBox {
+  margin-bottom: 30px;
+  background-color: rgb(53, 53, 53);
+  padding: 18px;
+}

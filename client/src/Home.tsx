@@ -7,16 +7,14 @@ import { AdminPanel } from "./admin/AdminPanel";
 import { useNavigate } from "react-router-dom";
 import { BannerNav } from "./components/banner-nav";
 import "./homeStyle.css";
-import beautyImg from './assets/merch/21M_beauty.jpg';
 
-
- export interface Merch {
+export interface Merch {
   productImagePath: string;
   productName: string;
- }
+}
 
 export function Home() {
-  const { user, articles, loading, users, setUser } = useStore((s) => s);
+  const { user, articles, loading, products, users, setUser } = useStore((s) => s);
   const { refresh } = useData();
   const navigate = useNavigate();
 
@@ -33,43 +31,50 @@ export function Home() {
 
   const [page, setPage] = useState('home');
 
- const adminCallback= useCallback(() => {
+  const adminCallback = useCallback(() => {
     navigate('/admin');
- })
+  })
 
-
- const merchItems: Merch[] = [{
-  productImagePath: '../assets/merch/21M_beauty.jpg',
-  productName: '21Million'
- }]
 
   if (loading) return <div>Loading…</div>;
   return (<>
-    <BannerNav 
-    adminCallback={adminCallback} page='home'/>
+    <BannerNav
+      adminCallback={adminCallback} page='home' />
 
     <div className="home">
-        <div className="articleList">
-            <Articles />
-        </div>
-        <div className='merchList'>
-          Merch:
-        <div className='productDiv'>
-              <img src={beautyImg}/>
-         </div>
+      <div className="articleList">
+        <Articles />
+      </div>
+      <div className='merchList'>
+        Merch:
+
 
         {
-        merchItems.map((item) => {
+          products.map((product) => {
+            return (
+              <>
+                <div className='productBox'>
+                  {
+                    product.mainImage && (
+                      <img src={`${product.mainImage}`} alt={`${product.productName}`} />)}
 
-return (
-  <img src={`${item.productImagePath}`} alt={`${item.productName}`}/>
-)
-        })}
-         
-        </div>
+                  <div>
+                    {product.productName}
+                  </div>
+
+                  <div>
+                    {product.productDescription}
+                  </div>
+                </div>
+              </>
+
+            )
+          })}
+
+      </div>
     </div>
 
- 
+
   </>
   );
 

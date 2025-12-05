@@ -50,8 +50,6 @@ export function EditArticlePage() {
             }
 
             article.userID = user._id;
-
-            console.log('BD: about to save article: ', article);
             
             const response = await axios.patch(`/api/articles/${article._id}`, article, {
                 headers: {

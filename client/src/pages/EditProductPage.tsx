@@ -11,6 +11,7 @@ import { ProductForm } from "./ProductForm";
 
 export function EditProductPage() {
     const navigate = useNavigate();
+    const { _id } = useParams<{ _id: string }>();
 
     const { user, categories, products, productCategories, articles, loading, users, setUser } = useStore((s) => s);
     const [category, setCategory] = useState(categories[0] || "");
@@ -25,7 +26,10 @@ export function EditProductPage() {
         navigate(`/`);
     }, []);
 
-    const [product, setProduct] = useState<Partial<Product> | null>(null);
+    const [product, setProduct] = useState<Product>(products.find((product) => product._id === _id));
+
+    console.log('BD: about to edit product: ', product);
+
 
     useEffect(() => {
         if (!product) {
@@ -60,7 +64,7 @@ export function EditProductPage() {
                 product.mainImage = selectedFile
             }
 
-            const response = await axios.post("/api/products", product, {
+            const response = await axios.patch(`/api/products/${product._id}`, product, {
                 headers: {
                     "Content-Type": "multipart/form-data"
                 }
@@ -118,7 +122,7 @@ export function EditProductPage() {
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
                 handleFileChange={handleFileChange}
-                editing={false}
+                editing={true}
                 changeCategory={handleChange}
                 changeNewCategory={changeNewCategory}
                 newCategory={newCategory}

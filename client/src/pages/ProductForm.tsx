@@ -19,13 +19,13 @@ export function ProductForm(props: ProductFormProps) {
     const { product, changeCategory, editing, changeNewCategory, 
         handleSubmit, newCategory, handleChange, handleFileChange } = props;
 
-         console.log('BD: new product: ', product);
+         console.log('BD: product: ', product);
     const navigate = useNavigate();
     const { user, categories, articles, products, 
         productCategories, loading, users, setUser } = useStore((s) => s);
     const { refresh } = useData();
 
-    console.log('BD: products: ', products);
+
 
     const [isReady, setIsReady] = useState(product?.readyToPublish ? product?.readyToPublish  : false);
 
