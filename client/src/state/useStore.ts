@@ -29,11 +29,9 @@ export type User = {
 export type Product = {
   _id: string;
   category: string;
-  imageCount: number;
-  images: string[];
+  productImages: string[];
   productDescription: string;
   productName: string;
-  mainImage: string;
   readyToPublish: boolean;
 }
 

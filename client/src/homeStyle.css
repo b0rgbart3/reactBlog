@@ -140,3 +140,12 @@
   max-width: 80%;
   margin:auto;
 }
+
+.productImagePreviewThumbnail {
+  width: 200px;
+
+}
+
+.productImagePreviewThumbnail img {
+  width: 100%;
+}

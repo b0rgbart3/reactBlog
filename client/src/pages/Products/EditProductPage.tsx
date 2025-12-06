@@ -15,11 +15,12 @@ export function EditProductPage() {
     const { user, categories, products, productCategories, articles, loading, users, setUser } = useStore((s) => s);
     const [category, setCategory] = useState(categories[0] || "");
     const [newCategory, setNewCategory] = useState('');
+    const [product, setProduct] = useState<Product>(products.find((product) => product._id === _id));
 
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    // const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [images, setImages] = useState<File[]>([]);
 
-    const [fileCount, setFileCount] = useState<number>(0);
+    // const [fileCount, setFileCount] = useState<number>(0);
 
     const { refresh } = useData();
 
@@ -28,8 +29,7 @@ export function EditProductPage() {
         navigate(`/`);
     }, []);
 
-    const [product, setProduct] = useState<Product>(products.find((product) => product._id === _id));
-
+  
     useEffect(() => {
         if (!product) {
             const freshProduct: Partial<Product> = {
@@ -49,7 +49,7 @@ export function EditProductPage() {
             // setSelectedFiles(newFiles);
                 setImages(prev => [...prev, e.target.files[0]]);
         }
-        console.log('BD: images: ', images);
+        // console.log('BD: images: ', images);
     };
 
     useData();
@@ -63,9 +63,10 @@ export function EditProductPage() {
 
     // Add text fields
     formData.append("productName", product.productName);
-    formData.append("productDeescription", product.productDescription);
+    formData.append("productDescription", product.productDescription);
     formData.append("readyToPublish", product.readyToPublish);
     formData.append("category", newCategory.length ? newCategory : category);
+    formData.append('productImages', product.productImages)
 
     // Add images (very important!)
     images.forEach((img) => {

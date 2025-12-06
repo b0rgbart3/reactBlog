@@ -71,7 +71,18 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
+
+const productStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/products/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
 const upload = multer({ storage });
+const uploadProducts = multer({ storage: productStorage });
 
 if (MONGO_URI) {
 mongoose.connect(MONGO_URI)
@@ -112,13 +123,22 @@ app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
   }
 });
 
-app.post("/api/products", upload.single("mainImage"), async (req, res) => {
+app.post("/api/products", uploadProducts.array("images", 10), async (req, res) => {
   try {
+
+    const images = req.files as Express.Multer.File[];
+
+
+      const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
+
+      req.body.productImages = uploadedImages;
+
+
     const doc = new Products(req.body);
     console.log('BD: about to save a product: ', req.body);
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-    if (imagePath) {
-      doc.mainImage = imagePath; }
+    // const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    // if (imagePath) {
+    //   doc.mainImage = imagePath; }
 
     await doc.save();
     res.json(doc);
@@ -127,7 +147,7 @@ app.post("/api/products", upload.single("mainImage"), async (req, res) => {
   }
 });
 
-app.patch("/api/products/:id", upload.array("images", 10), async (req, res) => {
+app.patch("/api/products/:id", uploadProducts.array("images", 10), async (req, res) => {
   try {
     const { id } = req.params;
     // let mainImage;
@@ -137,10 +157,23 @@ app.patch("/api/products/:id", upload.array("images", 10), async (req, res) => {
     const files = req.files as Express.Multer.File[];
     console.log('BD: files: ', files);
 
-      const uploadedImages = files?.map((file) => `/uploads/${file.filename}`);
+      const uploadedImages = files?.map((file) => `/uploads/products/${file.filename}`);
 
-      req.body.images = uploadedImages;
+      console.log('BD: uploaded: ', uploadedImages);
+
+      console.log('BD: PRE_EXISTING: ', req.body.productImages);
+
+
+      const newImageArray = req.body.productImages ? req.body.productImages : [];
+      const combined = [newImageArray, ...uploadedImages];
+
+
+      console.log('BD: combined: ', combined);
+
+      req.body.productImages = combined;
       
+      console.log('BD: req: ', req.body);
+
 
     // const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
     // if (imagePath) {
@@ -341,6 +374,22 @@ app.delete("/api/articles/:_id", async (req: any, res: any) => {
 
     if (!deleted) {
       return res.status(404).json({ error: "Article not found" });
+    }
+
+    res.json({ success: true, deleted });
+
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/api/products/:_id", async (req: any, res: any) => {
+  try {
+    const { _id } = req.params;
+    const deleted = await Products.findByIdAndDelete(_id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Product to kill was not found" });
     }
 
     res.json({ success: true, deleted });

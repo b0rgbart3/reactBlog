@@ -203,7 +203,7 @@ app.post("/api/wipe", async (req, res) => {
         wipeStatus = 200;
     }
     catch (e) {
-        console.log('BD:unable to wipe the db.');
+        // console.log('BD:unable to wipe the db.');
         wipeStatus = 500;
     }
     finally {

@@ -56,13 +56,15 @@ export function Home() {
 
         {
           products.map((product) => {
+            // console.log('BD: about to render product: ', product);
             return (
               <>
+              { product.readyToPublish && (
                 <div className='productBox' onClick={() => openProductPage(product._id)}>
                   <div className='productBoxImage'>
                   {
-                    product.mainImage && (
-                      <img src={`${product.images[0]}`} alt={`${product.productName}`} />)}
+                    product.productImages[0] && (
+                      <img src={`${product.productImages[0]}`} alt={`${product.productName}`} />)}
                       </div>
 
                   <div>
@@ -73,6 +75,7 @@ export function Home() {
                     {product.productDescription}
                   </div>
                 </div>
+                )}
               </>
 
             )

@@ -17,7 +17,7 @@ export function ProductPage() {
             <BannerNav page='product' />
 
             <div className='productBeauty'>
-                <img src={`${product?.mainImage}`} alt="headline" />
+                <img src={`${product?.productImages[0]}`} alt="headline" />
             </div>
 
             <div className='prodcutTitle'>

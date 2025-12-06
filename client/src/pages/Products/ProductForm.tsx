@@ -16,19 +16,20 @@ export type ProductFormProps = {
 }
 
 export function ProductForm(props: ProductFormProps) {
-    const { product, changeCategory, editing, changeNewCategory, 
+    const { product, changeCategory, editing, changeNewCategory,
         handleSubmit, newCategory, handleChange, handleFileChange } = props;
-    const navigate = useNavigate();
-    const { user, categories, articles, products, 
-        productCategories, loading, users, setUser } = useStore((s) => s);
-    const { refresh } = useData();
-    const [imageCount, setImageCount] = useState<number>(product?.imageCount ? product.imageCount : 0);
-    const [images, setImages] = useState<string[]>(product?.images ? product.images : []);
 
-    const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ? product?.readyToPublish  : false);
+    const navigate = useNavigate();
+    const { user, categories, articles, products,
+        productCategories, loading, users, setUser } = useStore((s) => s);
+        // console.log('BD: back from use Store.');
+    const { refresh } = useData();
+    const [images, setImages] = useState<string[]>([]);
+
+    const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ? product?.readyToPublish : false);
 
     const toggleReadyStatus = useCallback(() => {
-       const newReadyStatus = isReady;
+        const newReadyStatus = isReady;
         setIsReady(!newReadyStatus);
     }, [isReady]);
 
@@ -38,10 +39,11 @@ export function ProductForm(props: ProductFormProps) {
     })
 
     const addAnotherImage = useCallback((e) => {
-        const newImageCount = imageCount + 1;
-        setImageCount(newImageCount);
         setImages(prev => [...prev, ""]);
-    },[]);
+        // console.log('BD: images: ', images);
+    }, [images]);
+
+    // console.log('BD: about to render the actual product form.');
 
     return (
         <form onSubmit={handleFormSubmit} className="new-article-form">
@@ -100,7 +102,7 @@ export function ProductForm(props: ProductFormProps) {
                 />
             </div>
             <div>
-                <label htmlFor='headlineImage'>Main Image:</label>
+                <label htmlFor='headlineImage'>Images:</label>
 
                 {/* {editing && product?.mainImage !== '' && (
                     <div className='headlineImagePreview'>
@@ -112,15 +114,31 @@ export function ProductForm(props: ProductFormProps) {
             </div>
 
             <div className='imageUploadContainer'>
-                {images.map((productImage, imageNumber) => (
+                existing images:
+
+                {product?.productImages?.map((productImage, imageNumber) => (
                     <>
-                    <div className='productImagePreview'>
-                           <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images"/>
-                    </div>
+                        product Image:
+                        <div className='productImagePreview'>
+                            <div className='productImagePreviewThumbnail'>
+                                <img src={`${product.productImages[imageNumber]}`} />
+                            </div>
+                            {/* <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images"/> */}
+                        </div>
                     </>
                 ))}
             </div>
-            
+
+            <div>
+                Upload new images:
+                {images.map((image, imageNumber) => {
+                    return (
+                        <>Image: {image}
+                            <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images" />
+                        </>)
+                })}
+            </div>
+
             <div onClick={addAnotherImage}>
                 Add another image
             </div>

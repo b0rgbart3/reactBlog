@@ -13,7 +13,7 @@ export function AdminPanel() {
     const { user, articles, categories, loading, products, productCategories, users, setUser } = useStore((s) => s);
     // console.log('BD: categories: ', categories);
     const navigate = useNavigate();
-    const { refresh, kill, backUpDB, wipeAndSeed } = useData();
+    const { refresh, kill, backUpDB, wipeAndSeed, killProduct} = useData();
     const editArticle = useCallback((article: Article) => {
         navigate(`/article/edit/${article._id}`);
     }, []);
@@ -29,6 +29,16 @@ export function AdminPanel() {
             \nIt will be complete deleted from the database, and cannot be restored.`);
         if (!confirmDelete) return; // cancel if user clicks "Cancel"
         kill(article._id);
+        refresh();
+    }, []);
+
+    const killAProduct = useCallback((productToKill: Product) => {
+        const confirmDelete =
+            window.confirm(`Are you sure you want to delete this product, 
+            named: ${productToKill.productName} ?
+            \nIt will be complete deleted from the database, and cannot be restored.`);
+        if (!confirmDelete) return; // cancel if user clicks "Cancel"
+        killProduct(productToKill._id);
         refresh();
     }, []);
 
@@ -115,16 +125,20 @@ export function AdminPanel() {
                 Products:
                 <br>
                 </br>
+                <div className='productsContainer'>
                 {products.map((product) => {
                     return (
                         <div>
-                        <div  onClick={() => editProduct(product)}>
-                            {product.productName}
-                        </div>
-                        <div>{product.productDescription}</div>
+                            <div onClick={() => editProduct(product)}>
+                                {product.productName}
+                            </div>
+                            <div>{product.productDescription}</div>
+                        <div className='killProduct' onClick={() => killAProduct(product)}>X</div>
+                        
                         </div>
                     )
                 })}
+                </div>
 
 
                 </>)}

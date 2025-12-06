@@ -38,6 +38,10 @@ export function useData() {
       const cats: string[] = data.map((product) => product.category);
       const uniqueCategories: string[] = [...new Set(cats)];
       // console.log('BD: unique product categories:', uniqueCategories);
+
+      // const cleanImageArray = data?.productImages.filter((productImage) => productImage === '');
+      // data.productImages = cleanImageArray;
+
       setProducts(data);
       setProductCategories(uniqueCategories);
 
@@ -75,6 +79,17 @@ export function useData() {
       fetchUsers();
     }
   })
+
+    const killProduct = useCallback(async (killID: string) => {
+    setLoading(true);
+    try {
+      await axios.delete(`/api/products/${killID}`);
+    } catch (err) {
+      console.error("Failed to kill product: ", killID);
+    } finally {
+      setLoading(false);
+    }
+  }, [])
 
   const kill = useCallback(async (killID: string) => {
     setLoading(true);
@@ -191,7 +206,7 @@ export function useData() {
     }
   }, [setArticles, setCategories, users]);
 
-  return { articles, backUpDB, refresh, logout, createUser, kill, login, wipeAndSeed };
+  return { articles, backUpDB, refresh, logout, createUser, kill, killProduct, login, wipeAndSeed };
 }
 
 
