@@ -165,7 +165,7 @@ app.patch("/api/products/:id", uploadProducts.array("images", 10), async (req, r
 
 
       const newImageArray = req.body.productImages ? req.body.productImages : [];
-      const combined = [newImageArray, ...uploadedImages];
+      const combined = newImageArray.length ? [newImageArray, ...uploadedImages] : uploadedImages;
 
 
       console.log('BD: combined: ', combined);

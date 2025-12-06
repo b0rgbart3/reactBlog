@@ -43,7 +43,10 @@ export function ProductForm(props: ProductFormProps) {
         // console.log('BD: images: ', images);
     }, [images]);
 
-    // console.log('BD: about to render the actual product form.');
+    const killProductImage = useCallback((imageNumber: number) => {
+        console.log('BD: about to kill: ', imageNumber);
+        product.productImages.splice(imageNumber,1);
+    }, [product])
 
     return (
         <form onSubmit={handleFormSubmit} className="new-article-form">
@@ -102,15 +105,7 @@ export function ProductForm(props: ProductFormProps) {
                 />
             </div>
             <div>
-                <label htmlFor='headlineImage'>Images:</label>
-
-                {/* {editing && product?.mainImage !== '' && (
-                    <div className='headlineImagePreview'>
-
-                        <img src={`${product?.mainImage}`} />
-
-                    </div>)} */}
-                {/* <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} /> */}
+                <label>Images:</label>
             </div>
 
             <div className='imageUploadContainer'>
@@ -118,19 +113,19 @@ export function ProductForm(props: ProductFormProps) {
 
                 {product?.productImages?.map((productImage, imageNumber) => (
                     <>
-                        product Image:
                         <div className='productImagePreview'>
                             <div className='productImagePreviewThumbnail'>
                                 <img src={`${product.productImages[imageNumber]}`} />
                             </div>
-                            {/* <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images"/> */}
+                        <div className='productImagePreviewKill' onClick={()=>killProductImage(imageNumber)}>
+                            X
                         </div>
+                      </div>
                     </>
                 ))}
             </div>
 
             <div>
-                Upload new images:
                 {images.map((image, imageNumber) => {
                     return (
                         <>Image: {image}

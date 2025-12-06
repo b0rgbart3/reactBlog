@@ -11,17 +11,11 @@ import { ProductForm } from "./ProductForm";
 export function EditProductPage() {
     const navigate = useNavigate();
     const { _id } = useParams<{ _id: string }>();
-
     const { user, categories, products, productCategories, articles, loading, users, setUser } = useStore((s) => s);
     const [category, setCategory] = useState(categories[0] || "");
     const [newCategory, setNewCategory] = useState('');
     const [product, setProduct] = useState<Product>(products.find((product) => product._id === _id));
-
-    // const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [images, setImages] = useState<File[]>([]);
-
-    // const [fileCount, setFileCount] = useState<number>(0);
-
     const { refresh } = useData();
 
     const routeHome = useCallback(() => {
@@ -35,7 +29,7 @@ export function EditProductPage() {
             const freshProduct: Partial<Product> = {
                 productDescription: "",
                 category: productCategories[0] || "",
-                productName: "New Product",
+                productName: "Edit Product",
             };
             setProduct(freshProduct);
         }
@@ -127,10 +121,8 @@ export function EditProductPage() {
 
     return (
         <div className={'article'}>
-
-
             <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
-            <div className='articlePageTitle'>{`New Product:`}</div>
+            <div className='articlePageTitle'>{`Edit Product:`}</div>
             <ProductForm
                 product={product}
                 handleSubmit={handleSubmit}

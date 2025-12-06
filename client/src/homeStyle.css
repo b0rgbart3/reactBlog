@@ -132,12 +132,11 @@
 
 .productBeauty {
   margin: auto;
-  width: 40%;
-  border: 1px solid gray;
+  width: 80%;
 }
 
 .productBeauty img {
-  max-width: 80%;
+  max-width: 100%;
   margin:auto;
 }
 
