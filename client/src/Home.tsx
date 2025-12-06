@@ -15,8 +15,10 @@ export interface Merch {
 }
 
 export function Home() {
-  const { user, articles, loading, products, users, setUser } = useStore((s) => s);
   const { refresh } = useData();
+  const { user, articles, categories, loading, products, users, setUser } = useStore((s) => s);
+  console.log('BD: cats in home: ', categories);
+
   const navigate = useNavigate();
 
   useEffect(() => {

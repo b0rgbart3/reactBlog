@@ -61,7 +61,7 @@ export const useStore = create<State>((set) => ({
   products: [],
   setProducts: (products: Product[]) => set({ products: products }),
   productCategories: [],
-  setProductCategories: (productCategories: string[]) => set({ categories: productCategories}),
+  setProductCategories: (productCategories: string[]) => set({ productCategories: productCategories}),
   setLoading: (isLoading: boolean) => set({ loading: isLoading }),
   user: null,
   setUser: (u: User | null) => { 

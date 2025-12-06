@@ -10,7 +10,7 @@ export type AuthObject = {
 }
 
 export function useData() {
-  const { articles, setArticles, setProducts, setProductCategories, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
+  const {categories, articles, setArticles, setProducts, setProductCategories, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -18,10 +18,14 @@ export function useData() {
       const res = await axios.get("/api/articles");
       const data = res.data.data;
       const cats: string[] = data.map((article) => article.category);
+
+      console.log('BD: cats: ', cats);
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
-      //  console.log('BD: unique article categories:', uniqueCategories);
-      setCategories(uniqueCategories);
+      console.log('BD: unique article categories:', uniqueCategories);
+      if (uniqueCategories && uniqueCategories[0] !== '') {
+        setCategories(uniqueCategories);
+      }
 
     } catch (err) {
       console.error("Failed to fetch articles:", err);
@@ -36,14 +40,14 @@ export function useData() {
       const res = await axios.get("/api/products");
       const data = res.data.data;
       const cats: string[] = data.map((product) => product.category);
-      const uniqueCategories: string[] = [...new Set(cats)];
-      // console.log('BD: unique product categories:', uniqueCategories);
+      const uniqueProductCategories: string[] = [...new Set(cats)];
+      console.log('BD: unique product categories:', uniqueProductCategories);
 
       // const cleanImageArray = data?.productImages.filter((productImage) => productImage === '');
       // data.productImages = cleanImageArray;
 
       setProducts(data);
-      setProductCategories(uniqueCategories);
+      setProductCategories(uniqueProductCategories);
 
     } catch (err) {
       console.error("Failed to fetch articles:", err);
@@ -74,13 +78,13 @@ export function useData() {
     try {
       const res = await axios.post("/api/users");
       const data = res;
-  
+
     } finally {
       fetchUsers();
     }
   })
 
-    const killProduct = useCallback(async (killID: string) => {
+  const killProduct = useCallback(async (killID: string) => {
     setLoading(true);
     try {
       await axios.delete(`/api/products/${killID}`);
@@ -112,15 +116,15 @@ export function useData() {
       console.log('Failed to login.');
     } finally {
       if (loginResponse) {
-      setLoading(false);
+        setLoading(false);
 
-      const decoded = jwtDecode<User>(loginResponse.data.token);
-      setUser(decoded);
+        const decoded = jwtDecode<User>(loginResponse.data.token);
+        setUser(decoded);
 
-      // Save token to localStorage
-      localStorage.setItem("jwt", loginResponse.data.token);
+        // Save token to localStorage
+        localStorage.setItem("jwt", loginResponse.data.token);
 
-      return decoded;
+        return decoded;
       } else {
         return undefined;
       }
@@ -178,31 +182,31 @@ export function useData() {
     }
     if (!users.length) {
       fetchUsers();
-    } 
-      const localStorageUserToken = localStorage.getItem("jwt");
+    }
+    const localStorageUserToken = localStorage.getItem("jwt");
 
 
-      if (localStorageUserToken && localStorageUserToken !== 'null') {
-        const decoded: any = jwtDecode(localStorageUserToken);
-        const now = Date.now() / 1000; // in seconds
+    if (localStorageUserToken && localStorageUserToken !== 'null') {
+      const decoded: any = jwtDecode(localStorageUserToken);
+      const now = Date.now() / 1000; // in seconds
 
-        if (decoded.exp && decoded.exp > now) {
-          // token still valid
- 
-          const match : User = users?.find((u) => u._id === decoded?._id);
+      if (decoded.exp && decoded.exp > now) {
+        // token still valid
 
-          if (match) {
-      
-            setUser(match);
-          }
-        } else {
-          // expired
-          localStorage.removeItem("jwt");
-          setUser(null);
+        const match: User = users?.find((u) => u._id === decoded?._id);
+
+        if (match) {
+
+          setUser(match);
         }
+      } else {
+        // expired
+        localStorage.removeItem("jwt");
+        setUser(null);
+      }
 
 
-      
+
     }
   }, [setArticles, setCategories, users]);
 

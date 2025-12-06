@@ -61,7 +61,7 @@ app.use("/uploads", express.static("uploads"));
 app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
     try {
         const doc = new Articles(req.body);
-        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+        const imagePath = req.file ? `/uploads/articles/${req.file.filename}` : null;
         if (imagePath) {
             doc.headlineImage = imagePath;
         }
@@ -76,7 +76,7 @@ app.patch("/api/articles/:id", upload.single("headlineImage"), async (req, res) 
     try {
         const { id } = req.params;
         let headlineImage;
-        const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+        const imagePath = req.file ? `/uploads/articles/${req.file.filename}` : null;
         if (imagePath) {
             headlineImage = imagePath;
         }

@@ -38,10 +38,10 @@ import { Products } from "./models/Products.ts";
 function getRandomHexColor(): string {
   // Generate a random number between 0 and 0xFFFFFF
   const randomNum = Math.floor(Math.random() * 0xffffff);
-  
+
   // Convert it to a hexadecimal string and pad with zeros if necessary
   const hexString = randomNum.toString(16).padStart(6, '0');
-  
+
   // Return as a CSS color string
   return `${hexString}`;
 }
@@ -72,6 +72,15 @@ const storage = multer.diskStorage({
   },
 });
 
+const articleStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/articles/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/products/");
@@ -82,15 +91,16 @@ const productStorage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+const uploadArticle = multer({ storage: articleStorage });
 const uploadProducts = multer({ storage: productStorage });
 
 if (MONGO_URI) {
-mongoose.connect(MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err: unknown) => {
-    if (err instanceof Error) console.error("MongoDB error:", err.message);
-    else console.error(err);
-  });
+  mongoose.connect(MONGO_URI)
+    .then(() => console.log("✅ MongoDB connected"))
+    .catch((err: unknown) => {
+      if (err instanceof Error) console.error("MongoDB error:", err.message);
+      else console.error(err);
+    });
 } else {
   console.error('NO mongo URI.');
 }
@@ -106,12 +116,13 @@ app.use(cors({
 app.use("/uploads", express.static("uploads"));
 
 // Save new data
-app.post("/api/articles", upload.single("headlineImage"), async (req, res) => {
+app.post("/api/articles", uploadArticle.single("headlineImage"), async (req, res) => {
   try {
     const doc = new Articles(req.body);
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    const imagePath = req.file ? `/uploads/articles/${req.file.filename}` : null;
     if (imagePath) {
-      doc.headlineImage = imagePath; }
+      doc.headlineImage = imagePath;
+    }
 
     doc.randomColor = getRandomHexColor();
     doc.originDate = new Date().toISOString().split("T")[0];
@@ -129,9 +140,9 @@ app.post("/api/products", uploadProducts.array("images", 10), async (req, res) =
     const images = req.files as Express.Multer.File[];
 
 
-      const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
+    const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
 
-      req.body.productImages = uploadedImages;
+    req.body.productImages = uploadedImages;
 
 
     const doc = new Products(req.body);
@@ -157,29 +168,13 @@ app.patch("/api/products/:id", uploadProducts.array("images", 10), async (req, r
     const files = req.files as Express.Multer.File[];
     console.log('BD: files: ', files);
 
-      const uploadedImages = files?.map((file) => `/uploads/products/${file.filename}`);
+    const uploadedImages = files?.map((file) => `/uploads/products/${file.filename}`);
+    const newImageArray = req.body.productImages ? req.body.productImages : [];
+    const combined = newImageArray.length ? [newImageArray, ...uploadedImages] : uploadedImages;
 
-      console.log('BD: uploaded: ', uploadedImages);
+    req.body.productImages = combined;
 
-      console.log('BD: PRE_EXISTING: ', req.body.productImages);
-
-
-      const newImageArray = req.body.productImages ? req.body.productImages : [];
-      const combined = newImageArray.length ? [newImageArray, ...uploadedImages] : uploadedImages;
-
-
-      console.log('BD: combined: ', combined);
-
-      req.body.productImages = combined;
-      
-      console.log('BD: req: ', req.body);
-
-
-    // const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-    // if (imagePath) {
-    //   mainImage = imagePath; }
-
-    //   req.body.mainImage = mainImage;
+    console.log('BD: req: ', req.body);
 
     const updated = await Products.findByIdAndUpdate(
       id,
@@ -198,20 +193,21 @@ app.patch("/api/products/:id", uploadProducts.array("images", 10), async (req, r
 });
 
 
-app.patch("/api/articles/:id", upload.single("headlineImage"), async (req, res) => {
+app.patch("/api/articles/:id", uploadArticle.single("headlineImage"), async (req, res) => {
   try {
     const { id } = req.params;
     let headlineImage;
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+    const imagePath = req.file ? `/uploads/articles/${req.file.filename}` : null;
     if (imagePath) {
-      headlineImage = imagePath; }
+      headlineImage = imagePath;
+    }
 
-      req.body.headlineImage = headlineImage;
-      req.body.lastModifiedDate = new Date().toISOString().split("T")[0];
-      req.body.randomColor = getRandomHexColor();
+    req.body.headlineImage = headlineImage;
+    req.body.lastModifiedDate = new Date().toISOString().split("T")[0];
+    req.body.randomColor = getRandomHexColor();
 
-      console.log('BD: REQ body: ', req.body);
+    console.log('BD: REQ body: ', req.body);
 
     const updated = await Articles.findByIdAndUpdate(
       id,
@@ -233,7 +229,7 @@ app.patch("/api/user/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-      console.log('BD: REQ body: ', req.body);
+    console.log('BD: REQ body: ', req.body);
 
     const updated = await Users.findByIdAndUpdate(
       id,
@@ -425,24 +421,24 @@ app.post("/api/backup", async (req: any, res: any) => {
   let backupStatus = 500;
   try {
     const todaysDate = new Date();
-      let localeString = todaysDate.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+    let localeString = todaysDate.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
     });
     console.log('BD: todays date: ', localeString);
 
-        // Optional: build an absolute output path
+    // Optional: build an absolute output path
 
-        const folderName = getIsoFolderName();
-const backupPath = path.join(process.cwd(), "adminBackup", folderName);
+    const folderName = getIsoFolderName();
+    const backupPath = path.join(process.cwd(), "adminBackup", folderName);
 
 
-//  const backupPath = path.join(process.cwd(), "adminBackup");
+    //  const backupPath = path.join(process.cwd(), "adminBackup");
 
 
     // Your MongoDB backup command
-  
+
 
     console.log('BD: MONGO DUMP PATH: ', MONGO_DUMP_PATH);
 
@@ -463,14 +459,15 @@ const backupPath = path.join(process.cwd(), "adminBackup", folderName);
       res.status(200).json({ message: "Backup completed", output: stdout });
     });
 
-    
 
-    
+
+
     backupStatus = 200;
-  } catch (e) { console.log('BD:unable to backup the db.'); backupStatus = 500;
+  } catch (e) {
+    console.log('BD:unable to backup the db.'); backupStatus = 500;
 
-  res.status(backupStatus).send();
-   } 
+    res.status(backupStatus).send();
+  }
 
 });
 
