@@ -134,15 +134,23 @@ app.post("/api/articles", uploadArticle.single("headlineImage"), async (req, res
   }
 });
 
-app.post("/api/products", uploadProducts.array("images", 10), async (req, res) => {
+app.post("/api/products", uploadProducts.fields([
+  { name: "images", maxCount: 10 },
+  { name: "newBeauty", maxCount: 1 },
+  { name: "newThumbnail", maxCount: 1 }
+]), async (req, res) => {
   try {
 
-    const images = req.files as Express.Multer.File[];
 
+    const images = req.files["images"] || [];
+    const beauty = req.files["newBeauty"]?.[0] || null;
+    const thumbnail = req.files["newThumbnail"]?.[0] || null;
 
     const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
 
     req.body.productImages = uploadedImages;
+    req.body.beauty = `/uploads/products/${beauty.filename}`;
+    req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
 
 
     const doc = new Products(req.body);
@@ -158,23 +166,30 @@ app.post("/api/products", uploadProducts.array("images", 10), async (req, res) =
   }
 });
 
-app.patch("/api/products/:id", uploadProducts.array("images", 10), async (req, res) => {
+app.patch("/api/products/:id", uploadProducts.fields([
+  { name: "images", maxCount: 10 },
+  { name: "newBeauty", maxCount: 1 },
+  { name: "newThumbnail", maxCount: 1 }
+]), async (req, res) => {
   try {
     const { id } = req.params;
-    // let mainImage;
+    const images = req.files["images"] || [];
+    const beauty = req.files["newBeauty"]?.[0] || null;
+    const thumbnail = req.files["newThumbnail"]?.[0] || null;
 
-    // console.log('BD: REQ: ', req);
 
-    const files = req.files as Express.Multer.File[];
-    console.log('BD: files: ', files);
-
-    const uploadedImages = files?.map((file) => `/uploads/products/${file.filename}`);
+    const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
     const newImageArray = req.body.productImages ? req.body.productImages : [];
     const combined = newImageArray.length ? [newImageArray, ...uploadedImages] : uploadedImages;
 
     req.body.productImages = combined;
+    if (beauty) {
+    req.body.beauty = `/uploads/products/${beauty.filename}`;}
+    if (thumbnail) {
+    req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
+    }
 
-    console.log('BD: req: ', req.body);
+    // console.log('BD: req: ', req.body);
 
     const updated = await Products.findByIdAndUpdate(
       id,
@@ -207,7 +222,7 @@ app.patch("/api/articles/:id", uploadArticle.single("headlineImage"), async (req
     req.body.lastModifiedDate = new Date().toISOString().split("T")[0];
     req.body.randomColor = getRandomHexColor();
 
-    console.log('BD: REQ body: ', req.body);
+    // console.log('BD: REQ body: ', req.body);
 
     const updated = await Articles.findByIdAndUpdate(
       id,
@@ -229,7 +244,7 @@ app.patch("/api/user/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log('BD: REQ body: ', req.body);
+    // console.log('BD: REQ body: ', req.body);
 
     const updated = await Users.findByIdAndUpdate(
       id,
@@ -426,7 +441,7 @@ app.post("/api/backup", async (req: any, res: any) => {
       month: 'long',
       day: 'numeric'
     });
-    console.log('BD: todays date: ', localeString);
+    // console.log('BD: todays date: ', localeString);
 
     // Optional: build an absolute output path
 
@@ -440,7 +455,7 @@ app.post("/api/backup", async (req: any, res: any) => {
     // Your MongoDB backup command
 
 
-    console.log('BD: MONGO DUMP PATH: ', MONGO_DUMP_PATH);
+    // console.log('BD: MONGO DUMP PATH: ', MONGO_DUMP_PATH);
 
     if (!fs.existsSync(backupPath)) {
       fs.mkdirSync(backupPath, { recursive: true });
@@ -464,7 +479,7 @@ app.post("/api/backup", async (req: any, res: any) => {
 
     backupStatus = 200;
   } catch (e) {
-    console.log('BD:unable to backup the db.'); backupStatus = 500;
+    // console.log('BD:unable to backup the db.'); backupStatus = 500;
 
     res.status(backupStatus).send();
   }

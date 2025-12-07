@@ -17,6 +17,8 @@ export function NewProductPage() {
 
     // const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [images, setImages] = useState<File[]>([]);
+    const [beauty, setBeauty] = useState<File>({});
+    const [thumbnail, setThumbnail] = useState<File>({});
 
     const { refresh } = useData();
 
@@ -42,21 +44,25 @@ export function NewProductPage() {
         }
     }, [product]);
 
-    // Runs when user picks a file
-    // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     if (e.target.files && e.target.files[0]) {
-    //         setSelectedFile(e.target.files[0]);
-    //     }
-    // };
-        const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files && e.target.files[0]) {
-                // setFileCount(fileCount + 1);
-                // const newFiles = [...selectedFiles, e.target.files[0]];
-                // setSelectedFiles(newFiles);
-                    setImages(prev => [...prev, e.target.files[0]]);
-            }
-            // console.log('BD: images: ', images);
-        };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setImages(prev => [...prev, e.target.files[0]]);
+        }
+    };
+    const handleBeautyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                console.log('BD: target: ', e.target);
+        if (e.target.files && e.target.files[0]) {
+            setBeauty(e.target.files[0]);
+        }
+    };
+
+    const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                console.log('BD: target: ', e.target);
+        if (e.target.files && e.target.files[0]) {
+            setThumbnail( e.target.files[0]);
+        }
+    };
 
 
     useData();
@@ -70,19 +76,30 @@ export function NewProductPage() {
             if (newCategory.length) {
                 postedCategory = newCategory;
             }
-   const formData = new FormData();
+            const formData = new FormData();
 
-    // Add text fields
-    formData.append("productName", product.productName);
-    console.log('BD: about to append product description of: ', product.productDescription);
-    formData.append("productDescription", product.productDescription);
-    formData.append("readyToPublish", product.readyToPublish);
-    formData.append("category", newCategory.length ? newCategory : category);
+            // Add text fields
+            formData.append("productName", product.productName);
+            // console.log('BD: about to append product description of: ', product.productDescription);
+            formData.append("productDescription", product.productDescription);
+            formData.append("readyToPublish", product.readyToPublish);
+            formData.append("category", newCategory.length ? newCategory : category);
+            // formData.append("beauty", beauty);
+            // formData.append("thumbnail", thumbnail);
 
-    // Add images (very important!)
-    images.forEach((img) => {
-      formData.append("images", img);   // <--- name must match upload.array("images")
-    });
+                        if (beauty) {
+            formData.append('newBoeaty', beauty);
+            }
+
+            if (thumbnail) {
+            formData.append('newThumbnail', thumbnail);
+            }
+
+
+            // Add images 
+            images.forEach((img) => {
+                formData.append("images", img);   // <--- name must match upload.array("images")
+            });
 
 
             const response = await axios.post("/api/products", formData, {
@@ -90,7 +107,7 @@ export function NewProductPage() {
                     // "Content-Type": "multipart/form-data"
                 }
             });
-            console.log('Saved product: ', response.data);
+            // console.log('Saved product: ', response.data);
 
             navigate(`/`);
         } catch (err) {
@@ -136,8 +153,6 @@ export function NewProductPage() {
 
     return (
         <div className={'article'}>
-
-
             <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
             <div className='articlePageTitle'>{`New Product:`}</div>
             <ProductForm
@@ -145,11 +160,13 @@ export function NewProductPage() {
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
                 handleFileChange={handleFileChange}
+                handleBeautyChange={handleBeautyChange}
+                handleThumbnailChange={handleThumbnailChange}
                 editing={false}
                 changeCategory={handleChange}
                 changeNewCategory={changeNewCategory}
                 newCategory={newCategory}
-            /> 
+            />
             <div>
             </div>
         </div>

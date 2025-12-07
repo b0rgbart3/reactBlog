@@ -28,11 +28,13 @@ export type User = {
 
 export type Product = {
   _id: string;
+  beauty: string;
   category: string;
   productImages: string[];
   productDescription: string;
   productName: string;
   readyToPublish: boolean;
+  thumbnail: string;
 }
 
 type State = {

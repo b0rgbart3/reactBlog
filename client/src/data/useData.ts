@@ -19,10 +19,10 @@ export function useData() {
       const data = res.data.data;
       const cats: string[] = data.map((article) => article.category);
 
-      console.log('BD: cats: ', cats);
+      // console.log('BD: cats: ', cats);
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
-      console.log('BD: unique article categories:', uniqueCategories);
+      // console.log('BD: unique article categories:', uniqueCategories);
       if (uniqueCategories && uniqueCategories[0] !== '') {
         setCategories(uniqueCategories);
       }
@@ -39,9 +39,11 @@ export function useData() {
     try {
       const res = await axios.get("/api/products");
       const data = res.data.data;
-      const cats: string[] = data.map((product) => product.category);
+      const cats: string[] = data.map((product) => product.category).filter(category => category && category.trim() !== "");
+
+    
       const uniqueProductCategories: string[] = [...new Set(cats)];
-      console.log('BD: unique product categories:', uniqueProductCategories);
+      // console.log('BD: unique product categories:', uniqueProductCategories);
 
       // const cleanImageArray = data?.productImages.filter((productImage) => productImage === '');
       // data.productImages = cleanImageArray;

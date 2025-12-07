@@ -128,3 +128,20 @@ button:active {
     cursor: pointer;
   user-select: none;
 }
+
+.beautyPreview {
+  width: 200px;
+
+}
+
+.beautyPreview img {
+  max-width: 100%;
+}
+
+.thumbnailPreview {
+  width: 200px;
+}
+
+.thumbnailPreview img{
+  max-width: 100%;
+}

@@ -16,6 +16,8 @@ export function EditProductPage() {
     const [newCategory, setNewCategory] = useState('');
     const [product, setProduct] = useState<Product>(products.find((product) => product._id === _id));
     const [images, setImages] = useState<File[]>([]);
+    const [beauty, setBeauty] = useState<File>(null);
+    const [thumbnail, setThumbnail] = useState<File>(null);
     const { refresh } = useData();
 
     const routeHome = useCallback(() => {
@@ -23,7 +25,7 @@ export function EditProductPage() {
         navigate(`/`);
     }, []);
 
-  
+
     useEffect(() => {
         if (!product) {
             const freshProduct: Partial<Product> = {
@@ -41,10 +43,25 @@ export function EditProductPage() {
             // setFileCount(fileCount + 1);
             // const newFiles = [...selectedFiles, e.target.files[0]];
             // setSelectedFiles(newFiles);
-                setImages(prev => [...prev, e.target.files[0]]);
+            setImages(prev => [...prev, e.target.files[0]]);
         }
         // console.log('BD: images: ', images);
     };
+
+    const handleBeautyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('BD: target: ', e.target);
+
+        if (e.target.files && e.target.files[0]) {
+            setBeauty(e.target.files[0]);
+        }
+    };
+
+    const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setThumbnail(e.target.files[0]);
+        }
+    };
+
 
     useData();
     const handleSubmit = async (e: React.FormEvent) => {
@@ -53,25 +70,37 @@ export function EditProductPage() {
         try {
 
 
-                const formData = new FormData();
+            const formData = new FormData();
 
-    // Add text fields
-    formData.append("productName", product.productName);
-    formData.append("productDescription", product.productDescription);
-    formData.append("readyToPublish", product.readyToPublish);
-    formData.append("category", newCategory.length ? newCategory : category);
-    formData.append('productImages', product.productImages)
+            // Add text fields
+            formData.append("productName", product.productName);
+            formData.append("productDescription", product.productDescription);
+            formData.append("readyToPublish", product.readyToPublish);
+            formData.append("category", newCategory.length ? newCategory : category);
+            formData.append('productImages', product.productImages)
+            formData.append('beauty', product.beauty);
+            formData.append('thumbnail', product.thumbnail);
+            if (beauty) {
+            formData.append('newBeauty', beauty);
+            }
 
-    // Add images (very important!)
-    images.forEach((img) => {
-      formData.append("images", img);   // <--- name must match upload.array("images")
-    });
+            if (thumbnail) {
+            formData.append('newThumbnail', thumbnail);
+            }
+
+            
+
+            // Add images (very important!)
+            images.forEach((img) => {
+                formData.append("images", img);   // <--- name must match upload.array("images")
+            });
 
 
             let postedCategory = category;
             if (newCategory.length) {
                 postedCategory = newCategory;
             }
+
 
             const response = await axios.patch(`/api/products/${product._id}`, formData, {
                 headers: {
@@ -128,11 +157,13 @@ export function EditProductPage() {
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
                 handleFileChange={handleFileChange}
+                handleBeautyChange={handleBeautyChange}
+                handleThumbnailChange={handleThumbnailChange}
                 editing={true}
                 changeCategory={handleChange}
                 changeNewCategory={changeNewCategory}
                 newCategory={newCategory}
-            /> 
+            />
             <div>
             </div>
         </div>

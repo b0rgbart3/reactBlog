@@ -11,18 +11,20 @@ export type ProductFormProps = {
     editing: boolean;
     handleChange: (e: React.FormEvent) => void;
     handleFileChange: (e: React.FormEvent) => void;
+    handleBeautyChange: (e: React.FormEvent) => void;
+    handleThumbnailChange: (e: React.FormEvent) => void;
     handleSubmit: (e: React.FormEvent) => Promise<void>;
     newCategory: string;
 }
 
 export function ProductForm(props: ProductFormProps) {
     const { product, changeCategory, editing, changeNewCategory,
-        handleSubmit, newCategory, handleChange, handleFileChange } = props;
+        handleSubmit, newCategory, handleChange, handleFileChange, handleBeautyChange, handleThumbnailChange } = props;
 
     const navigate = useNavigate();
     const { user, categories, articles, products,
         productCategories, loading, users, setUser } = useStore((s) => s);
-        // console.log('BD: back from use Store.');
+    // console.log('BD: back from use Store.');
     const { refresh } = useData();
     const [images, setImages] = useState<string[]>([]);
 
@@ -45,7 +47,7 @@ export function ProductForm(props: ProductFormProps) {
 
     const killProductImage = useCallback((imageNumber: number) => {
         console.log('BD: about to kill: ', imageNumber);
-        product.productImages.splice(imageNumber,1);
+        product.productImages.splice(imageNumber, 1);
     }, [product])
 
     return (
@@ -108,6 +110,24 @@ export function ProductForm(props: ProductFormProps) {
                 <label>Images:</label>
             </div>
 
+            <div>
+                <div>
+                    Beauty Image:
+                    {editing && product.beauty && product.beauty !== '' && (
+                        <div className='beautyPreview'><img src={product.beauty} /></div>
+                    )}
+                    <input id="beauty" type="file" accept="image/*" onChange={handleBeautyChange} name="beauty" />
+                </div>
+                <div>
+                    Thumbnail Image:
+                    {editing && product.thumbnail && product.thumbnail !== '' && (
+                        <div className='thumbnailPreview'> <img src={product.thumbnail} /></div>
+                    )}
+                    <input id="thumbnail" type="file" accept="image/*" onChange={handleThumbnailChange} name="thumbnail" />
+                </div>
+
+            </div>
+
             <div className='imageUploadContainer'>
                 existing images:
 
@@ -117,10 +137,10 @@ export function ProductForm(props: ProductFormProps) {
                             <div className='productImagePreviewThumbnail'>
                                 <img src={`${product.productImages[imageNumber]}`} />
                             </div>
-                        <div className='productImagePreviewKill' onClick={()=>killProductImage(imageNumber)}>
-                            X
+                            <div className='productImagePreviewKill' onClick={() => killProductImage(imageNumber)}>
+                                X
+                            </div>
                         </div>
-                      </div>
                     </>
                 ))}
             </div>

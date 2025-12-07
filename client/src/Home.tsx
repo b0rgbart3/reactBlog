@@ -17,7 +17,7 @@ export interface Merch {
 export function Home() {
   const { refresh } = useData();
   const { user, articles, categories, loading, products, users, setUser } = useStore((s) => s);
-  console.log('BD: cats in home: ', categories);
+  // console.log('BD: cats in home: ', categories);
 
   const navigate = useNavigate();
 
@@ -65,8 +65,8 @@ export function Home() {
                 <div className='productBox' onClick={() => openProductPage(product._id)}>
                   <div className='productBoxImage'>
                   {
-                    product.productImages[0] && (
-                      <img src={`${product.productImages[0]}`} alt={`${product.productName}`} />)}
+                    product.thumbnail && (
+                      <img src={`${product.thumbnail}`} alt={`${product.productName}`} />)}
                       </div>
 
                   <div>
