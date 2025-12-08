@@ -37,7 +37,11 @@ export function BannerNav(props) {
             <div className='navBanner'>
                 <div className='left borgLogo titleType' onClick={goHome}>b0rgBlog</div>
 
-                <div className='middle'>
+                <div className='middleBannerNav'>
+
+                <div>Articles</div>
+                 <div>Merch</div>
+                  <div>Resources</div>
                 {user?.sensi && showAdminButton && (<div className='bButton grayButton midSizeButton adminButton' onClick={adminCallback}>Admin</div>)}
                 </div>
                 {showLogin &&
@@ -56,8 +60,8 @@ export function BannerNav(props) {
                     {user?.sensi && ' & admin'}
                 </div>}
             {!user && page !== 'login' && page !== 'create' &&
-                <div className='mildWarning'>
-                    You are not logged in.
+                <div className='notLoggedIn'>
+                    {/* You are not logged in. */}
                 </div>}
         </>
 

@@ -61,22 +61,24 @@ export function Home() {
             // console.log('BD: about to render product: ', product);
             return (
               <>
-              { product.readyToPublish && (
-                <div className='productBox' onClick={() => openProductPage(product._id)}>
-                  <div className='productBoxImage'>
-                  {
-                    product.thumbnail && (
-                      <img src={`${product.thumbnail}`} alt={`${product.productName}`} />)}
+                {product.readyToPublish && (
+                  <div className='productBox' onClick={() => openProductPage(product._id)}>
+                    <div className='productBoxImage'>
+                      {
+                        product.thumbnail && (
+                          <img src={`${product.thumbnail}`} alt={`${product.productName}`} />)}
+                    </div>
+
+                    <div className='productThumbnailDescriptionBox'>
+                      <div className="productThumbnailTitle">
+                        {product.productName}
                       </div>
 
-                  <div>
-                    {product.productName}
+                      <div>
+                        {product.productDescription}
+                      </div>
+                    </div>
                   </div>
-
-                  <div>
-                    {product.productDescription}
-                  </div>
-                </div>
                 )}
               </>
 

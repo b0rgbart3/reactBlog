@@ -1,0 +1,96 @@
+.productPageLayout {
+    display: flex;
+    flex-direction: column;
+    /* Mobile: stacked */
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.pplChild {
+    width: 100%;
+    /* Mobile: each child takes full width */
+}
+
+.pplChild-left {
+
+}
+
+.pplChild-right {
+    padding-left: 60px;
+    padding-right: 50px;
+    max-width: 100%;
+    width: 80%;
+}
+
+/* Tablet and larger */
+@media (min-width: 768px) {
+    .productPageLayout {
+        flex-direction: row;
+        /* Side-by-side */
+    }
+
+    .pplChild-left {
+        flex: 3;
+        /* ~75% width */
+    }
+
+    .pplChild-right {
+            /* border-left: 2px solid gray; */
+        flex: 2;
+  
+                padding-left:0;
+    padding-right: 50px;
+        /* ~25% width */
+    }
+}
+
+.productBeauty {
+    font-family: "Noto Serif", serif;
+    margin: auto;
+    width: 80%;
+    text-align: center;
+}
+
+.productBeauty img {
+    max-height: 400px;
+    max-width: 100%;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.prodcutTitle {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+.productDescriptionBlock {
+    text-align: left;
+    ;
+}
+
+.sizeBoxes {
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 12px;
+    font-weight: 900;
+}
+
+.sizeBox {
+    border: 3px solid gray;
+    padding: 18px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.sizeBox:hover {
+    border: 3px solid orange;
+}
+
+.sizeBox.active {
+    border: 3px solid orange;
+    background-color: black;
+    color: white;
+}

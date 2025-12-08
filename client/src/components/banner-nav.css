@@ -26,9 +26,10 @@
   width: 200px;
 }
 
-.middle {
+.middleBannerNav {
   flex: 1; /* take up all remaining space */
   text-align: center;
+  display: flex;
 }
 
 
