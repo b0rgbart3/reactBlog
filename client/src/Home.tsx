@@ -74,7 +74,7 @@ export function Home() {
                         {product.productName}
                       </div>
 
-                      <div>
+                      <div className='productThumbnailDescriptionBoxText'>
                         {product.productDescription}
                       </div>
                     </div>
