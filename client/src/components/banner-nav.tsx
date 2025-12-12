@@ -63,7 +63,7 @@ export function BannerNav(props) {
          setTimeout(() => {
         // console.log('BD: mousing out, and target = ', e.target?.id);
         // console.log('mouseing out.');
-        if ( causeOfLeave.id !== 'burger') {
+        if ( causeOfLeave.id !== 'burger' && causeOfLeave.id !== 'menuItem') {
         setIsMenuOpen(false);
         }
         }, 200);
@@ -87,7 +87,7 @@ export function BannerNav(props) {
             } else {
                 // console.log('BD: mouseLeave Burger with menu open');
                 // setTimeout(() => {
-                if (causeOfLeave?.id !== 'menu') {
+                if (causeOfLeave?.id !== 'menu' && causeOfLeave?.id !== 'menuItem') {
                     setIsMenuOpen(false);
                     setInMenu(false);
                 }
@@ -121,8 +121,9 @@ export function BannerNav(props) {
 
                     <div id='menu' className={`menu ${isMenuOpen ? "open" : "closed"}`} onMouseOver={mouseOverMenu} onMouseLeave={mouseLeaveOutOfMenu}>
 
-                        <div id='innerMenu' className='innerMenu'>Test
-                            Test Again
+                        <div id='innerMenu' className='innerMenu'>
+                            <div id='menuItem' className='innerMenuOption'>Login</div>
+                            <div id='menuItem' className='innerMenuOption'>About Moon-Math</div>
                         </div>
                     </div>
                 </div>
