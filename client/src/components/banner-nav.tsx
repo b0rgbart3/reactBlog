@@ -17,8 +17,9 @@ export function BannerNav(props) {
     const { user, articles, loading, users, setUser } = useStore((s) => s);
     const { refresh, logout } = useData();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-    const [inMenu, setInMenu] = useState(false);
-
+    const showLogin = page !== "login" && page !== "create";
+    const showAdminButton = (page === "home" && user?.sensi);
+    
     const navigate = useNavigate();
 
     const goHome = useCallback(() => {
@@ -27,80 +28,56 @@ export function BannerNav(props) {
     const goLogout = useCallback(() => {
         logout();
     }, []);
-    const login = useCallback(() => {
+    const login = useCallback((e) => {
+        e.stopPropagation();
+        console.log('BD: in the login method.');
         navigate('/login');
     }, []);
+
+    const about = useCallback((e) => {
+        e.stopPropagation();
+        navigate('/about');
+    }, []);
+
     const editUser = useCallback(() => {
         navigate('/user');
     })
 
-    const openMenu = useCallback(() => {
-        // console.log('BD: setting menu open.');
-        if (!isMenuOpen) {
-            setInMenu(true);
-        }
-        setIsMenuOpen(!isMenuOpen);
-    }, [isMenuOpen, inMenu])
-
-    const showLogin = page !== "login" && page !== "create";
-    const showAdminButton = (page === "home" && user?.sensi);
-
-    const ref = useRef<HTMLDivElement>(null);
-    useClickOutside(ref, () => {
-        setIsMenuOpen(false);
-        // setInMenu(false);
-    });
-
-    const mouseOverMenu = useCallback(() => {
-        // console.log('setting IN MENU TO TRUE .');
-        setInMenu(true);
-    }, [inMenu])
-
-    const mouseLeaveOutOfMenu = useCallback((e) => {
-         const causeOfLeave = e.relatedTarget as HTMLElement | null;
-        //  console.log('BD: cause of leave:', causeOfLeave);
-
-         setTimeout(() => {
-        // console.log('BD: mousing out, and target = ', e.target?.id);
-        // console.log('mouseing out.');
-        if ( causeOfLeave.id !== 'burger' && causeOfLeave.id !== 'menuItem') {
-        setIsMenuOpen(false);
-        }
-        }, 200);
-        // setInMenu(false);
+    const openMenu = useCallback(() => {;
+        setTimeout(() => {
+            setIsMenuOpen(!isMenuOpen);
+        }, 100)
+      
     }, [isMenuOpen])
 
-    const mouseLeaveOutOfBurger = useCallback((e) => {
-         const causeOfLeave = e.relatedTarget as HTMLElement | null;
-        // console.log('BD: closing:', isMenuOpen);
-        // console.log('BD: mouseout of burger');
-        // console.log('BD: menu is open.');
-        // console.log('BD: in menu: ', inMenu);
+    const burgerRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
-        const menuTimer = setTimeout(() => {
-                 if (isMenuOpen) {
-            if (!inMenu) {
-            // console.log('BD: checking... in Menu?: ', inMenu);
-
-            // console.log('BD: ABout to clear.');
-            setIsMenuOpen(false);
-            } else {
-                // console.log('BD: mouseLeave Burger with menu open');
-                // setTimeout(() => {
-                if (causeOfLeave?.id !== 'menu' && causeOfLeave?.id !== 'menuItem') {
-                    setIsMenuOpen(false);
-                    setInMenu(false);
-                }
-                // }, 600);
-            }
+    useClickOutside(menuRef, () => {
+        console.log('BD: menu open: ', isMenuOpen);
+        if (isMenuOpen) {
+        setIsMenuOpen(false);
         }
-        }, 200);
+    });
+
+    const itemClick = useCallback((e) => {
+        e.stopPropagation();
+        const navItem = e.target?.dataset?.nav;
+
+        switch(navItem) {
+            case 'login':         navigate('/login'); break;
+            case 'about':         navigate('/about'); break;
+            case 'resources':    navigate('/resources');
+            break;
+            default: break;
+        }
+    }, []);
 
 
-
-    }, [isMenuOpen, inMenu]);
-
-
+    const menuActions = [
+        { label: 'Login', action: login },
+        { label: 'About', action: about }
+    ]
     return (
         <>
             <div className='navBanner'>
@@ -113,29 +90,19 @@ export function BannerNav(props) {
                 </div>
 
                 <div className='right'>
-                    <div id='burger' className='burger' onMouseDown={openMenu} onMouseLeave={mouseLeaveOutOfBurger} ref={ref}>
+                    <div id='burger' className='burger' onMouseDown={openMenu}>
                         <div className='patty'></div>
                         <div className='patty'></div>
                         <div className='patty'></div>
                     </div>
 
-                    <div id='menu' className={`menu ${isMenuOpen ? "open" : "closed"}`} onMouseOver={mouseOverMenu} onMouseLeave={mouseLeaveOutOfMenu}>
-
-                        <div id='innerMenu' className='innerMenu'>
-                            <div id='menuItem' className='innerMenuOption'>Login</div>
-                            <div id='menuItem' className='innerMenuOption'>About Moon-Math</div>
-                        </div>
+                    <div id='menu' className={`menu ${isMenuOpen ? "open" : "closed"}`} ref={menuRef}>
+                        <div data-nav='login' data-type='menuItem' className='innerMenuOption' id='menuItem1' onClick={itemClick}>Login</div>
+                        <div data-nav='about' data-type='menuItem' className='innerMenuOption' id='menuItem2' onClick={itemClick}>About Moon-Math</div>
+                        <div data-nav='resources' data-type='menuItem' className='innerMenuOption' id='menuItem3' onClick={itemClick}>Resources</div>
                     </div>
                 </div>
 
-                {/* {showLogin &&
-                    <div className='userAccountIconContainer'>
-                        <button onClick={(e) => { e.stopPropagation(); user ? goLogout() : login(); }}
-                            className="bButton logout">{user && (`Logout`)}
-                            {!user && (`Login`)}</button>
-                        {user && (<div className='bButton userIcon' onClick={editUser}></div>)}
-                    </div>
-                } */}
             </div>
             <div className="divider"></div>
             <div className="tagline">

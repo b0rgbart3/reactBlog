@@ -13,6 +13,8 @@ import { NewProductPage } from "./pages/Products/NewProductPage";
 import { EditUserPage } from "./pages/EditUserPage";
 import { ProductPage } from "./pages/Products/ProductPage";
 import { EditProductPage } from "./pages/Products/EditProductPage";
+import { About } from "./pages/About";
+import { Resources } from "./pages/Resources";
 
 
 export default function App() {
@@ -32,6 +34,8 @@ export default function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/login" element={<Login />} />
         <Route path='/newUser' element={<CreateAccount />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/resources' element={<Resources />} />
         <Route path='/article/new' element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />

@@ -57,10 +57,10 @@ export function Home() {
 
 
         {
-          products.map((product) => {
+          products.map((product, index) => {
             // console.log('BD: about to render product: ', product);
             return (
-              <>
+              <div key={`product-thumb-${index}`}>
                 {product.readyToPublish && (
                   <div className='productBox' onClick={() => openProductPage(product._id)}>
                     <div className='productBoxImage'>
@@ -80,7 +80,7 @@ export function Home() {
                     </div>
                   </div>
                 )}
-              </>
+              </div>
 
             )
           })}
