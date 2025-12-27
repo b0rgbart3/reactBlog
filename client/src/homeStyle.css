@@ -165,3 +165,40 @@
   margin-top: 14px;
   line-height: 24px;
 }
+
+
+
+.moon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #ddd;
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+  animation: moonGlow 12s ease-in-out infinite;
+}
+
+@keyframes moonGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255,255,255,0.15);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255,255,255,0.35);
+  }
+}
+
+.symbol {
+  position: absolute;
+  color: rgba(255,255,255,0.15);
+  font-size: 2rem;
+  animation: float 30s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+

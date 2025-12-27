@@ -352,6 +352,24 @@ app.get("/api/users", async (req: any, res: any) => {
   }
 });
 
+app.post("/api/contact", (req, res) => {
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: "Missing fields" });
+  }
+
+  console.log('BD: got contact from: ', name);
+  console.log(email);
+  console.log(message);
+  // 1) send an email
+  // 2) save to DB
+  // 3) log somewhere
+
+  res.status(200).json({ success: true });
+});
+
+
 app.get("/api/products", async (req: any, res: any) => {
   try {
     // console.log('BD: GOT request for users.');

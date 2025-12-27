@@ -1,8 +1,47 @@
+html {
+    background: radial-gradient(
+    circle at top right,
+    #1e3a53 0%,
+    #0b1026 45%,
+    #000000 100%
+  );
+  background-size: 200% 200%;
+}
+
 html, body {
     box-sizing: border-box;
   margin:0;
-  padding:0;
+  padding:0; 
+
 }
+
+
+.starfield {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.starfield::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 70%, #fff 50%, transparent 51%),
+    radial-gradient(3px 3px at 50% 10%, #fff 50%, transparent 51%);
+  background-size: 300px 300px;
+  opacity: 0.4;
+  animation: drift 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-300px); }
+}
+
+
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -11,7 +50,6 @@ html, body {
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
   box-sizing: border-box;
 
   font-synthesis: none;
@@ -30,11 +68,11 @@ html, body {
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #5091f0;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #6ba7eb;
 }
 
 

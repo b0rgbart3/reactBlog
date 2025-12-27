@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { BannerNav } from "./components/banner-nav";
 import "./homeStyle.css";
 import { Articles } from "./pages/Articles/Articles";
+import { Footer } from "./components/footer";
 
 export interface Merch {
   productImagePath: string;
@@ -32,6 +33,8 @@ export function Home() {
     navigate('/login');
   }, []);
 
+
+
   const [page, setPage] = useState('home');
 
   const adminCallback = useCallback(() => {
@@ -44,11 +47,15 @@ export function Home() {
 
 
   if (loading) return <div>Loading…</div>;
-  return (<>
+  return (<div className='starfield'>
+    
     <BannerNav
       adminCallback={adminCallback} page='home' />
 
+
+
     <div className="home">
+      
       <div className="articleList">
         <Articles />
       </div>
@@ -88,8 +95,8 @@ export function Home() {
       </div>
     </div>
 
-
-  </>
+<Footer/>
+  </div>
   );
 
 }

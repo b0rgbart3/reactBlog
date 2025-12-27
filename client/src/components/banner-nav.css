@@ -313,3 +313,39 @@
   overflow: hidden;
   padding: 20px;
 }
+
+.footer {
+  padding-top: 14px;
+  padding-left: 10%;
+  padding-bottom: 50px;
+  margin-bottom: 200px;
+  color: #2864c8;
+  cursor: pointer;
+  user-select: none;
+}
+
+.footer:hover {
+    color: #6ba7eb;
+}
+
+.contactForm {
+}
+
+.contactForm input {
+  display: block;
+  min-width: 300px;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 10px;
+  margin: 12px;
+}
+
+.contactForm textarea {
+  display: block;
+  min-width: 300px;
+  min-height: 150px;
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 10px;
+  margin: 12px;
+}
