@@ -40,19 +40,17 @@ export function ArticleThumbnail({ article }: ArticleProps) {
         {
   !hasHeadlineImage && (
     <div className='noHeadlineImageContainer'       style={{
-
             backgroundColor: article?.randomColor ? `#${article.randomColor}` : undefined,
-      
         }}>
- 
       </div>
   )
 }
 
       </div>
+      <div className='articleThumbText'>
       {article.title}
       <div className='briefArticleStart'>      {parse(briefArticleStart)}</div>
-
+</div>
     </div>
   );
 }

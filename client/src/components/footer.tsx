@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../state/useStore";
 import { useData } from "../data/useData";
-
-import "./banner-nav.css";
 import { useClickOutside } from "../hooks/useClickOutside";
-
-
 
 
 export function Footer() {
@@ -43,12 +39,12 @@ export function Footer() {
 
 
     return (
-        <>
+        <div className='footerContainer'>
 
             <div className="divider" />
             <div className='footer'><p onClick={copyrightInfo}>Moon-Math @copyright 2026 Bart Dority - see full rights disclaimer</p></div>
          
-        </>
+        </div>
 
     )
 }

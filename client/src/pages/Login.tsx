@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import "./loginStyle.css";
 import { User, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import { useNavigate } from "react-router-dom";

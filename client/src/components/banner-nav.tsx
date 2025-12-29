@@ -2,18 +2,15 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../state/useStore";
 import { useData } from "../data/useData";
-import Tagline from "../assets/tagline.svg";
-import "./banner-nav.css";
 import { useClickOutside } from "../hooks/useClickOutside";
 
 
 export type BannerNavProps = {
     page: string;
-    adminCallback: () => void;
 }
 
 export function BannerNav(props) {
-    const { adminCallback, page } = props;
+    const { page } = props;
     const { user, articles, loading, users, setUser } = useStore((s) => s);
     const { refresh, logout } = useData();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -21,6 +18,10 @@ export function BannerNav(props) {
     const showAdminButton = (page === "home" && user?.sensi);
     
     const navigate = useNavigate();
+
+    const goAdmin = useCallback(() => {
+        navigate(`/admin`);
+    }, []);
 
     const goHome = useCallback(() => {
         navigate(`/`);
@@ -61,6 +62,7 @@ export function BannerNav(props) {
     });
 
     const itemClick = useCallback((e) => {
+        console.log('BD: item click.');
         e.stopPropagation();
         const navItem = e.target?.dataset?.nav;
 
@@ -69,6 +71,7 @@ export function BannerNav(props) {
             case 'about':         navigate('/about'); break;
             case 'resources':    navigate('/resources');
             break;
+            case 'admin': navigate('/admin');break;
             default: break;
         }
     }, []);
@@ -79,17 +82,16 @@ export function BannerNav(props) {
         { label: 'About', action: about }
     ]
     return (
-        <>
+        <div className='banner'>
             <div className='navBanner'>
-                <div className='left moonMathLogo' onClick={goHome}>
+                <div className='bannerLeft moonMathLogo' onClick={goHome}>
                 </div>
 
                 <div className='middleBannerNav'>
 
-                    {user?.sensi && showAdminButton && (<div className='bButton grayButton midSizeButton adminButton' onClick={adminCallback}>Admin</div>)}
-                </div>
+              </div>
 
-                <div className='right'>
+                <div className='bannerRight'>
                     <div id='burger' className='burger' onMouseDown={openMenu}>
                         <div className='patty'></div>
                         <div className='patty'></div>
@@ -100,13 +102,15 @@ export function BannerNav(props) {
                         <div data-nav='login' data-type='menuItem' className='innerMenuOption' id='menuItem1' onClick={itemClick}>Login</div>
                         <div data-nav='about' data-type='menuItem' className='innerMenuOption' id='menuItem2' onClick={itemClick}>About Moon-Math</div>
                         <div data-nav='resources' data-type='menuItem' className='innerMenuOption' id='menuItem3' onClick={itemClick}>Resources</div>
+    {user?.sensi && showAdminButton && (<div data-nav='admin' className='innerMenuOption' id='menuItem4' onClick={itemClick}>Admin</div>)}
+      
                     </div>
                 </div>
 
             </div>
             <div className="divider"></div>
             <div className="tagline">
-                <img src={Tagline} />
+               <p className="hero-title ">A blog about bitcoin.</p>
             </div>
             {user &&
                 <div className='loggedInAs'>
@@ -118,7 +122,7 @@ export function BannerNav(props) {
                 <div className='notLoggedIn'>
                     {/* You are not logged in. */}
                 </div>}
-        </>
+        </div>
 
     )
 }

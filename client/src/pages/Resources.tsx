@@ -1,6 +1,4 @@
 import { BannerNav } from "../components/banner-nav";
-import '../styles/basics.css';
-import '../styles/typography.css';
 
 export function Resources() {
     return (

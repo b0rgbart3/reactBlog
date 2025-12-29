@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../../state/useStore";
-import "../articleStyle.css";
 import { useData } from "../../data/useData";
 import { BannerNav } from "../../components/banner-nav";
 import parse from "html-react-parser";
@@ -86,7 +85,6 @@ export function ArticlePage() {
         <div className='originDate'>Originally published: {article?.originDate ? article.originDate : `2025-12-01`}</div>
         <div className='modifiedDate'>Last modified: {article?.lastModifiedDate}</div>
 
-        </div>
  <div className='articleBody'>
        
 {paragraphs.map((par, index) => (
@@ -97,6 +95,7 @@ export function ArticlePage() {
 </div>
 
 
+        </div>
       </div>
     </>
   );

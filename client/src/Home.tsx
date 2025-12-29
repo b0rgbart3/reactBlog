@@ -6,7 +6,7 @@ import { DownloadJsonButton } from "./admin/Download";
 import { AdminPanel } from "./admin/AdminPanel";
 import { useNavigate } from "react-router-dom";
 import { BannerNav } from "./components/banner-nav";
-import "./homeStyle.css";
+
 import { Articles } from "./pages/Articles/Articles";
 import { Footer } from "./components/footer";
 
@@ -49,18 +49,18 @@ export function Home() {
   if (loading) return <div>Loading…</div>;
   return (<div className='starfield'>
     
-    <BannerNav
-      adminCallback={adminCallback} page='home' />
+    <BannerNav page='home' />
 
 
 
     <div className="home">
       
       <div className="articleList">
+             <div className='sticker'>Articles</div>
         <Articles />
       </div>
       <div className='merchList'>
-        Merch:
+        <div className='sticker'>Merch</div>
 
 
         {

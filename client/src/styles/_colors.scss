@@ -1,0 +1,31 @@
+
+
+@use "sass:color";
+
+$base: #0b1c2d;        // deep space blue
+$highlight: #5fa2ff;   // celestial blue
+$accent: #2f6ef6;      // cosmic purple
+$main: #2864c8;
+$success: #22c55e;
+$warning: #f59e0b;
+$error: #ef4444;
+
+
+// semantic surfaces
+$background: $base;
+$surface: tint($base, 6%);
+
+
+$cards: #05111e;
+$sticker-color: #122a5f; 
+$sticker-color: #0c1018; 
+$sticker-text: #3d5893; 
+$title-text: #d2d3d5;
+
+$text-basic: #929fb7;
+$text-article: #a9bcde;
+$text-muted: #9ca3af;
+$text-headline: #ffffff;
+
+$link: $highlight;
+

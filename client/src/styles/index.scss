@@ -1,0 +1,47 @@
+@use 'colors';
+@use 'variables';
+@use 'typography';
+@use 'layout';
+@use 'forms';
+@use 'interface';
+@use 'products';
+@use 'admin';
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
+
+
+html, body {
+  box-sizing: border-box;
+  margin:0;
+  padding:0; 
+}
+
+
+body {
+  min-height: 100vh;
+  font-family: variables.$font-sans;
+  color: colors.$text-basic;
+  background: colors.$background;
+  line-height: 1.6;
+  margin-bottom: 200px;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 70%, #fff 50%, transparent 51%),
+    radial-gradient(3px 3px at 50% 10%, #fff 50%, transparent 51%);
+  background-size: 300px 300px;
+  opacity: 0.4;
+  animation: drift 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-300px); }
+}
+

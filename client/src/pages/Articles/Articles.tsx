@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import "../articleStyle.css";
 import { all } from "axios";
 import { ArticleThumbnail } from "../../ArticleThumbnail";
 import { useStore } from "../../state/useStore";

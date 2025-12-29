@@ -1,3 +1,56 @@
+
+@use 'colors' as *;
+@use 'variables' as *;
+
+input,
+textarea,
+select {
+  background: $surface;
+  color: $text-basic;
+  border: 1px solid shade($surface, 10%);
+  border-radius: $border-radius-sm;
+  padding: 0.5rem 0.75rem;
+
+  &:focus {
+    outline: none;
+    border-color: $highlight;
+    box-shadow: 0 0 0 1px tint($highlight, 40%);
+  }
+}
+
+
+
+
+.loginForm {
+    background-color: rgb(50, 50, 50);
+    border-radius: 8px;
+    box-shadow:  0 0 12px black;
+    margin:50px;
+    padding:50px;
+}
+
+input {
+    padding: 9px;
+}
+
+label {
+    padding-top: 1em;
+    display: block;
+}
+
+.loggedInAs {
+  padding:10px;
+  padding-left: 20px;
+}
+.errorMessage {
+    background-color: rgb(78, 16, 16);
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+
 .new-article-form {
     background-color: rgba(0, 0, 0, .25);
     padding: 28px;
@@ -93,4 +146,44 @@
 .new-article-form input::placeholder {
     color: black;
     font-style: italic;
+}
+
+
+
+.titleText {
+    color: white;
+    font-family: "Noto Serif", serif;
+    font-size: 26px;
+}
+
+.pageLayout {
+    padding:40px;
+}
+
+.editUserForm {
+    padding: 40px;
+}
+
+.checkBox {
+    border: 2px solid rgb(149, 149, 149);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 12px;
+    display: inline-block;
+}
+
+.checkBoxSelected {
+    background-image: url('../assets/checkmark.svg');
+    border: 2px solid rgb(149, 149, 149);
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 12px;
+    display: inline-block;
+}
+
+.lineContainer {
+    border: 1px solid black;
+    display: block;
 }

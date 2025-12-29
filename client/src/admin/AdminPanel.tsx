@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Article, Product, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
-import "./adminStyle.css";
 import { DownloadJsonButton } from "./Download";
 import { UsersForm } from "./UsersForm";
 import { TableHeader } from "./TableHeader";

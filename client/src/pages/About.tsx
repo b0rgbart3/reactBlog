@@ -1,11 +1,10 @@
 import { BannerNav } from "../components/banner-nav";
-import '../styles/basics.css';
-import '../styles/typography.css';
-
 import { useState } from "react";
 import axios from "axios";
 
 export function About() {
+
+    const [sent, setSent] = useState(false);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -26,6 +25,9 @@ export function About() {
         console.log('BD: formData: ', formData);
         try {
             const response = await axios.post('/api/contact', formData);
+            if (response.status === 200) {
+                setSent(true);
+            }
         } catch (err) {
             console.log(err.response?.status); // 404?
             console.log(err.response?.config?.url);
@@ -48,16 +50,33 @@ export function About() {
                 <p>As a designer, I also wanted to have my own bitcoin related merch - t-shirts and such, and a place to sell / share them with other bitcoiners.  I love typography and graphic design and I wanted to design bitcoin t-shirts that I myself wanted to wear.</p>
                 <p>Also, check out the resources section - where I promote my favorite brands and bitcoin related resources.</p>
                 <p>These articles, merch, and resources are my way of contributing to the community, and helping to spread the gospel.  I haven't had much luck at orange-pilling, but maybe some of my ideas or designs will help others in their orange-pilling efforts.</p><p>Thanks for checking out Moon-Math!</p>
-                <p>You can connect with me on Nostr at
-                    Bitcoin Bubble: npub1gh5nll9l4rcvgjp60el65r9myjx7ms7a2msctwysx9yn6rv4v73qcj4uq8</p>
-                <p>Or at: <a href='https://x.com/bartell_SF'>@bartell_SF</a> on X</p>
 
+<br></br>
+                <div className="divider"></div>
                 {/* <div className="divider"></div> */}
                 <h1>Copyright on Moon-Math Content</h1>
                 <p>All of my articles and designs published on this blog site are copyrighted by Bart Dority 2026.</p>
                 <p>If you would like to reproduce any of this content, please
                     contact me directly first to obtain the rights.  Thank you.</p>
+
+<br></br>
+                <div className="divider"></div>
                 <h1>Contact Me</h1>
+
+                                <p>You can connect with me on Nostr:<br></br>
+                    Bitcoin Bubble - npub1gh5nll9l4rcvgjp60el65r9myjx7ms7a2msctwysx9yn6rv4v73qcj4uq8</p>
+                    <p>-------</p>
+                <p>You can follow me on Twitter: <a href='https://x.com/bartell_SF'>@bartell_SF</a></p>
+                         <p>-------</p>
+
+{ sent && (
+    <>
+    <p className='thankYou'>Thanks for contacting me.</p></>
+)}
+                         { !sent && (<>
+                <p>Or you can send me an email:</p>
+
+
                 <form onSubmit={handleSubmit} className='contactForm'>
                     <input
                         name="name"
@@ -80,6 +99,8 @@ export function About() {
                     />
                     <button type="submit">Send</button>
                 </form>
+</>
+                )}
             </div>
         </>
     )
