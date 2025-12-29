@@ -15,6 +15,7 @@ import { ProductPage } from "./pages/Products/ProductPage";
 import { EditProductPage } from "./pages/Products/EditProductPage";
 import { About } from "./pages/About";
 import { Resources } from "./pages/Resources";
+import { ShoppingCart } from "./pages/Products/ShoppingCart";
 
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
         <Route path='/product/new' element={<NewProductPage />} />
         <Route path='/product/:id' element={<ProductPage />} />
         <Route path="/product/edit/:_id" element={<EditProductPage />} />
+        <Route path="/cart" element={<ShoppingCart />} />
         <Route path="/user" element={<EditUserPage />} />
       </Routes>
     </Router>

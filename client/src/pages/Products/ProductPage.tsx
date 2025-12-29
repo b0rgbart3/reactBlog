@@ -1,17 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useData } from "../../data/useData";
-import { useStore } from "../../state/useStore";
+import { Order, useStore } from "../../state/useStore";
 import { BannerNav } from "../../components/banner-nav";
+import { formToJSON } from "axios";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 export function ProductPage() {
 
   useData();
   const { id } = useParams<{ id: string }>();
 
-  const { user, articles, loading, products, users, setUser } = useStore((s) => s);
+  const { user, articles, loading, products, users, setUser, orders, setOrders } = useStore((s) => s);
   const [chosenSize, setChosenSize] = useState('');
   const [count, setCount] = useState<number>(1);
+  const [chooseSizeWarning, setChooseSizeWarning] = useState(false);
 
   const addQuantity = useCallback(() => {
       console.log('BD: current count: ', count);
@@ -32,6 +35,25 @@ export function ProductPage() {
     setChosenSize(size);
 
   }, []);
+
+  const warningRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(warningRef, () => {
+      console.log('BD: menu open: ', chooseSizeWarning);
+      setChooseSizeWarning(false);
+  });
+
+  const addToCart = useCallback(() => {
+    if (chosenSize === '') {
+      setChooseSizeWarning(true);
+    } else {
+      const newOrder = { productID: product._id, quantity: count, chosenSize } as Order;
+      orders.push(newOrder);
+      setOrders(orders);
+      console.log('Orders: ', JSON.stringify(orders));
+
+    }
+  }, [chosenSize])
 
   const productTypes = [
     'Gilden Adult Softstyle Short Sleeve Tshirt'
@@ -107,6 +129,11 @@ export function ProductPage() {
 
 
           </div>
+          { chooseSizeWarning && (
+          <div className='sizeWarning' ref={warningRef}>
+            Please select a size option.
+          </div>
+          )}
 
 
           <div className='countSelection'>
@@ -117,7 +144,7 @@ export function ProductPage() {
                 <button className='quantityButton' onClick={reduceQuantity}>-</button>
                 <button className='quantityButton' onClick={addQuantity}>+</button>
               </div>
-                        <button className='cartButton'>Add to Cart</button>
+                        <button className='cartButton' onClick={addToCart}>Add to Cart</button>
             </div>
   
           </div>

@@ -623,3 +623,15 @@
   user-select: none;
   cursor: pointer;
 }
+
+.ordersContainer {
+  display: block;
+  border: 2px solid fuchsia;
+}
+
+.orderBox {
+  display: block;
+  border: 2px solid $text-basic;
+  padding: 12px;
+  margin-bottom: 20px;
+}

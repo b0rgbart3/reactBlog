@@ -11,7 +11,7 @@ export type BannerNavProps = {
 
 export function BannerNav(props) {
     const { page } = props;
-    const { user, articles, loading, users, setUser } = useStore((s) => s);
+    const { user, articles, loading, users, setUser, orders } = useStore((s) => s);
     const { refresh, logout } = useData();
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const showLogin = page !== "login" && page !== "create";
@@ -67,6 +67,7 @@ export function BannerNav(props) {
         const navItem = e.target?.dataset?.nav;
 
         switch(navItem) {
+            case 'cart': navigate('/cart');break;
             case 'login':         navigate('/login'); break;
             case 'about':         navigate('/about'); break;
             case 'resources':    navigate('/resources');
@@ -102,7 +103,11 @@ export function BannerNav(props) {
                         <div data-nav='login' data-type='menuItem' className='innerMenuOption' id='menuItem1' onClick={itemClick}>Login</div>
                         <div data-nav='about' data-type='menuItem' className='innerMenuOption' id='menuItem2' onClick={itemClick}>About Moon-Math</div>
                         <div data-nav='resources' data-type='menuItem' className='innerMenuOption' id='menuItem3' onClick={itemClick}>Resources</div>
-    {user?.sensi && showAdminButton && (<div data-nav='admin' className='innerMenuOption' id='menuItem4' onClick={itemClick}>Admin</div>)}
+                        {orders.length && (
+                             <div data-nav='cart' data-type='menuItem' className='innerMenuOption' id='menuItem4' onClick={itemClick}>Your Shopping Cart</div>
+                    
+                        )}
+    {user?.sensi && showAdminButton && (<div data-nav='admin' className='innerMenuOption' id='menuItem5' onClick={itemClick}>Admin</div>)}
       
                     </div>
                 </div>

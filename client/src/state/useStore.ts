@@ -36,6 +36,12 @@ export type Product = {
   readyToPublish: boolean;
   thumbnail: string;
 }
+export type Order = {
+  _id: string;
+  productID: string;
+  quantity: number;
+  chosenSize: string;
+}
 
 type State = {
   articles: Article[];
@@ -52,6 +58,8 @@ type State = {
   setUser: (u: User | null) => void;
   users: User[] | null;
   setUsers: (users: User[] | null) => void;
+  orders: Order[];
+  setOrders: (orders: Order[] | null) => void;
 };
 
 export const useStore = create<State>((set) => ({
@@ -66,8 +74,9 @@ export const useStore = create<State>((set) => ({
   setProductCategories: (productCategories: string[]) => set({ productCategories: productCategories}),
   setLoading: (isLoading: boolean) => set({ loading: isLoading }),
   user: null,
-  setUser: (u: User | null) => { 
-    set({ user: u })},
+  setUser: (u: User | null) => { set({ user: u })},
   users: [],
-  setUsers: (users: User[] | null) => set({ users: users })
+  setUsers: (users: User[] | null) => set({ users: users }),
+  orders: [],
+  setOrders: (orders: Order[] | null) => set({ orders: orders }),
 }));
