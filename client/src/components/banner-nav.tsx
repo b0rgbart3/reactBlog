@@ -31,7 +31,7 @@ export function BannerNav(props) {
     }, []);
     const login = useCallback((e) => {
         e.stopPropagation();
-        console.log('BD: in the login method.');
+        // console.log('BD: in the login method.');
         navigate('/login');
     }, []);
 
@@ -39,6 +39,10 @@ export function BannerNav(props) {
         e.stopPropagation();
         navigate('/about');
     }, []);
+
+    const gotoShoppingCart = useCallback(() => {
+        navigate('/cart');
+    })
 
     const editUser = useCallback(() => {
         navigate('/user');
@@ -55,14 +59,14 @@ export function BannerNav(props) {
     const menuRef = useRef<HTMLDivElement>(null);
 
     useClickOutside(menuRef, () => {
-        console.log('BD: menu open: ', isMenuOpen);
+        // console.log('BD: menu open: ', isMenuOpen);
         if (isMenuOpen) {
         setIsMenuOpen(false);
         }
     });
 
     const itemClick = useCallback((e) => {
-        console.log('BD: item click.');
+        // console.log('BD: item click.');
         e.stopPropagation();
         const navItem = e.target?.dataset?.nav;
 
@@ -70,8 +74,12 @@ export function BannerNav(props) {
             case 'cart': navigate('/cart');break;
             case 'login':         navigate('/login'); break;
             case 'about':         navigate('/about'); break;
-            case 'resources':    navigate('/resources');
-            break;
+            case 'resources':    navigate('/resources'); break;
+            case 'memes': navigate('/memes'); break;
+            case 'logout': logout();
+            setIsMenuOpen(false);
+             break;
+            
             case 'admin': navigate('/admin');break;
             default: break;
         }
@@ -82,6 +90,9 @@ export function BannerNav(props) {
         { label: 'Login', action: login },
         { label: 'About', action: about }
     ]
+
+    // console.log('User: ', JSON.stringify(user));
+
     return (
         <div className='banner'>
             <div className='navBanner'>
@@ -93,6 +104,11 @@ export function BannerNav(props) {
               </div>
 
                 <div className='bannerRight'>
+                    {orders.length > 0 && !isMenuOpen && (
+                        <div className='orderInfo' onClick={gotoShoppingCart}>
+                            
+                            Orders: {orders.length}</div>
+                    )}
                     <div id='burger' className='burger' onMouseDown={openMenu}>
                         <div className='patty'></div>
                         <div className='patty'></div>
@@ -100,15 +116,17 @@ export function BannerNav(props) {
                     </div>
 
                     <div id='menu' className={`menu ${isMenuOpen ? "open" : "closed"}`} ref={menuRef}>
-                        <div data-nav='login' data-type='menuItem' className='innerMenuOption' id='menuItem1' onClick={itemClick}>Login</div>
+
                         <div data-nav='about' data-type='menuItem' className='innerMenuOption' id='menuItem2' onClick={itemClick}>About Moon-Math</div>
                         <div data-nav='resources' data-type='menuItem' className='innerMenuOption' id='menuItem3' onClick={itemClick}>Resources</div>
-                        {orders.length && (
+                                     <div data-nav='memes' data-type='menuItem' className='innerMenuOption' id='menuItem6' onClick={itemClick}>Memes</div>                   
+                                            {orders && orders.length > 0 && (
                              <div data-nav='cart' data-type='menuItem' className='innerMenuOption' id='menuItem4' onClick={itemClick}>Your Shopping Cart</div>
-                    
                         )}
-    {user?.sensi && showAdminButton && (<div data-nav='admin' className='innerMenuOption' id='menuItem5' onClick={itemClick}>Admin</div>)}
-      
+                {user && <div data-nav='logout' data-type='menuItem' className='innerMenuOption' id='menuItem6' onClick={itemClick}>Logout</div>}
+                    {!user &&  <div data-nav='login' data-type='menuItem' className='innerMenuOption' id='menuItem1' onClick={itemClick}>Login</div>}
+   {user && user.sensi && <div data-nav='admin' data-type='menuItem' className='innerMenuOption' id='menuItem5' onClick={itemClick}>Admin</div>}
+
                     </div>
                 </div>
 

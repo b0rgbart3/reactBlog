@@ -33,6 +33,7 @@ import bcrypt from "bcrypt";
 import cors from "cors";
 import { exec } from "child_process";
 import { Products } from "./models/Products.ts";
+import { Settings } from "./models/Settings.ts";
 
 
 function getRandomHexColor(): string {
@@ -184,9 +185,10 @@ app.patch("/api/products/:id", uploadProducts.fields([
 
     req.body.productImages = combined;
     if (beauty) {
-    req.body.beauty = `/uploads/products/${beauty.filename}`;}
+      req.body.beauty = `/uploads/products/${beauty.filename}`;
+    }
     if (thumbnail) {
-    req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
+      req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
     }
 
     // console.log('BD: req: ', req.body);
@@ -339,6 +341,60 @@ app.post("/api/users", async (req: any, res: any) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get("/api/showMerch", async (req: any, res: any) => {
+  try { 
+    const settings = await Settings.find();
+    const showMerch = settings.find((setting) => setting.name === "showMerch");
+    res.json({ data: showMerch });
+  }
+  catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/settings", async (req: any, res: any) => {
+  try { 
+    const settings = await Settings.find();
+    res.json({ data: settings });
+  }
+  catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.post("/api/toggleMerch", async (req: any, res: any) => {
+  console.log('BD: toggleing showMerch.');
+
+  const showMerchSetting = {
+    name: 'showMerch', booleanValue: true
+  }
+  try {
+    const settings = await Settings.find();
+    const showMerch = settings.find((setting) => setting.name === "showMerch");
+    console.log('BD: showMerch: ', JSON.stringify(showMerch));
+
+    if (showMerch) {
+      // toggle it
+      showMerch.booleanValue = !showMerch.booleanValue;
+
+      const updated = await Settings.findByIdAndUpdate(
+        showMerch._id,
+        showMerch
+      );
+
+    } else {
+      // set it
+      const setting = new Settings(showMerchSetting);
+      await setting.save();
+      res.json(setting);
+    }
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.get("/api/users", async (req: any, res: any) => {
   try {

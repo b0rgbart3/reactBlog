@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useStore } from "./state/useStore";
 import { useData } from "./data/useData";
 import { DownloadJsonButton } from "./admin/Download";
@@ -9,6 +9,9 @@ import { BannerNav } from "./components/banner-nav";
 
 import { Articles } from "./pages/Articles/Articles";
 import { Footer } from "./components/footer";
+import { ProductThumbnails } from "./pages/Products/ProductThumbnails";
+import { MemesPage } from "./pages/MemesPage";
+import { Memes } from "./components/Memes";
 
 export interface Merch {
   productImagePath: string;
@@ -17,7 +20,7 @@ export interface Merch {
 
 export function Home() {
   const { refresh } = useData();
-  const { user, articles, categories, loading, products, users, setUser } = useStore((s) => s);
+  const { user, articles, categories, loading, products, users, setUser, settings } = useStore((s) => s);
   // console.log('BD: cats in home: ', categories);
 
   const navigate = useNavigate();
@@ -29,11 +32,19 @@ export function Home() {
   const logout = useCallback(() => {
     setUser(null);
   }, []);
+
   const login = useCallback(() => {
     navigate('/login');
   }, []);
 
 
+  const showMerch = useMemo(() => {
+    // console.log('BD: in homepage, settings: ', settings);
+    const displayMerchSetting = settings?.find((setting) => setting.name === "showMerch");
+    // console.log('BD: displayMerchSetting: ', displayMerchSetting?.booleanValue);
+
+    return displayMerchSetting?.booleanValue;
+  }, [settings]);
 
   const [page, setPage] = useState('home');
 
@@ -41,61 +52,36 @@ export function Home() {
     navigate('/admin');
   })
 
-  const openProductPage = useCallback((productID) => {
-    navigate(`/product/${productID}`);
-  })
 
 
   if (loading) return <div>Loading…</div>;
   return (<div className='starfield'>
-    
+
     <BannerNav page='home' />
 
 
 
     <div className="home">
-      
+
       <div className="articleList">
-             <div className='sticker'>Articles</div>
+        <div className='sticker'>Articles</div>
         <Articles />
       </div>
       <div className='merchList'>
-        <div className='sticker'>Merch</div>
+        {showMerch && (
+          <> <ProductThumbnails /> </>
+        )}
+        {!showMerch && (<><div className='sticker'>Memes</div>
+          <div className='thumbnailMemes'>
+            <Memes />
+          </div>
 
-
-        {
-          products.map((product, index) => {
-            // console.log('BD: about to render product: ', product);
-            return (
-              <div key={`product-thumb-${index}`}>
-                {product.readyToPublish && (
-                  <div className='productBox' onClick={() => openProductPage(product._id)}>
-                    <div className='productBoxImage'>
-                      {
-                        product.thumbnail && (
-                          <img src={`${product.thumbnail}`} alt={`${product.productName}`} />)}
-                    </div>
-
-                    <div className='productThumbnailDescriptionBox'>
-                      <div className="productThumbnailTitle">
-                        {product.productName}
-                      </div>
-
-                      <div className='productThumbnailDescriptionBoxText'>
-                        {product.productDescription}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-            )
-          })}
-
+        </>)}
       </div>
+
     </div>
 
-<Footer/>
+    <Footer />
   </div>
   );
 

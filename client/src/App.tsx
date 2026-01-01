@@ -16,6 +16,8 @@ import { EditProductPage } from "./pages/Products/EditProductPage";
 import { About } from "./pages/About";
 import { Resources } from "./pages/Resources";
 import { ShoppingCart } from "./pages/Products/ShoppingCart";
+import { CheckOut } from "./pages/Products/CheckOut";
+import { MemesPage } from "./pages/MemesPage";
 
 
 export default function App() {
@@ -43,7 +45,9 @@ export default function App() {
         <Route path='/product/new' element={<NewProductPage />} />
         <Route path='/product/:id' element={<ProductPage />} />
         <Route path="/product/edit/:_id" element={<EditProductPage />} />
+        <Route path='/memes' element={<MemesPage />} />
         <Route path="/cart" element={<ShoppingCart />} />
+        <Route path='/check-out' element={<CheckOut />} />
         <Route path="/user" element={<EditUserPage />} />
       </Routes>
     </Router>

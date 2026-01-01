@@ -47,7 +47,9 @@ export function ProductPage() {
     if (chosenSize === '') {
       setChooseSizeWarning(true);
     } else {
-      const newOrder = { productID: product._id, quantity: count, chosenSize } as Order;
+
+      const newOrder = { _id: orders.length + 1, productID: product._id, quantity: count, chosenSize } as Order;
+      console.log('BD: newOrder: ', newOrder);
       orders.push(newOrder);
       setOrders(orders);
       console.log('Orders: ', JSON.stringify(orders));
@@ -156,7 +158,7 @@ export function ProductPage() {
           </div>
 
         </div>
-      </div>ƒ
+      </div>
     </>
   )
 

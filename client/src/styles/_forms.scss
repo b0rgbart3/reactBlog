@@ -187,3 +187,43 @@ label {
     border: 1px solid black;
     display: block;
 }
+
+.orderForm fieldset {
+    border: 1px solid $sticker-text;
+    color: $sticker-text;
+    padding-bottom: 24px;
+    margin-bottom: 34px;
+}
+
+.orderForm label {
+    color: $text-basic;
+    display: block;
+}
+
+.orderForm input {
+    border-radius: 8px;
+    padding: 12px;
+    background-color:black;
+    border: 1px solid $sticker-text;
+        display: block;
+        width: 400px;
+}
+.orderForm textarea {
+        border-radius: 8px;
+    padding: 12px;
+    background-color:black;
+    border: 1px solid $sticker-text;
+    width: 400px;
+}
+
+/* Autofill override */
+.orderForm input:-webkit-autofill,
+.orderForm input:-webkit-autofill:hover,
+.orderForm input:-webkit-autofill:focus,
+.orderForm input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px black inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 9999s ease-in-out 3s;
+  color: white;
+}
+

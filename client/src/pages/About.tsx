@@ -22,16 +22,16 @@ export function About() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('BD: formData: ', formData);
+        // console.log('BD: formData: ', formData);
         try {
             const response = await axios.post('/api/contact', formData);
             if (response.status === 200) {
                 setSent(true);
             }
         } catch (err) {
-            console.log(err.response?.status); // 404?
-            console.log(err.response?.config?.url);
-            console.log(err.response?.config?.method);
+            // console.log(err.response?.status); // 404?
+            // console.log(err.response?.config?.url);
+            // console.log(err.response?.config?.method);
         }
     };
 

@@ -37,10 +37,17 @@ export type Product = {
   thumbnail: string;
 }
 export type Order = {
-  _id: string;
+  _id: number;
   productID: string;
   quantity: number;
   chosenSize: string;
+}
+
+export type Setting = {
+  _id: string;
+  name: string;
+  booleanValue: boolean;
+  stringValue: string;
 }
 
 type State = {
@@ -60,6 +67,8 @@ type State = {
   setUsers: (users: User[] | null) => void;
   orders: Order[];
   setOrders: (orders: Order[] | null) => void;
+  settings: Setting[];
+  setSettings: (settings: Setting[] | null) => void;
 };
 
 export const useStore = create<State>((set) => ({
@@ -79,4 +88,6 @@ export const useStore = create<State>((set) => ({
   setUsers: (users: User[] | null) => set({ users: users }),
   orders: [],
   setOrders: (orders: Order[] | null) => set({ orders: orders }),
+  settings: [],
+  setSettings: (settings: Setting[] | null) => set({ settings: settings})
 }));

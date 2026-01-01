@@ -10,7 +10,23 @@ export type AuthObject = {
 }
 
 export function useData() {
-  const {categories, articles, setArticles, setProducts, setProductCategories, setCategories, setLoading, users, setUsers, setUser } = useStore((s) => s);
+  const {categories, articles, setArticles, setProducts, setProductCategories, setCategories, setLoading, users, setUsers, setUser, setSettings, settings } = useStore((s) => s);
+
+  const fetchSettings = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get("/api/settings");
+      const data = res.data.data;
+      // console.log('BD: got settings from API: ', data);
+      setSettings(data);
+
+    } catch (err) {
+      console.error("Failed to fetch articles:", err);
+    } finally {
+      // setLoading(false);
+    }
+  }, []);
+
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -139,6 +155,17 @@ export function useData() {
     localStorage.removeItem("jwt");
   })
 
+  const displayMerch = useCallback(async (auth: AuthObject) => {
+
+    try {
+      await axios.post('/api/toggleMerch/', auth);
+    }
+    catch(err) {
+      console.log('Failed to toggle merch.');
+    }
+    
+  });
+
   const wipeAndSeed = useCallback(async (auth: AuthObject) => {
     let wiped;
     // setLoading(true);
@@ -172,7 +199,8 @@ export function useData() {
   })
 
   const refresh = useCallback(async () => {
-
+    console.log('BD: refreshing...');
+    await fetchSettings();
     await fetchArticles();
     await fetchProducts();
     await fetchUsers();
@@ -210,9 +238,9 @@ export function useData() {
 
 
     }
-  }, [setArticles, setCategories, users]);
+  }, [setArticles, setCategories, users, setSettings]);
 
-  return { articles, backUpDB, refresh, logout, createUser, kill, killProduct, login, wipeAndSeed };
+  return { articles, backUpDB, displayMerch, refresh, settings, logout, createUser, kill, killProduct, login, wipeAndSeed };
 }
 
 

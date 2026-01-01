@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Article, Product, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
@@ -8,9 +8,11 @@ import { TableHeader } from "./TableHeader";
 import { ExpandableTable } from "./ExpandableTable";
 
 export function AdminPanel() {
-      const { refresh, kill, backUpDB, wipeAndSeed, killProduct} = useData();
+      const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch} = useData();
     const { user, articles, categories, loading, products, productCategories, users, setUser } = useStore((s) => s);
     // console.log('BD: categories: ', categories);
+
+    const [showMerch, setShowMerch] = useState(true);
 
     const navigate = useNavigate();
 
@@ -21,6 +23,11 @@ export function AdminPanel() {
     const editProduct = useCallback((product: Product) => {
         navigate(`/product/edit/${product._id}`);
     }, []);
+
+    const toggleMerch = useCallback(() => {
+        setShowMerch(!showMerch);
+        displayMerch();
+    }, [ showMerch ])
 
     const killArticle = useCallback((article: Article) => {
         const confirmDelete =
@@ -117,6 +124,10 @@ export function AdminPanel() {
                </ExpandableTable>
 
                 <ExpandableTable title='merchandise' open={false}>
+                    <div onClick={toggleMerch} >
+                        {!showMerch && (<>Show Merch</>)}
+                        {showMerch && (<>Hide Merch</>)}
+                        </div>
                 <div onClick={newProduct} className="newArticleButton">
                     New Product
                 </div>
