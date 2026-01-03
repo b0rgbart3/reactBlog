@@ -22,11 +22,13 @@ export function NewArticlePage() {
         navigate(`/`);
     }, []);
     const [article, setArticle] = useState<Partial<Article> | null>(null);
+
     useEffect(() => {
         if (!article) {
             const freshArticle: Partial<Article> = {
                 body: "",
                 category: categories[0] || "",
+                readyToPublish: false,
                 title: "",
                 userID: user._id
             };
@@ -108,7 +110,7 @@ export function NewArticlePage() {
         <div className={'article'}>
             <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
             <div className='articlePageTitle'>{`New Article:`}</div>
-            <ArticleForm
+            {article && ( <ArticleForm
                 article={article}
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
@@ -117,7 +119,7 @@ export function NewArticlePage() {
                 changeCategory={handleChange}
                 changeNewCategory={changeNewCategory}
                 newCategory={newCategory}
-            />
+            /> )}
             <div>
             </div>
         </div>

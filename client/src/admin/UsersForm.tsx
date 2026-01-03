@@ -11,7 +11,7 @@ export function UsersForm(userFormProps) {
     return (
      
             user.sensi && users.map((user) => (
-                <div className='bUser'>
+                <div className='bUser' key={user._id}>
 
                     <div className='bRow'>
                         <div className='bItem bLabel'>

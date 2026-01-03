@@ -139,7 +139,7 @@ export function AdminPanel() {
                 <div className='productsContainer'>
                 {products.map((product) => {
                     return (
-                        <div>
+                        <div key={product._id}>
                             <div onClick={() => editProduct(product)}>
                                 {product.productName}
                             </div>
