@@ -147,7 +147,8 @@ app.post("/api/products", uploadProducts.fields([
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     const images = files?.images ?? [];
-    const thumbnail = files?.newThumbnail ?? null;
+    const thumbnailFiles = files?.newThumbnail ?? [];
+    const thumbnail = thumbnailFiles[0];
 
     const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
 
@@ -160,8 +161,9 @@ app.post("/api/products", uploadProducts.fields([
       req.body.beauty = `/uploads/products/${beauty.filename}`;
     }
 
+    if (thumbnail) {
     req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
-
+    }
 
     const doc = new Products(req.body);
     console.log('BD: about to save a product: ', req.body);
