@@ -143,9 +143,9 @@ app.post("/api/products", uploadProducts.fields([
   try {
 
 
-    const images = req.files["images"] || [];
-    const beauty = req.files["newBeauty"]?.[0] || null;
-    const thumbnail = req.files["newThumbnail"]?.[0] || null;
+    const images = req.files?.["images"] || [];
+    const beauty = req.files?.["newBeauty"]?.[0] || null;
+    const thumbnail = req.files?.["newThumbnail"]?.[0] || null;
 
     const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
 
