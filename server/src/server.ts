@@ -147,13 +147,19 @@ app.post("/api/products", uploadProducts.fields([
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     const images = files?.images ?? [];
-    const beauty = files?.newBeauty ?? null;
     const thumbnail = files?.newThumbnail ?? null;
 
     const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
 
     req.body.productImages = uploadedImages;
-    req.body.beauty = `/uploads/products/${beauty.filename}`;
+
+    const beautyFiles = req.files?.beauty ?? [];
+    const beauty = beautyFiles[0];
+
+    if (beauty) {
+      req.body.beauty = `/uploads/products/${beauty.filename}`;
+    }
+
     req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
 
 
@@ -346,7 +352,7 @@ app.post("/api/users", async (req: any, res: any) => {
 });
 
 app.get("/api/showMerch", async (req: any, res: any) => {
-  try { 
+  try {
     const settings = await Settings.find();
     const showMerch = settings.find((setting) => setting.name === "showMerch");
     res.json({ data: showMerch });
@@ -357,7 +363,7 @@ app.get("/api/showMerch", async (req: any, res: any) => {
 });
 
 app.get("/api/settings", async (req: any, res: any) => {
-  try { 
+  try {
     const settings = await Settings.find();
     res.json({ data: settings });
   }
