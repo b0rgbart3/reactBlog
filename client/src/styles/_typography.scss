@@ -40,11 +40,12 @@ h1 {
 
 .hero-title {
   font-family: $font-sans;
-  font-weight: 600;
-  font-size: 26px;
+  font-weight: 400;
+  font-size: 24px;
   letter-spacing: -0.02em;
   margin:0;
   padding:0;
+  padding-top: 8px;
   color: $accent;
   user-select: none;
   padding-left: 6px;

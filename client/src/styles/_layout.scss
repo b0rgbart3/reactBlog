@@ -219,19 +219,19 @@
   padding-top: 24px;
   padding-left: 0px;
   font-weight: bold;
-  min-width: 320px;
+  min-width: 340px;
   max-height: 80px;
   cursor: pointer;
   user-select: none;
   box-sizing: border-box;
-  background-image: url('../assets/moonmath_logo.svg');
+  background-image: url('../assets/moonmath_logo2.jpg');
   background-repeat: no-repeat;
   background-size: 342px;
-  background-position: 0px 22px;
+  background-position: -4px 22px;
 }
 
 .moonMathLogo:hover {
-    background-image: url('../assets/moonmath_logo_hi.svg');
+    background-image: url('../assets/moonmath_logo2_hi.jpg');
 }
 
 .tagline {
