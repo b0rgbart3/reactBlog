@@ -185,9 +185,21 @@ app.patch("/api/products/:id", uploadProducts.fields([
 ]), async (req, res) => {
   try {
     const { id } = req.params;
-    const images = req.files["images"] || [];
-    const beauty = req.files["newBeauty"]?.[0] || null;
-    const thumbnail = req.files["newThumbnail"]?.[0] || null;
+
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const images = files?.images ?? [];
+
+
+        const beautyFiles = files?.beauty ?? [];
+    const beauty = beautyFiles[0];
+
+    if (beauty) {
+      req.body.beauty = `/uploads/products/${beauty.filename}`;
+    }
+    const thumbnailFiles = files?.newThumbnail ?? [];
+    const thumbnail = thumbnailFiles[0];
+
 
 
     const uploadedImages = images?.map((file) => `/uploads/products/${file.filename}`);
