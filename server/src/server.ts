@@ -153,7 +153,7 @@ app.post("/api/products", uploadProducts.fields([
 
     req.body.productImages = uploadedImages;
 
-    const beautyFiles = req.files?.beauty ?? [];
+    const beautyFiles = files?.beauty ?? [];
     const beauty = beautyFiles[0];
 
     if (beauty) {
