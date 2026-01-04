@@ -162,7 +162,7 @@ app.post("/api/products", uploadProducts.fields([
     }
 
     if (thumbnail) {
-    req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
+      req.body.thumbnail = `/uploads/products/${thumbnail.filename}`;
     }
 
     const doc = new Products(req.body);
@@ -186,12 +186,12 @@ app.patch("/api/products/:id", uploadProducts.fields([
   try {
     const { id } = req.params;
 
-      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
     const images = files?.images ?? [];
 
 
-        const beautyFiles = files?.beauty ?? [];
+    const beautyFiles = files?.beauty ?? [];
     const beauty = beautyFiles[0];
 
     if (beauty) {
@@ -322,11 +322,16 @@ app.post("/api/login", async (req: any, res: any) => {
 
       const secret: Secret = process.env.JWT_SECRET as string;
 
-      const options: SignOptions = {
-        expiresIn: (process.env.JWT_EXPIRES_IN || "2h"),
-      };
+      // const options: SignOptions = {
+      //   expiresIn: (process.env.JWT_EXPIRES_IN || "2h"),
+      // };
 
-      const token = jwt.sign(payload, secret, options);
+      const expiresIn =
+        (process.env.JWT_EXPIRES_IN as SignOptions["expiresIn"]) || "2h";
+
+      const token = jwt.sign(payload, secret, {
+        expiresIn,
+      });
 
       // console.log('payload: ', payload);
       // console.log('SECRET: ', process.env.JWT_SECRET);
