@@ -5,8 +5,8 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "strict": true,
-    "allowImportingTsExtensions": true,
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }
