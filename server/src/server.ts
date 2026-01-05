@@ -601,12 +601,16 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Default route to public/index.html if exists
-app.get("/index.html", (req: any, res: any) => {
-  const indexPath = path.join(__dirname, "public", "index.html");
+// app.get("/index.html", (req: any, res: any) => {
+//   const indexPath = path.join(__dirname, "public", "index.html");
 
-  res.sendFile(indexPath);
+//   res.sendFile(indexPath);
 
+// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
+
 
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
