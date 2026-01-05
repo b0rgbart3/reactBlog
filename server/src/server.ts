@@ -19,9 +19,11 @@ const __dirname = path.dirname(__filename);
 const MONGO_URI = process.env.MONGO_URI;
 const MONGO_DUMP_PATH = process.env.MONGO_DUMP_PATH;
 
-import { Articles } from "./models/Articles.ts";
+import { Articles } from "./models/Articles.js";
+import { Users } from "./models/Users.js";
+import { Products } from "./models/Products.js";
+import { Settings } from "./models/Settings.js";
 
-import { Users } from "./models/Users.ts";
 
 //  import pkg, { Secret, SignOptions } from 'jsonwebtoken';
 // const { Secret, SignOptions, StringValue } = pkg;
@@ -32,8 +34,7 @@ import bcrypt from "bcrypt";
 // import { seed } from "./seedMongoDB.ts";
 import cors from "cors";
 import { exec } from "child_process";
-import { Products } from "./models/Products.ts";
-import { Settings } from "./models/Settings.ts";
+
 
 
 function getRandomHexColor(): string {
