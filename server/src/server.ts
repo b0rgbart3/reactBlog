@@ -49,7 +49,7 @@ function getRandomHexColor(): string {
 }
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 
 const articles = [
@@ -613,6 +613,11 @@ app.get('*', (req, res) => {
 
 
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+// app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+
+app.listen(PORT, '127.0.0.1', () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
 
