@@ -272,7 +272,7 @@
   position: absolute;
   right: 0;
   top: 16px;
-  border: 4px solid #2864c8;
+  border: 4px solid $main;
   cursor: pointer;
   user-select: none;
   z-index: 300;
@@ -280,18 +280,18 @@
 }
 
 .burger:hover {
-  border-color: #4b86ed;
+  border-color: $main;
 }
 
 .burger:active {
-  background-color: #2864c8;
-  border-color: #8bb6ff;
+  background-color: $main;
+  border-color: $main;
 }
 
 .patty {
   width: 70%;
   box-sizing: border-box;
-  background-color:#2864c8;
+  background-color:$main;
   height: 4px;
   border-radius: 8px;
   margin: auto;
@@ -300,15 +300,15 @@
 }
 
 .burger:hover .patty {
-  background-color: #4b86ed;
+  background-color: $main;
 }
 
 .burger:active .patty {
-  background-color: #8bb6ff;
+  background-color: $main;
 }
 
 .menu {
-  border: 4px solid #2864c8;
+  border: 4px solid $main;
   background-color: black;
   width: 200px;
   height: 0px;
@@ -345,7 +345,8 @@
 }
 
 .innerMenuOption:hover {
-  background-color: #2864c8;
+  background-color: $darker_main;
+  color: white;
 }
 
 .middleBannerNav {
@@ -396,7 +397,7 @@
 
 .userIcon:hover {
   opacity: 1;
-  background-color: blue;
+  background-color: $highlight;
 }
 
 .userAccountIconContainer {
@@ -414,7 +415,7 @@
 .divider {
   width: 100%;
   box-sizing: border-box;
-  background-color:#2864c8;
+  background-color:$main;
   height: 4px;
   border-radius: 8px;
   margin: auto;

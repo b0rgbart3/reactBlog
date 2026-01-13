@@ -41,4 +41,3 @@ export {};
 //   console.error(err);
 //   process.exit(1);
 // });
-//# sourceMappingURL=seedMongoDB.js.map

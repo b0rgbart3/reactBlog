@@ -4,9 +4,12 @@ import dotenv from "dotenv";
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
 console.log('MY NODE ENV: ', process.env.NODE_ENV);
+import nodemailer from 'nodemailer';
 
 import express from "express";
 import mongoose from "mongoose";
+import { Resend } from 'resend';
+import { sendContactEmail } from './services/email.js';
 import fs from "fs";
 
 // At the top of your file
@@ -18,11 +21,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const MONGO_URI = process.env.MONGO_URI;
 const MONGO_DUMP_PATH = process.env.MONGO_DUMP_PATH;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const resend = new Resend(process.env.RESEND_API_KEY);
+// const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY as string;
 
 import { Articles } from "./models/Articles.js";
 import { Users } from "./models/Users.js";
 import { Products } from "./models/Products.js";
 import { Settings } from "./models/Settings.js";
+
+// import sgMail from '@sendgrid/mail';
+
+// sgMail.setApiKey(SENDGRID_API_KEY);
 
 
 //  import pkg, { Secret, SignOptions } from 'jsonwebtoken';
@@ -63,6 +73,14 @@ const users = [
   { sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3@gmail.com" },
   { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // or 'outlook', 'yahoo', etc.
+  auth: {
+    user: process.env.EMAIL_USER, // Your email
+    pass: process.env.EMAIL_PASS, // Your app password
+  },
+});
 
 // store in "uploads" folder locally
 const storage = multer.diskStorage({
@@ -437,21 +455,94 @@ app.get("/api/users", async (req: any, res: any) => {
   }
 });
 
-app.post("/api/contact", (req, res) => {
+app.post("/api/contact", async (req, res) => {
+ 
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: "Missing fields" });
   }
 
-  console.log('BD: got contact from: ', name);
-  console.log(email);
-  console.log(message);
-  // 1) send an email
-  // 2) save to DB
-  // 3) log somewhere
+  console.log('BD: got contact from:', name, email, message);
 
-  res.status(200).json({ success: true });
+  try {
+    await resend.emails.send({
+      from: 'info@moon-math.online',      // must be verified in Resend
+      to: 'info@moon-math.online',           // your target email
+      bcc: 'b0rgbart3@gmail.com',
+      subject: 'New contact form submission from Moon-Math',
+      html: `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    });
+
+    return res.status(200).json({ success: true });
+
+  } catch (err) {
+    console.error('❌ Error sending contact email:', err);
+    return res.status(500).json({ error: 'Failed to send message' });
+  }
+
+//   await sgMail.send({
+//   to: 'info@moon-math.online',
+//   bcc: 'b0rgbart3@gmail.com',
+//   from: 'b0rgbart3@gmail.com', // 'no-reply@yourdomain.com', // must be verified in SendGrid
+//   subject: 'New contact form submission',
+//   text: message,
+// });
+
+
+  // try {
+    // 1) Send email notification
+    // const mailOptions = {
+    //   from: process.env.EMAIL_USER,
+    //   to: process.env.EMAIL_USER, // Send to yourself
+    //   replyTo: email, // Allow easy reply to the contact
+    //   subject: `New Contact Form Submission from ${name}`,
+    //   html: `
+    //     <h2>New Contact Form Message</h2>
+    //     <p><strong>Name:</strong> ${name}</p>
+    //     <p><strong>Email:</strong> ${email}</p>
+    //     <p><strong>Message:</strong></p>
+    //     <p>${message.replace(/\n/g, '<br>')}</p>
+    //     <hr>
+    //     <p><em>Sent from your website contact form</em></p>
+    //   `,
+    //   text: `
+    //     New Contact Form Message
+        
+    //     Name: ${name}
+    //     Email: ${email}
+    //     Message: ${message}
+        
+    //     ---
+    //     Sent from your website contact form
+    //   `,
+    // };
+
+    // await transporter.sendMail(mailOptions);
+
+    // 2) Optional: Save to MongoDB
+    // const contact = new Contact({ name, email, message, date: new Date() });
+    // await contact.save();
+
+    // 3) Optional: Log to file or monitoring service
+  //   console.log(`✅ Contact form email sent successfully for ${name}`);
+
+  //   res.status(200).json({ 
+  //     success: true,
+  //     message: 'Your message has been sent successfully!' 
+  //   });
+
+  // } catch (error) {
+  //   console.error('❌ Error sending contact form email:', error);
+  //   res.status(500).json({ 
+  //     error: 'Failed to send message. Please try again later.' 
+  //   });
+  // }
 });
 
 

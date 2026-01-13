@@ -3,9 +3,11 @@ const ArticlesSchema = new mongoose.Schema({
     body: String,
     category: String,
     headlineImage: String,
+    originDate: String,
+    lastModifiedDate: String,
+    randomColor: String,
+    readyToPublish: Boolean,
     title: String,
-    authorEmail: String,
-    authorID: String
+    userID: String
 });
 export const Articles = mongoose.model("articles", ArticlesSchema);
-//# sourceMappingURL=Articles.js.map

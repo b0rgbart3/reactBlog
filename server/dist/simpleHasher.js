@@ -11,4 +11,3 @@ if (process.argv[1] === new URL(import.meta.url).pathname) {
     const value = process.argv[2] || "bbb";
     simpleHash(value);
 }
-//# sourceMappingURL=simpleHasher.js.map

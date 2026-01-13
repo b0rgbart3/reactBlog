@@ -4,4 +4,3 @@ const DataSchema = new mongoose.Schema({
     message: String,
 });
 export const Data = mongoose.model("Data", DataSchema);
-//# sourceMappingURL=Data.js.map

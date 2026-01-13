@@ -1,4 +1,4 @@
-# b0rgBlog
+# Moon-Math.online
 
 A full-stack web application with a **Node.js + Express backend** using **TypeScript** and a **React frontend** using **Vite**, with MongoDB as the database. This setup supports development and production environments, with separate dev servers for backend and frontend, and proper build pipelines.
 

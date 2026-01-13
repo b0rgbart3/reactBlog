@@ -8,7 +8,7 @@ export function Resources() {
                 <h1>Bitcoin related Resources</h1>
                 <p>This is just a short list of the resources in the bitcoin space that are at top of mind for me.</p>
 
-                <h2>Books</h2>
+                <h2>Recommended Books</h2>
                 <ul>
                     <li>
                         <div>Gradually, then Suddenly - by Parker Lewis</div>
@@ -41,7 +41,7 @@ export function Resources() {
                         <div>The Big Print - by Larry Leopard</div>
                     </li>
                 </ul>
-                <h2>Podcasts</h2>
+                <h2>Recommended Podcasts</h2>
                 <ul>
                     <li><a href='https://www.fountain.fm/show/BMElezTqi1mcOc4PnwSH' target='new'>
                         <div>Bitcoin Unleashed - Oliver Velez</div></a>
@@ -63,7 +63,7 @@ export function Resources() {
                         <div>Rajat Soni, CFA</div></a></li>
                     <li><a href='https://www.youtube.com/@thebitcoinmatrixpodcast' target='new'><div>The Bitcoin Matrix Podcast</div></a></li>
                 </ul>
-                <h2>Products</h2>
+                <h2>Recommended Products</h2>
                 <ul>
                     <li><a href='https://coldcard.com/' target='new'>
                         <div>Cold Card</div></a>
@@ -75,7 +75,7 @@ export function Resources() {
                         <div>Aqua Wallet</div></a>
                     </li>
                 </ul>
-                <h2>Businesses</h2>
+                <h2>Recommended Businesses</h2>
                 <ul>
                     <li><a href='https://river.com/' target='new'>
                         <div>River</div></a>
