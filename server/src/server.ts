@@ -74,13 +74,13 @@ const users = [
   { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // or 'outlook', 'yahoo', etc.
-  auth: {
-    user: process.env.EMAIL_USER, // Your email
-    pass: process.env.EMAIL_PASS, // Your app password
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail', // or 'outlook', 'yahoo', etc.
+//   auth: {
+//     user: process.env.EMAIL_USER, // Your email
+//     pass: process.env.EMAIL_PASS, // Your app password
+//   },
+// });
 
 // store in "uploads" folder locally
 const storage = multer.diskStorage({
