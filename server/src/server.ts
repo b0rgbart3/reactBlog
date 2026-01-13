@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
 console.log('MY NODE ENV: ', process.env.NODE_ENV);
-import nodemailer from 'nodemailer';
+// import nodemailer from 'nodemailer';
 
 import express from "express";
 import mongoose from "mongoose";
