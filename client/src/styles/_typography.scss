@@ -45,10 +45,13 @@ h1 {
   letter-spacing: -0.02em;
   margin:0;
   padding:0;
-  padding-top: 8px;
+  padding-top: 0px;
+  padding-left: 30px;
   color: $accent;
   user-select: none;
   padding-left: 6px;
+  position: relative;
+  top: -34px;
 }
 
 

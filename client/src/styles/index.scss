@@ -21,9 +21,18 @@ body {
   min-height: 100vh;
   font-family: variables.$font-sans;
   color: colors.$text-basic;
-  background: colors.$background;
   line-height: 1.6;
   margin-bottom: 200px;
+
+    background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.8) 0px,
+      rgba(0, 0, 0, 0.4) 200px,
+      rgba(0, 0, 0, 0) 320px
+    ),
+    colors.$background;;
+
 }
 
 body::before {

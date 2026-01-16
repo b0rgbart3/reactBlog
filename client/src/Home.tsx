@@ -11,7 +11,7 @@ import { Articles } from "./pages/Articles/Articles";
 import { Footer } from "./components/footer";
 import { ProductThumbnails } from "./pages/Products/ProductThumbnails";
 import { MemesPage } from "./pages/MemesPage";
-import { Memes } from "./components/Memes";
+import { MemeThumbnails } from "./components/MemeThumbnails";
 
 export interface Merch {
   productImagePath: string;
@@ -20,7 +20,16 @@ export interface Merch {
 
 export function Home() {
   const { refresh } = useData();
-  const { user, articles, categories, loading, products, users, setUser, settings } = useStore((s) => s);
+  const {
+    user,
+    articles,
+    categories,
+    loading,
+    products,
+    users,
+    setUser,
+    settings,
+  } = useStore((s) => s);
   // console.log('BD: cats in home: ', categories);
 
   const navigate = useNavigate();
@@ -34,57 +43,54 @@ export function Home() {
   }, []);
 
   const login = useCallback(() => {
-    navigate('/login');
+    navigate("/login");
   }, []);
-
 
   const showMerch = useMemo(() => {
     // console.log('BD: in homepage, settings: ', settings);
-    const displayMerchSetting = settings?.find((setting) => setting.name === "showMerch");
+    const displayMerchSetting = settings?.find(
+      (setting) => setting.name === "showMerch",
+    );
     // console.log('BD: displayMerchSetting: ', displayMerchSetting?.booleanValue);
 
     return displayMerchSetting?.booleanValue;
   }, [settings]);
 
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState("home");
 
   const adminCallback = useCallback(() => {
-    navigate('/admin');
-  })
-
-
+    navigate("/admin");
+  });
 
   if (loading) return <div>Loading…</div>;
-  return (<div className='starfield'>
+  return (
+    <div className="starfield">
+      <BannerNav page="home" />
 
-    <BannerNav page='home' />
-
-
-
-    <div className="home">
-
-      <div className="articleList">
-        <div className='sticker'>Articles</div>
-        <Articles />
+      <div className="home">
+        <div className="articleList">
+          <div className="sticker">Articles</div>
+          <Articles />
+        </div>
+        <div className="merchList">
+          {showMerch && (
+            <>
+              {" "}
+              <ProductThumbnails />{" "}
+            </>
+          )}
+          {!showMerch && (
+            <>
+              <div className="sticker">Memes</div>
+              <div className="thumbnailMemes">
+                <MemeThumbnails />
+              </div>
+            </>
+          )}
+        </div>
       </div>
-      <div className='merchList'>
-        {showMerch && (
-          <> <ProductThumbnails /> </>
-        )}
-        {!showMerch && (<><div className='sticker'>Memes</div>
-          <div className='thumbnailMemes'>
-            <Memes />
-          </div>
 
-        </>)}
-      </div>
-
+      <Footer />
     </div>
-
-    <Footer />
-  </div>
   );
-
 }
-
-

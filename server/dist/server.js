@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET);
 console.log('MY NODE ENV: ', process.env.NODE_ENV);
-import nodemailer from 'nodemailer';
+// import nodemailer from 'nodemailer';
 import express from "express";
 import mongoose from "mongoose";
 import { Resend } from 'resend';
@@ -52,13 +52,13 @@ const users = [
     { sensi: true, author: true, phash: '$2b$10$C/DrFUhLR66fNX7WhC2KL.i.Uw9Hh/9QUMvxCxGrByzqin834lEe.', user_name: "bart", status: "active", user_email: "b0rgbart3@gmail.com" },
     { sensi: false, author: true, phash: '$2b$10$pOl0QkbiBcE6JeRiOvEJ6e0mcv8YnzfdmFABSALR70Fk4S5q2r44G', user_name: "dumbo", status: "active", user_email: "dumbo@somewhere.org" }
 ];
-const transporter = nodemailer.createTransport({
-    service: 'gmail', // or 'outlook', 'yahoo', etc.
-    auth: {
-        user: process.env.EMAIL_USER, // Your email
-        pass: process.env.EMAIL_PASS, // Your app password
-    },
-});
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail', // or 'outlook', 'yahoo', etc.
+//   auth: {
+//     user: process.env.EMAIL_USER, // Your email
+//     pass: process.env.EMAIL_PASS, // Your app password
+//   },
+// });
 // store in "uploads" folder locally
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

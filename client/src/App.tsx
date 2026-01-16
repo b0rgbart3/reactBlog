@@ -19,16 +19,13 @@ import { ShoppingCart } from "./pages/Products/ShoppingCart";
 import { CheckOut } from "./pages/Products/CheckOut";
 import { MemesPage } from "./pages/MemesPage";
 
-
 export default function App() {
-
   const user = useStore((s) => s.user);
   const setUser = useStore((s) => s.setUser);
 
   useEffect(() => {
     setUser(null);
-  }, [])
-
+  }, []);
 
   return (
     <Router>
@@ -36,18 +33,18 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path='/newUser' element={<CreateAccount />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/resources' element={<Resources />} />
-        <Route path='/article/new' element={<NewArticlePage />} />
+        <Route path="/newUser" element={<CreateAccount />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/article/new" element={<NewArticlePage />} />
         <Route path="/article/:id" element={<ArticlePage />} />
         <Route path="/article/edit/:_id" element={<EditArticlePage />} />
-        <Route path='/product/new' element={<NewProductPage />} />
-        <Route path='/product/:id' element={<ProductPage />} />
+        <Route path="/product/new" element={<NewProductPage />} />
+        <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/product/edit/:_id" element={<EditProductPage />} />
-        <Route path='/memes' element={<MemesPage />} />
+        <Route path="/memes" element={<MemesPage />} />
         <Route path="/cart" element={<ShoppingCart />} />
-        <Route path='/check-out' element={<CheckOut />} />
+        <Route path="/check-out" element={<CheckOut />} />
         <Route path="/user" element={<EditUserPage />} />
       </Routes>
     </Router>
