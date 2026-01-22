@@ -35,17 +35,14 @@ export function parseHTML(paragraph: string) {
 }
 
 export function ArticlePage() {
-  const { articlesById, usersById } = useStore((s) => s);
-
   const { fetchArticles, fetchUsers } = useData();
   const { id } = useParams<{ id: string }>();
 
-  const { user, articles, articlesLoading, usersLoading, users } = useStore(
-    (s) => s,
-  );
+  const { user, articlesById, articlesLoaded, usersById, usersLoaded, users } =
+    useStore((s) => s);
 
   const navigate = useNavigate();
-  const article = articlesById[id!];
+  const article = articlesById[id!]; // 0(1) lookup
   const authorUser = article ? usersById[article.userID] : undefined;
 
   const routeHome = useCallback(() => {
@@ -57,16 +54,10 @@ export function ArticlePage() {
     fetchUsers();
   }, [fetchArticles, fetchUsers]);
 
-  useEffect(() => {
-    console.log("BD: articles updated:", articles);
-  }, [articles]);
-
-  console.log("BD: articles: ", articles);
-
-  if (articlesLoading) {
+  if (!articlesLoaded) {
     return <div>Loading article...</div>;
   }
-  if (usersLoading) {
+  if (!usersLoaded) {
     return <div>Loading users...</div>;
   }
   if (!article) return <div>Article not found</div>;

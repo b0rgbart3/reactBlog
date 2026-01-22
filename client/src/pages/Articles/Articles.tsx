@@ -5,11 +5,11 @@ import { ArticleThumbnail } from "../../ArticleThumbnail";
 import { useStore } from "../../state/useStore";
 
 export function Articles() {
-  const articles = useStore((s) => s.articles);
+  const { articlesById } = useStore((s) => s);
   return (
     <>
       <div className="articleBlock">
-        {articles
+        {Object.values(articlesById)
           .filter((a) => a.readyToPublish)
           .map((a) => (
             <React.Fragment key={a._id}>

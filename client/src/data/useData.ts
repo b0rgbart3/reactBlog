@@ -33,48 +33,10 @@ export function useData() {
     }
   }, []);
 
-
-  // const fetchArticles = useCallback(async () => {
-  //   console.log("FETCH ARTICLES");
-  //   console.log('articles loading: ', articlesLoading);
-  //   console.log("fetchArticles", {
-  //     articlesLength: articles.length,
-  //     articlesLoading,
-  //     hasFetchedArticles,
-  //   });
-
-  //   if (articlesLoading) return;
-  //   if (hasFetchedArticles && articles.length > 0) return;
-  //   setArticlesLoading(true);
-  //   try {
-  //     const res = await axios.get("/api/articles");
-  //     const data = res.data.data;
-  //     const cats: string[] = data.map((article) => article.category);
-
-
-  //     const uniqueCategories: string[] = [...new Set(cats)];
-  //     setArticles(data);
-
-
-  //     if (uniqueCategories && uniqueCategories[0] !== '') {
-  //       setCategories(uniqueCategories);
-  //     }
-  //     setHasFetchedArticles(true);
-
-  //   } catch (err) {
-  //     console.error("Failed to fetch articles:", err);
-  //     setArticlesLoading(false);
-  //   } finally {
-  //     setArticlesLoading(false);
-  //   }
-  // }, [articlesLoading, hasFetchedArticles]);
-
   const fetchArticles = useCallback(async () => {
     console.log('BD: called fetchArticles.');
-    // if (articlesLoading) return;
     if (articlesLoaded) return;
 
-    // setArticlesLoaded(true);
     try {
       const res = await axios.get("/api/articles");
       setArticles(res.data.data);
@@ -87,8 +49,6 @@ export function useData() {
       }
     } catch (err) {
       console.error("Failed to fetch articles:", err);
-    } finally {
-      // setArticlesLoaded(false);
     }
   }, [articlesLoaded, articles.length]);
 
@@ -117,28 +77,6 @@ export function useData() {
       setProductsLoaded(false);
     }
   }, [productsLoaded, setProductsLoaded]);
-
-  // const fetchUsers = useCallback(async () => {
-
-  //   if (usersLoading) return;
-  //   if (hasFetchedUsers && users.length > 0) return;
-
-  //   setUsersLoading(true);
-  //   try {
-  //     const res = await axios.get("/api/users");
-  //     const data = res.data;
-  //     setUsers(data.data);
-  //     // setUsersLoading(false);
-  //     setHasFetchedUsers(true);
-  //   }
-  //   catch (err) {
-  //     console.error("Failed to fetch users:", err);
-  //     setUsersLoading(false);
-  //   } finally {
-  //     setUsersLoading(false);
-  //     return;
-  //   }
-  // }, [usersLoading, hasFetchedUsers])
 
   const fetchUsers = useCallback(async () => {
     if (usersLoaded) return;
