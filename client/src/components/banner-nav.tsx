@@ -13,7 +13,7 @@ export function BannerNav(props) {
   const { user, articles, loading, users, setUser, orders } = useStore(
     (s) => s,
   );
-  const { refresh, logout } = useData();
+  const { refresh, fetchUsers, logout } = useData();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const showLogin = page !== "login" && page !== "create";
   const showAdminButton = page === "home" && user?.sensi;

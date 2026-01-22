@@ -10,48 +10,58 @@ export type AuthObject = {
 }
 
 export function useData() {
-  const {categories, articles, setArticles, setProducts, setProductCategories, setCategories, setLoading, users, setUsers, setUser, setSettings, settings } = useStore((s) => s);
+  const {categories, articles, articlesLoading, usersLoading, setUsersLoading, 
+    productsLoading, setProductsLoading, settingsLoading, setSettingsLoading, 
+    setArticlesLoading, setArticles, setProducts, setProductCategories, setCategories, 
+    setLoginLoading, loginLoading, 
+    users, setUsers, setUser, setSettings, settings } = useStore((s) => s);
 
   const fetchSettings = useCallback(async () => {
-    setLoading(true);
+    if (settingsLoading) return;
+    setSettingsLoading(true);
     try {
       const res = await axios.get("/api/settings");
       const data = res.data.data;
-      // console.log('BD: got settings from API: ', data);
+
       setSettings(data);
 
     } catch (err) {
       console.error("Failed to fetch articles:", err);
     } finally {
-      // setLoading(false);
+       setSettingsLoading(false);
     }
   }, []);
 
 
   const fetchArticles = useCallback(async () => {
-    setLoading(true);
+    console.log("FETCH ARTICLES");
+    console.log('articles loading: ', articlesLoading);
+    if (articlesLoading) return;
+    setArticlesLoading(true);
     try {
       const res = await axios.get("/api/articles");
       const data = res.data.data;
       const cats: string[] = data.map((article) => article.category);
 
-      // console.log('BD: cats: ', cats);
+
       const uniqueCategories: string[] = [...new Set(cats)];
       setArticles(data);
-      // console.log('BD: unique article categories:', uniqueCategories);
+   
       if (uniqueCategories && uniqueCategories[0] !== '') {
         setCategories(uniqueCategories);
       }
 
     } catch (err) {
       console.error("Failed to fetch articles:", err);
+          setArticlesLoading(false);
     } finally {
-      setLoading(false);
+      setArticlesLoading(false);
     }
   }, []);
 
   const fetchProducts = useCallback(async () => {
-    setLoading(true);
+     if (productsLoading) return;
+    setProductsLoading(true);
     try {
       const res = await axios.get("/api/products");
       const data = res.data.data;
@@ -59,10 +69,7 @@ export function useData() {
 
     
       const uniqueProductCategories: string[] = [...new Set(cats)];
-      // console.log('BD: unique product categories:', uniqueProductCategories);
-
-      // const cleanImageArray = data?.productImages.filter((productImage) => productImage === '');
-      // data.productImages = cleanImageArray;
+ 
 
       setProducts(data);
       setProductCategories(uniqueProductCategories);
@@ -70,23 +77,23 @@ export function useData() {
     } catch (err) {
       console.error("Failed to fetch articles:", err);
     } finally {
-      setLoading(false);
+      setProductsLoading(false);
     }
   }, []);
 
   const fetchUsers = useCallback(async () => {
-    setLoading(true);
+    setUsersLoading(true);
     try {
       const res = await axios.get("/api/users");
       const data = res.data;
       setUsers(data.data);
-      setLoading(false);
+      // setUsersLoading(false);
     }
     catch (err) {
       console.error("Failed to fetch users:", err);
-      setLoading(false);
+      setUsersLoading(false);
     } finally {
-      setLoading(false);
+      setUsersLoading(false);
       return;
     }
   })
@@ -127,14 +134,14 @@ export function useData() {
   const login = useCallback(async (newUser: Partial<User>) => {
     let loginResponse;
     let match: User;
-    setLoading(true);
+    setLoginLoading(true);
     try {
       loginResponse = await axios.post('/api/login/', newUser);
     } catch (err) {
       console.log('Failed to login.');
     } finally {
       if (loginResponse) {
-        setLoading(false);
+        setLoginLoading(false);
 
         const decoded = jwtDecode<User>(loginResponse.data.token);
         setUser(decoded);
@@ -198,49 +205,16 @@ export function useData() {
 
   })
 
-  const refresh = useCallback(async () => {
-    console.log('BD: refreshing...');
-    await fetchSettings();
-    await fetchArticles();
-    await fetchProducts();
-    await fetchUsers();
-  })
-
-  useEffect(() => {
-    if (!articles.length) {
-      fetchArticles();
-    }
-    if (!users.length) {
-      fetchUsers();
-    }
-    const localStorageUserToken = localStorage.getItem("jwt");
+const refresh = useCallback(async () => {
+  console.log('BD: refreshing...');
+  await fetchSettings();
+  await fetchArticles();
+  await fetchProducts();
+  await fetchUsers();
+}, [fetchSettings, fetchArticles, fetchProducts, fetchUsers]);
 
 
-    if (localStorageUserToken && localStorageUserToken !== 'null') {
-      const decoded: any = jwtDecode(localStorageUserToken);
-      const now = Date.now() / 1000; // in seconds
-
-      if (decoded.exp && decoded.exp > now) {
-        // token still valid
-
-        const match: User = users?.find((u) => u._id === decoded?._id);
-
-        if (match) {
-
-          setUser(match);
-        }
-      } else {
-        // expired
-        localStorage.removeItem("jwt");
-        setUser(null);
-      }
-
-
-
-    }
-  }, [setArticles, setCategories, users, setSettings]);
-
-  return { articles, backUpDB, displayMerch, refresh, settings, logout, createUser, kill, killProduct, login, wipeAndSeed };
+  return { articles, backUpDB, displayMerch, fetchArticles, fetchUsers, refresh, settings, logout, createUser, kill, killProduct, login, wipeAndSeed };
 }
 
 

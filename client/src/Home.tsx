@@ -19,15 +19,16 @@ export interface Merch {
 }
 
 export function Home() {
-  const { refresh } = useData();
+  const { fetchArticles, fetchUsers } = useData();
   const {
     user,
     articles,
+    articlesLoading,
     categories,
-    loading,
     products,
     users,
     setUser,
+    usersLoading,
     settings,
   } = useStore((s) => s);
   // console.log('BD: cats in home: ', categories);
@@ -35,8 +36,18 @@ export function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    refresh();
-  }, []);
+    if (!articles.length && !articlesLoading) {
+      console.log("BD: about to fetch articles.");
+      fetchArticles();
+    }
+  }, [articles.length, articlesLoading, fetchArticles]);
+
+  useEffect(() => {
+    if (!users.length && !usersLoading) {
+      console.log("BD: about to fetch users.");
+      fetchUsers();
+    }
+  }, [fetchUsers, users.length, usersLoading]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -62,7 +73,7 @@ export function Home() {
     navigate("/admin");
   });
 
-  if (loading) return <div>Loading…</div>;
+  if (articlesLoading || usersLoading) return <div>Loading…</div>;
   return (
     <div className="starfield">
       <BannerNav page="home" />

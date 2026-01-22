@@ -55,11 +55,15 @@ type State = {
   setArticles: (articles: Article[]) => void;
   categories: string[];
   setCategories: (categories: string[]) => void;
-  loading: boolean;
-  setLoading: (boolean) => void;
+  articlesLoading: boolean;
+  setArticlesLoading: (boolean) => void;
   products: Product[];
   setProducts: (products: Product[]) => void;
+  productsLoading: boolean;
+  setProductsLoading: (boolean) => void;
   productCategories: string[];
+  loginLoading: boolean;
+  setLoginLoading: (boolean) => void;
   setProductCategories: ( productCategories: string[]) => void;
   user: User | null;
   setUser: (u: User | null) => void;
@@ -69,6 +73,10 @@ type State = {
   setOrders: (orders: Order[] | null) => void;
   settings: Setting[];
   setSettings: (settings: Setting[] | null) => void;
+  settingsLoading: boolean;
+  setSettingsLoading: (boolean) => void;
+  usersLoading: boolean;
+  setUsersLoading: (boolean) => void;
 };
 
 export const useStore = create<State>((set) => ({
@@ -76,12 +84,17 @@ export const useStore = create<State>((set) => ({
   setArticles: (articles: Article[]) => set({ articles: articles }),
   categories: [],
   setCategories: (categories: string[]) => set({ categories: categories }),
-  loading: false,
+  articlesLoading: false,
+  loginLoading: false,
   products: [],
+  productsLoading: false,
   setProducts: (products: Product[]) => set({ products: products }),
   productCategories: [],
   setProductCategories: (productCategories: string[]) => set({ productCategories: productCategories}),
-  setLoading: (isLoading: boolean) => set({ loading: isLoading }),
+  setProductsLoading: (isLoading: boolean) => set({ productsLoading: isLoading }),
+  setArticlesLoading: (isLoading: boolean) => set( { articlesLoading: isLoading}),
+  setSettingsLoading: (isLoading: boolean) => set( { settingsLoading: isLoading}),
+  setLoginLoading: (isLoading: boolean) => set({ loginLoading: isLoading}),
   user: null,
   setUser: (u: User | null) => { set({ user: u })},
   users: [],
@@ -89,5 +102,8 @@ export const useStore = create<State>((set) => ({
   orders: [],
   setOrders: (orders: Order[] | null) => set({ orders: orders }),
   settings: [],
-  setSettings: (settings: Setting[] | null) => set({ settings: settings})
+  settingsLoading: false,
+  setSettings: (settings: Setting[] | null) => set({ settings: settings}),
+  usersLoading: false,
+  setUsersLoading: (isLoading: boolean) => set({ usersLoading: isLoading})
 }));

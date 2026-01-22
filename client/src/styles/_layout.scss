@@ -723,7 +723,15 @@ box-sizing: border-box;;
   width: 25%;
   min-width: 250px;
   margin: 2%;
-  box-shadow: 0 0 18px $accent;
+  box-shadow: 0 0 10px $accent;
+  vertical-align: top;
+}
+
+.memes img:hover {
+  width: 25%;
+  min-width: 250px;
+  margin: 2%;
+  box-shadow: 0 0 18px $highlight;
   vertical-align: top;
 }
 
@@ -746,7 +754,7 @@ box-sizing: border-box;;
 }
 
 .thumbnailMemes img:hover {
-    box-shadow: 0 0 12px white;
+    box-shadow: 0 0 12px $highlight;
 }
 
 /* Image modals */
@@ -820,6 +828,18 @@ box-sizing: border-box;;
 .bannerRight { 
   margin:0;
   padding:0;
-  margin-right: 8px;
+  margin-right: 18px;
 }
+
+.menu.open {
+  transform: scaleY(1) scaleX(1);
+  opacity: 1;
+    right: 0px;
+    top: 50px;
+    width: 300px;
+    height: fit-content;
+    box-shadow: 0 0 50px black;
+}
+
+
 }
