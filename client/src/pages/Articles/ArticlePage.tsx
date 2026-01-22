@@ -35,6 +35,8 @@ export function parseHTML(paragraph: string) {
 }
 
 export function ArticlePage() {
+  const { articlesById, usersById } = useStore((s) => s);
+
   const { fetchArticles, fetchUsers } = useData();
   const { id } = useParams<{ id: string }>();
 
@@ -42,29 +44,18 @@ export function ArticlePage() {
     (s) => s,
   );
 
-  const article = articles?.find((article) => article._id === id);
-  console.log("BD: found article: ", article);
   const navigate = useNavigate();
-
-  const authorUser = users?.find((user) => user._id === article?.userID);
+  const article = articlesById[id!];
+  const authorUser = article ? usersById[article.userID] : undefined;
 
   const routeHome = useCallback(() => {
     navigate(`/`);
   }, []);
 
   useEffect(() => {
-    if (!articles.length && !articlesLoading) {
-      console.log("BD: about to fetch articles.");
-      fetchArticles();
-    }
-  }, [articles.length, articlesLoading, fetchArticles]);
-
-  useEffect(() => {
-    if (!users.length && !usersLoading) {
-      console.log("BD: about to fetch users.");
-      fetchUsers();
-    }
-  }, [fetchUsers, users.length, usersLoading]);
+    fetchArticles();
+    fetchUsers();
+  }, [fetchArticles, fetchUsers]);
 
   useEffect(() => {
     console.log("BD: articles updated:", articles);

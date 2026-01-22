@@ -19,35 +19,27 @@ export interface Merch {
 }
 
 export function Home() {
-  const { fetchArticles, fetchUsers } = useData();
+  const { fetchArticles, fetchUsers, fetchSettings } = useData();
   const {
     user,
     articles,
-    articlesLoading,
+    articlesLoaded,
     categories,
     products,
     users,
     setUser,
-    usersLoading,
+    usersLoaded,
+    settingsLoaded,
     settings,
   } = useStore((s) => s);
-  // console.log('BD: cats in home: ', categories);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!articles.length && !articlesLoading) {
-      console.log("BD: about to fetch articles.");
-      fetchArticles();
-    }
-  }, [articles.length, articlesLoading, fetchArticles]);
-
-  useEffect(() => {
-    if (!users.length && !usersLoading) {
-      console.log("BD: about to fetch users.");
-      fetchUsers();
-    }
-  }, [fetchUsers, users.length, usersLoading]);
+    fetchArticles();
+    fetchUsers();
+    fetchSettings();
+  }, [fetchArticles, fetchUsers, fetchSettings]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -58,11 +50,9 @@ export function Home() {
   }, []);
 
   const showMerch = useMemo(() => {
-    // console.log('BD: in homepage, settings: ', settings);
     const displayMerchSetting = settings?.find(
       (setting) => setting.name === "showMerch",
     );
-    // console.log('BD: displayMerchSetting: ', displayMerchSetting?.booleanValue);
 
     return displayMerchSetting?.booleanValue;
   }, [settings]);
@@ -73,7 +63,10 @@ export function Home() {
     navigate("/admin");
   });
 
-  if (articlesLoading || usersLoading) return <div>Loading…</div>;
+  if (!articlesLoaded || !usersLoaded || !settingsLoaded)
+    return <div>Loading…</div>;
+  console.log("HOME articles length:", articles.length);
+
   return (
     <div className="starfield">
       <BannerNav page="home" />

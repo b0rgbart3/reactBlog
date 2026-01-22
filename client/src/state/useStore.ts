@@ -51,59 +51,73 @@ export type Setting = {
 }
 
 type State = {
+  articlesById: Record<string, Article>;
+  usersById: Record<string, User>;
   articles: Article[];
   setArticles: (articles: Article[]) => void;
   categories: string[];
   setCategories: (categories: string[]) => void;
-  articlesLoading: boolean;
-  setArticlesLoading: (boolean) => void;
+  articlesLoaded: boolean;
+  setArticlesLoaded: (boolean) => void;
   products: Product[];
   setProducts: (products: Product[]) => void;
-  productsLoading: boolean;
-  setProductsLoading: (boolean) => void;
+  productsLoaded: boolean;
+  setProductsLoaded: (boolean) => void;
   productCategories: string[];
-  loginLoading: boolean;
-  setLoginLoading: (boolean) => void;
-  setProductCategories: ( productCategories: string[]) => void;
+  loginLoaded: boolean;
+  setLoginLoaded: (boolean) => void;
+  setProductCategories: (productCategories: string[]) => void;
   user: User | null;
   setUser: (u: User | null) => void;
   users: User[] | null;
+  usersLoaded: boolean;
   setUsers: (users: User[] | null) => void;
   orders: Order[];
   setOrders: (orders: Order[] | null) => void;
   settings: Setting[];
   setSettings: (settings: Setting[] | null) => void;
-  settingsLoading: boolean;
-  setSettingsLoading: (boolean) => void;
-  usersLoading: boolean;
-  setUsersLoading: (boolean) => void;
+  settingsLoaded: boolean;
+  setSettingsLoaded: (boolean) => void;
+  setUsersLoaded: (boolean) => void;
 };
 
 export const useStore = create<State>((set) => ({
+  articlesById: {},
+  usersById: {},
   articles: [],
-  setArticles: (articles: Article[]) => set({ articles: articles }),
+  setArticles: (articles) =>
+    set({
+      articles,
+      articlesById: Object.fromEntries(articles.map(a => [a._id, a])),
+      articlesLoaded: true, // mark loaded
+    }),
   categories: [],
   setCategories: (categories: string[]) => set({ categories: categories }),
-  articlesLoading: false,
-  loginLoading: false,
+  articlesLoaded: false,
+  loginLoaded: false,
   products: [],
-  productsLoading: false,
+  productsLoaded: false,
   setProducts: (products: Product[]) => set({ products: products }),
   productCategories: [],
-  setProductCategories: (productCategories: string[]) => set({ productCategories: productCategories}),
-  setProductsLoading: (isLoading: boolean) => set({ productsLoading: isLoading }),
-  setArticlesLoading: (isLoading: boolean) => set( { articlesLoading: isLoading}),
-  setSettingsLoading: (isLoading: boolean) => set( { settingsLoading: isLoading}),
-  setLoginLoading: (isLoading: boolean) => set({ loginLoading: isLoading}),
+  setProductCategories: (productCategories: string[]) => set({ productCategories: productCategories }),
+  setProductsLoaded: (loaded: boolean) => set({ productsLoaded: loaded }),
+  setArticlesLoaded: (loaded: boolean) => set({ articlesLoaded: loaded }),
+  setSettingsLoaded: (loaded: boolean) => set({ settingsLoaded: loaded }),
+  setLoginLoaded: (loaded: boolean) => set({ loginLoaded: loaded }),
   user: null,
-  setUser: (u: User | null) => { set({ user: u })},
+  setUser: (u: User | null) => { set({ user: u }) },
   users: [],
-  setUsers: (users: User[] | null) => set({ users: users }),
+  setUsers: (users) =>
+    set({
+      users,
+      usersById: Object.fromEntries(users.map(u => [u._id, u])),
+      usersLoaded: true, // mark loaded
+    }),
   orders: [],
   setOrders: (orders: Order[] | null) => set({ orders: orders }),
   settings: [],
-  settingsLoading: false,
-  setSettings: (settings: Setting[] | null) => set({ settings: settings}),
-  usersLoading: false,
-  setUsersLoading: (isLoading: boolean) => set({ usersLoading: isLoading})
+  settingsLoaded: false,
+  setSettings: (settings: Setting[] | null) => set({ settings: settings }),
+  usersLoaded: false,
+  setUsersLoaded: (loaded: boolean) => set({ usersLoaded: loaded })
 }));

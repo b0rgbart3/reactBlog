@@ -10,66 +10,103 @@ export type AuthObject = {
 }
 
 export function useData() {
-  const {categories, articles, articlesLoading, usersLoading, setUsersLoading, 
-    productsLoading, setProductsLoading, settingsLoading, setSettingsLoading, 
-    setArticlesLoading, setArticles, setProducts, setProductCategories, setCategories, 
-    setLoginLoading, loginLoading, 
-    users, setUsers, setUser, setSettings, settings } = useStore((s) => s);
+  const { categories, articles, articlesLoaded, usersLoaded,
+    productsLoaded, settingsLoaded, setSettingsLoaded, products,
+    setArticlesLoaded, setArticles, setProducts, setProductCategories, setCategories,
+    setLoginLoaded, loginLoaded, users, setUsers, setProductsLoaded,
+    setUser, setSettings, settings } = useStore((s) => s);
 
   const fetchSettings = useCallback(async () => {
-    if (settingsLoading) return;
-    setSettingsLoading(true);
+    if (settingsLoaded) return;
+
     try {
       const res = await axios.get("/api/settings");
       const data = res.data.data;
 
       setSettings(data);
+      setSettingsLoaded(true);
 
     } catch (err) {
       console.error("Failed to fetch articles:", err);
     } finally {
-       setSettingsLoading(false);
+      setSettingsLoaded(true);
     }
   }, []);
 
 
+  // const fetchArticles = useCallback(async () => {
+  //   console.log("FETCH ARTICLES");
+  //   console.log('articles loading: ', articlesLoading);
+  //   console.log("fetchArticles", {
+  //     articlesLength: articles.length,
+  //     articlesLoading,
+  //     hasFetchedArticles,
+  //   });
+
+  //   if (articlesLoading) return;
+  //   if (hasFetchedArticles && articles.length > 0) return;
+  //   setArticlesLoading(true);
+  //   try {
+  //     const res = await axios.get("/api/articles");
+  //     const data = res.data.data;
+  //     const cats: string[] = data.map((article) => article.category);
+
+
+  //     const uniqueCategories: string[] = [...new Set(cats)];
+  //     setArticles(data);
+
+
+  //     if (uniqueCategories && uniqueCategories[0] !== '') {
+  //       setCategories(uniqueCategories);
+  //     }
+  //     setHasFetchedArticles(true);
+
+  //   } catch (err) {
+  //     console.error("Failed to fetch articles:", err);
+  //     setArticlesLoading(false);
+  //   } finally {
+  //     setArticlesLoading(false);
+  //   }
+  // }, [articlesLoading, hasFetchedArticles]);
+
   const fetchArticles = useCallback(async () => {
-    console.log("FETCH ARTICLES");
-    console.log('articles loading: ', articlesLoading);
-    if (articlesLoading) return;
-    setArticlesLoading(true);
+    console.log('BD: called fetchArticles.');
+    // if (articlesLoading) return;
+    if (articlesLoaded) return;
+
+    // setArticlesLoaded(true);
     try {
       const res = await axios.get("/api/articles");
-      const data = res.data.data;
-      const cats: string[] = data.map((article) => article.category);
+      setArticles(res.data.data);
+      const cats: string[] = res.data.data.map((article) => article.category);
 
 
       const uniqueCategories: string[] = [...new Set(cats)];
-      setArticles(data);
-   
       if (uniqueCategories && uniqueCategories[0] !== '') {
         setCategories(uniqueCategories);
       }
-
     } catch (err) {
       console.error("Failed to fetch articles:", err);
-          setArticlesLoading(false);
     } finally {
-      setArticlesLoading(false);
+      // setArticlesLoaded(false);
     }
-  }, []);
+  }, [articlesLoaded, articles.length]);
+
 
   const fetchProducts = useCallback(async () => {
-     if (productsLoading) return;
-    setProductsLoading(true);
+    // if (productsLoading || hasFetchedProducts) return;
+
+    if (productsLoaded) return;
+    // if (products.length > 0) return;
+    setProductsLoaded(true);
     try {
       const res = await axios.get("/api/products");
       const data = res.data.data;
       const cats: string[] = data.map((product) => product.category).filter(category => category && category.trim() !== "");
 
-    
+
       const uniqueProductCategories: string[] = [...new Set(cats)];
- 
+
 
       setProducts(data);
       setProductCategories(uniqueProductCategories);
@@ -77,29 +114,48 @@ export function useData() {
     } catch (err) {
       console.error("Failed to fetch articles:", err);
     } finally {
-      setProductsLoading(false);
+      setProductsLoaded(false);
     }
-  }, []);
+  }, [productsLoaded, setProductsLoaded]);
+
+  // const fetchUsers = useCallback(async () => {
+
+  //   if (usersLoading) return;
+  //   if (hasFetchedUsers && users.length > 0) return;
+
+  //   setUsersLoading(true);
+  //   try {
+  //     const res = await axios.get("/api/users");
+  //     const data = res.data;
+  //     setUsers(data.data);
+  //     // setUsersLoading(false);
+  //     setHasFetchedUsers(true);
+  //   }
+  //   catch (err) {
+  //     console.error("Failed to fetch users:", err);
+  //     setUsersLoading(false);
+  //   } finally {
+  //     setUsersLoading(false);
+  //     return;
+  //   }
+  // }, [usersLoading, hasFetchedUsers])
 
   const fetchUsers = useCallback(async () => {
-    setUsersLoading(true);
+    if (usersLoaded) return;
+    if (users.length > 0) return;
+
     try {
       const res = await axios.get("/api/users");
-      const data = res.data;
-      setUsers(data.data);
-      // setUsersLoading(false);
-    }
-    catch (err) {
+      setUsers(res.data.data);
+    } catch (err) {
       console.error("Failed to fetch users:", err);
-      setUsersLoading(false);
     } finally {
-      setUsersLoading(false);
-      return;
+      //;
     }
-  })
+  }, [users.length]);
+
 
   const createUser = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await axios.post("/api/users");
       const data = res;
@@ -110,38 +166,36 @@ export function useData() {
   })
 
   const killProduct = useCallback(async (killID: string) => {
-    setLoading(true);
     try {
       await axios.delete(`/api/products/${killID}`);
     } catch (err) {
       console.error("Failed to kill product: ", killID);
     } finally {
-      setLoading(false);
     }
   }, [])
 
   const kill = useCallback(async (killID: string) => {
-    setLoading(true);
     try {
       await axios.delete(`/api/articles/${killID}`);
     } catch (err) {
       console.error("Failed to kill article: ", killID);
     } finally {
-      setLoading(false);
     }
   }, [])
 
   const login = useCallback(async (newUser: Partial<User>) => {
     let loginResponse;
     let match: User;
-    setLoginLoading(true);
+    if (loginLoaded) return;
+
+    setLoginLoaded(true);
     try {
       loginResponse = await axios.post('/api/login/', newUser);
     } catch (err) {
       console.log('Failed to login.');
     } finally {
       if (loginResponse) {
-        setLoginLoading(false);
+
 
         const decoded = jwtDecode<User>(loginResponse.data.token);
         setUser(decoded);
@@ -155,7 +209,7 @@ export function useData() {
       }
     }
 
-  })
+  }, [loginLoaded])
 
   const logout = useCallback(() => {
     setUser(null);
@@ -167,10 +221,10 @@ export function useData() {
     try {
       await axios.post('/api/toggleMerch/', auth);
     }
-    catch(err) {
+    catch (err) {
       console.log('Failed to toggle merch.');
     }
-    
+
   });
 
   const wipeAndSeed = useCallback(async (auth: AuthObject) => {
@@ -205,16 +259,36 @@ export function useData() {
 
   })
 
-const refresh = useCallback(async () => {
-  console.log('BD: refreshing...');
-  await fetchSettings();
-  await fetchArticles();
-  await fetchProducts();
-  await fetchUsers();
-}, [fetchSettings, fetchArticles, fetchProducts, fetchUsers]);
+  const refresh = useCallback(async () => {
+    console.log('BD: refreshing...');
+    await fetchSettings();
+    await fetchArticles();
+    await fetchProducts();
+    await fetchUsers();
+  }, [fetchSettings, fetchArticles, fetchProducts, fetchUsers]);
 
 
-  return { articles, backUpDB, displayMerch, fetchArticles, fetchUsers, refresh, settings, logout, createUser, kill, killProduct, login, wipeAndSeed };
+  return {
+    // fetchers
+    fetchArticles,
+    fetchUsers,
+    fetchProducts,
+    fetchSettings,
+
+    // actions
+    refresh,
+    login,
+    logout,
+    createUser,
+    kill,
+    killProduct,
+    wipeAndSeed,
+    backUpDB,
+    displayMerch,
+
+    // optional data exposure (not required)
+    settings,
+  };
 }
 
 
