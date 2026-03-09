@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Article, Product, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
@@ -18,10 +18,11 @@ export function AdminPanel() {
     productCategories,
     users,
     setUser,
+    settings,
   } = useStore((s) => s);
   // console.log('BD: categories: ', categories);
 
-  const [showMerch, setShowMerch] = useState(true);
+  const showMerch = settings?.find((s) => s.name === "showMerch")?.booleanValue ?? true;
 
   const navigate = useNavigate();
 
@@ -34,9 +35,8 @@ export function AdminPanel() {
   }, []);
 
   const toggleMerch = useCallback(() => {
-    setShowMerch(!showMerch);
-    displayMerch();
-  }, [showMerch]);
+    displayMerch({ id: user._id, key: user.phash });
+  }, [user]);
 
   const killArticle = useCallback((article: Article) => {
     const confirmDelete =
@@ -132,9 +132,11 @@ export function AdminPanel() {
         </ExpandableTable>
 
         <ExpandableTable title="merchandise" open={false}>
-          <div onClick={toggleMerch}>
-            {!showMerch && <>Show Merch</>}
-            {showMerch && <>Hide Merch</>}
+          <div className="merchToggle" onClick={toggleMerch}>
+            <div className={showMerch ? "bigCheckBoxSelected" : "bigCheckBox"}>
+              {showMerch && <span className="bigCheckmark">✓</span>}
+            </div>
+            <span className="merchToggleLabel">Show Merchandise</span>
           </div>
           <div onClick={newProduct} className="newArticleButton">
             New Product

@@ -442,6 +442,58 @@
     padding: 8px 0;
 }
 
+/* ---- Merch Toggle ---- */
+
+.merchToggle {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 16px;
+
+    &:hover .bigCheckBox {
+        border-color: $admin-accent-color;
+        background-color: rgba($admin-accent-color, 0.15);
+    }
+}
+
+.bigCheckBox,
+.bigCheckBoxSelected {
+    width: 48px;
+    height: 48px;
+    border: 3px solid $admin-text;
+    border-radius: $border-radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color $transition-base, background-color $transition-base;
+}
+
+.bigCheckBoxSelected {
+    border-color: $admin-accent-color;
+    background-color: rgba($admin-accent-color, 0.15);
+}
+
+.bigCheckmark {
+    color: $admin-accent-color;
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.merchToggleLabel {
+    font-size: 16px;
+    font-weight: 500;
+    color: $admin-text;
+    transition: color $transition-base;
+
+    .merchToggle:hover & {
+        color: $admin-foreground;
+    }
+}
+
 .JsonData {
     padding: 16px 0;
     color: $admin-text;

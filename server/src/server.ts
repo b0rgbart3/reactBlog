@@ -426,10 +426,11 @@ app.post("/api/toggleMerch", async (req: any, res: any) => {
       // toggle it
       showMerch.booleanValue = !showMerch.booleanValue;
 
-      const updated = await Settings.findByIdAndUpdate(
+      await Settings.findByIdAndUpdate(
         showMerch._id,
         showMerch
       );
+      res.json({ success: true, booleanValue: showMerch.booleanValue });
 
     } else {
       // set it

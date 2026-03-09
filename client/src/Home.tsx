@@ -69,18 +69,26 @@ export function Home() {
 
   return (
     <div className="starfield">
+      <div className="siteWrapper">
       <BannerNav page="home" />
 
       <div className="home">
         <div className="articleList">
           <div className="sticker">Articles</div>
           <Articles />
+          {showMerch && (
+            <>
+              <div className="sticker">Memes</div>
+              <div className="thumbnailMemes">
+                <MemeThumbnails />
+              </div>
+            </>
+          )}
         </div>
         <div className="merchList">
           {showMerch && (
             <>
-              {" "}
-              <ProductThumbnails />{" "}
+              <ProductThumbnails />
             </>
           )}
           {!showMerch && (
@@ -95,6 +103,7 @@ export function Home() {
       </div>
 
       <Footer />
+      </div>
     </div>
   );
 }

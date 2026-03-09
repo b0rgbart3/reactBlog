@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 
 export function ProductThumbnails() {
-  const { refresh } = useData();
+  const { fetchProducts } = useData();
   const { user, articles, categories, loading, products, users, setUser, settings } = useStore((s) => s);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
     const openProductPage = useCallback((productID) => {
     navigate(`/product/${productID}`);
   })

@@ -22,6 +22,7 @@ export function useData() {
     try {
       const res = await axios.get("/api/settings");
       const data = res.data.data;
+      console.log('BD: settings: ', data);
 
       setSettings(data);
       setSettingsLoaded(true);
@@ -72,9 +73,7 @@ export function useData() {
       setProductCategories(uniqueProductCategories);
 
     } catch (err) {
-      console.error("Failed to fetch articles:", err);
-    } finally {
-      setProductsLoaded(false);
+      console.error("Failed to fetch products:", err);
     }
   }, [productsLoaded, setProductsLoaded]);
 
@@ -155,14 +154,14 @@ export function useData() {
   })
 
   const displayMerch = useCallback(async (auth: AuthObject) => {
-
     try {
       await axios.post('/api/toggleMerch/', auth);
+      const res = await axios.get("/api/settings");
+      setSettings(res.data.data);
     }
     catch (err) {
       console.log('Failed to toggle merch.');
     }
-
   });
 
   const wipeAndSeed = useCallback(async (auth: AuthObject) => {
