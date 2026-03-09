@@ -5,7 +5,7 @@
 @use 'forms';
 @use 'interface';
 @use 'products';
-@use 'admin';
+@use '../admin/admin';
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap');
 
@@ -30,9 +30,9 @@ body {
     background:
     linear-gradient(
       to bottom,
-      rgba(0, 0, 0, 0.8) 0px,
-      rgba(0, 0, 0, 0.4) 200px,
-      rgba(0, 0, 0, 0) 320px
+      rgba(colors.$background, 0.8) 0px,
+      rgba(colors.$background, 0.4) 200px,
+      rgba(colors.$background, 0) 320px
     ),
     colors.$base;;
 
@@ -44,9 +44,9 @@ body::before {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 80% 70%, #fff 50%, transparent 51%),
-    radial-gradient(3px 3px at 50% 10%, #fff 50%, transparent 51%);
+    radial-gradient(2px 2px at 20% 30%, colors.$foreground 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 70%, colors.$foreground 50%, transparent 51%),
+    radial-gradient(3px 3px at 50% 10%, colors.$foreground 50%, transparent 51%);
   background-size: 300px 300px;
   opacity: 0.4;
   animation: drift 60s linear infinite;

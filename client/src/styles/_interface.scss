@@ -7,7 +7,7 @@
 
 button {
   background-color: $main; /* dark charcoal gray */
-  color: white;
+  color: $foreground;
   border: none;
   padding: 12px 24px;
   font-size: 16px;
@@ -15,16 +15,16 @@ button {
   border-radius: 6px;
   cursor: pointer;
   transition: box-shadow 0.2s ease, transform 0.1s ease;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 1); /* subtle blue glow */
+  box-shadow: 0 0 12px $background; /* subtle blue glow */
 }
 
 button:hover {
-  box-shadow: 0 0 12px rgba(0, 180, 255, 0.7); /* stronger glow on hover */
+  box-shadow: 0 0 12px rgba($glow, 0.7); /* stronger glow on hover */
 }
 
 button:active {
-  background-color: #0f2435;
-  box-shadow: 0 0 22px rgba(0, 180, 255, 1); /* brightest glow when clicked */
+  background-color: $button-pressed;
+  box-shadow: 0 0 22px $glow; /* brightest glow when clicked */
   transform: scale(0.97); /* slight "press down" effect */
 }
 

@@ -80,11 +80,11 @@ export function ArticlePage() {
         {!hasHeadlineImage && (
           <div
             className="noHeadlineImageContainer"
-            style={{
-              backgroundColor: article?.randomColor
-                ? `#${article.randomColor}`
-                : undefined,
-            }}
+            style={
+              article?.randomColor
+                ? ({ "--article-color": `#${article.randomColor}` } as React.CSSProperties)
+                : undefined
+            }
           ></div>
         )}
         <div className="articleContainer">

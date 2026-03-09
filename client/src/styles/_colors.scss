@@ -2,6 +2,10 @@
 
 @use "sass:color";
 
+
+$background: #000000;
+$foreground: #ffffff;
+
 $base: #0b1c2d;        
 $highlight: #5fc2ff;   
 $accent: #367dc7;     
@@ -11,16 +15,27 @@ $success: #22c55e;
 $warning: #f59e0b;
 $error: #ef4444;
 
-
 $surface: tint($base, 6%);
-$cards: #05111e;
-$sticker-color: #122a5f; 
-$sticker-color: #0c1018; 
+$cards: color.scale($base, $lightness: -30%);
+$sticker-color:  color.scale($base, $lightness: -80%);
 $sticker-text: #3d5893; 
 $title-text: #d2d3d5;
 
 $text-basic: #929fb7;
 $text-article: #a9bcde;
-$text-muted: #9ca3af;
-$text-headline: #ffffff;
+
+$glow: #00b4ff;
+$logo-hover: #00345f;
+$surface-dark: #070c18;
+$button-pressed: #0f2435;
+
+$border-muted: #c3c3c3;
+$ui-gray: #373737;
+$ui-gray-hover: #434343;
+
+$modal-overlay: rgba(10, 20, 30, 0.85);
+$border-neutral: #808080;
+$size-select: #ffa500;
+$preview-placeholder: #800080;
+$debug-border: #008000;
 
