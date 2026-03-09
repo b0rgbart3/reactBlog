@@ -303,7 +303,7 @@ box-sizing: border-box;;
   position: absolute;
   right: 0;
   top: 36px;
-  border: 4px solid $main;
+  border: 4px solid $accent;
   cursor: pointer;
   user-select: none;
   z-index: 300;
@@ -315,14 +315,14 @@ box-sizing: border-box;;
 }
 
 .burger:active {
-  background-color: $main;
-  border-color: $main;
+  background-color: $accent;
+  border-color: $accent;
 }
 
 .patty {
   width: 70%;
   box-sizing: border-box;
-  background-color:$main;
+  background-color:$accent;
   height: 4px;
   border-radius: 8px;
   margin: auto;
@@ -335,11 +335,11 @@ box-sizing: border-box;;
 }
 
 .burger:active .patty {
-  background-color: $main;
+  background-color: $accent;
 }
 
 .menu {
-  border: 4px solid $main;
+  border: 4px solid $accent;
   background-color: $background;
   width: 200px;
   height: 0px;
@@ -447,7 +447,7 @@ box-sizing: border-box;;
 .divider {
   width: 100%;
   box-sizing: border-box;
-  background-color:$main;
+  background-color:$accent;
   height: 4px;
   border-radius: 8px;
   margin: auto;
@@ -565,7 +565,7 @@ box-sizing: border-box;;
 
 
 .footer p {
-  color: $main;
+  color: $accent;
 }
 
 
@@ -635,7 +635,7 @@ box-sizing: border-box;;
   // border: 1px solid cyan;
   padding-top:50px;
   width: 80px;
-  color: $main;
+  color: $accent;
   user-select: none;
   cursor: pointer;
   box-sizing: border-box;
@@ -651,7 +651,7 @@ box-sizing: border-box;;
   // border: 1px solid cyan;
   padding-top:50px;
   width: 80px;
-  color: $main;
+  color: $accent;
   user-select: none;
   cursor: pointer;
   box-sizing: border-box;
@@ -720,7 +720,7 @@ box-sizing: border-box;;
 .thumbnailMemes img {
   width: 90%;
   margin-bottom: 40px;
-  box-shadow: 0 0 12px $main
+  box-shadow: 0 0 12px $accent
 }
 
 .thumbnailMemes img:hover {

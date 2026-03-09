@@ -6,7 +6,7 @@
 
 
 button {
-  background-color: $main; /* dark charcoal gray */
+  background-color: $accent; /* dark charcoal gray */
   color: $foreground;
   border: none;
   padding: 12px 24px;
@@ -50,7 +50,7 @@ button:active {
 .breadcrumbs ul li {
     display: inline-block;
     padding: 10px;
-    color: $main;
+    color: $accent;
     line-height: 1em;
     padding-top:0;
     padding-bottom:0;
@@ -71,7 +71,7 @@ button:active {
 .breadcrumbs ul li:hover:after {
   padding-left: 20px;
   content: "  |";
-  color: $main;
+  color: $accent;
 }
 
 @media (max-width: 480px) {
