@@ -59,6 +59,14 @@ export function Home() {
 
   const [page, setPage] = useState("home");
 
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const adminCallback = useCallback(() => {
     navigate("/admin");
   });
@@ -70,39 +78,44 @@ export function Home() {
   return (
     <div className="starfield">
       <div className="siteWrapper">
-      <BannerNav page="home" />
+        <BannerNav page="home" />
 
-      <div className="home">
-        <div className="articleList">
-          <div className="sticker">Articles</div>
-          <Articles />
-          {showMerch && (
-            <>
-              <div className="sticker">Memes</div>
-              <div className="thumbnailMemes">
-                <MemeThumbnails />
-              </div>
-            </>
-          )}
+        <div className="home">
+          <div className="mainColumn">
+            {isMobile && showMerch && (
+              <>
+                <ProductThumbnails />
+              </>
+            )}
+            <div className="sticker">Articles</div>
+            <Articles />
+            {showMerch && (
+              <>
+                <div className="sticker">Memes</div>
+                <div className="thumbnailMemes">
+                  <MemeThumbnails />
+                </div>
+              </>
+            )}
+          </div>
+          <div className="sideColumn">
+            {showMerch && !isMobile && (
+              <>
+                <ProductThumbnails />
+              </>
+            )}
+            {!showMerch && (
+              <>
+                <div className="sticker">Memes</div>
+                <div className="thumbnailMemes">
+                  <MemeThumbnails />
+                </div>
+              </>
+            )}
+          </div>
         </div>
-        <div className="merchList">
-          {showMerch && (
-            <>
-              <ProductThumbnails />
-            </>
-          )}
-          {!showMerch && (
-            <>
-              <div className="sticker">Memes</div>
-              <div className="thumbnailMemes">
-                <MemeThumbnails />
-              </div>
-            </>
-          )}
-        </div>
-      </div>
 
-      <Footer />
+        <Footer />
       </div>
     </div>
   );

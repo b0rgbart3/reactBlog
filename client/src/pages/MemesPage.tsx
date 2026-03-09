@@ -13,6 +13,7 @@ export function MemesPage() {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   return (
     <>
+      <div className="siteWrapper">
       <BannerNav page="memes" />
       <div className="basicContainer">
         <h1>Bitcoin related Memes</h1>
@@ -31,6 +32,7 @@ export function MemesPage() {
         {activeImage && (
           <ImageModal src={activeImage} onClose={() => setActiveImage(null)} />
         )}
+      </div>
       </div>
     </>
   );

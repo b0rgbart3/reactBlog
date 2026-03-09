@@ -36,6 +36,7 @@ export function About() {
 
   return (
     <>
+      <div className="siteWrapper">
       <BannerNav page="about" />
       <div className="basicContainer">
         <h1>About Moon Math</h1>
@@ -143,6 +144,7 @@ export function About() {
             </form>
           </>
         )}
+      </div>
       </div>
     </>
   );

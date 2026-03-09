@@ -42,6 +42,7 @@ export function Login() {
 
   return (
     <>
+      <div className="siteWrapper">
       <BannerNav page="login" />
 
       <div className="loginForm">
@@ -78,6 +79,7 @@ export function Login() {
 
       <div className="newToBorg">
         <button onClick={newUser}>New to MoonMath?</button>
+      </div>
       </div>
     </>
   );
