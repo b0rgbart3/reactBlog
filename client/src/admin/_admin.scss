@@ -224,7 +224,7 @@
 }
 
 .bHash {
-    font-family: monospace;
+    font-family: $font-mono;
     font-size: 11px;
     color: rgba(255,255,255,0.4);
     word-break: break-all;
@@ -319,7 +319,7 @@
 
 .titleText {
     color: $admin-foreground;
-    font-family: "Noto Serif", serif;
+    font-family: $font-serif;
     font-size: 26px;
 }
 
@@ -411,7 +411,7 @@
 }
 .titleBar {
     color: $admin-accent-color;
-    font-family: "Noto Serif", serif;
+    font-family: $font-serif;
     font-size: 20px;
     padding: 12px 20px;
     user-select: none;

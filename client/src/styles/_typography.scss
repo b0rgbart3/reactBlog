@@ -32,8 +32,7 @@ a {
 
 
 h1 {
-      /* font-family: "Inconsolata", monospace; */
-      font-family: "Noto Serif", serif;
+      font-family: $font-serif;
       color: $highlight;
       font-size: 26px;
 }
@@ -56,16 +55,7 @@ h1 {
 
 
 .article {
-    /* font-family: "Patua One", serif;
-  font-weight: 300;
-  font-style: normal; */
-
-    /* font-family: "Baskervville", serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal; */
-
-    font-family: "Noto Serif", serif;
+    font-family: $font-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;

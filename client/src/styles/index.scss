@@ -1,5 +1,5 @@
-@use 'colors';
-@use 'variables';
+@use 'colors' as *;
+@use 'variables' as *;
 @use 'typography';
 @use 'layout';
 @use 'forms';
@@ -21,8 +21,8 @@ body {
   margin:0;
   padding:0;
   min-height: 100vh;
-  font-family: variables.$font-sans;
-  color: colors.$text-basic;
+  font-family: $font-sans;
+  color: $text-basic;
   line-height: 1.6;
   margin-bottom: 200px;
   width: 100%;
@@ -30,11 +30,11 @@ body {
     background:
     linear-gradient(
       to bottom,
-      rgba(colors.$background, 0.8) 0px,
-      rgba(colors.$background, 0.4) 200px,
-      rgba(colors.$background, 0) 320px
+      rgba($background, 0.8) 0px,
+      rgba($background, 0.4) 200px,
+      rgba($background, 0) 320px
     ),
-    colors.$base;;
+    $base;;
 
 }
 
@@ -44,9 +44,9 @@ body::before {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(2px 2px at 20% 30%, colors.$foreground 50%, transparent 51%),
-    radial-gradient(1px 1px at 80% 70%, colors.$foreground 50%, transparent 51%),
-    radial-gradient(3px 3px at 50% 10%, colors.$foreground 50%, transparent 51%);
+    radial-gradient(2px 2px at 20% 30%, $foreground 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 70%, $foreground 50%, transparent 51%),
+    radial-gradient(3px 3px at 50% 10%, $foreground 50%, transparent 51%);
   background-size: 300px 300px;
   opacity: 0.4;
   animation: drift 60s linear infinite;
