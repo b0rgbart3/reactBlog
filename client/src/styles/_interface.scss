@@ -3,24 +3,6 @@
 @use 'colors' as *;
 @use 'variables' as *;
 
-// .button {
-//   background: $highlight;
-//   color: $base;
-//   border: none;
-//   border-radius: $border-radius-md;
-//   padding: 0.5rem 1rem;
-//   cursor: pointer;
-//   transition: background $transition-base;
-
-//   &:hover {
-//     background: tint($highlight, 15%);
-//   }
-
-//   &--secondary {
-//     background: $accent;
-//   }
-// }
-
 
 
 button {

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Article, useStore } from "../../state/useStore";
-import { useData } from "../../data/useData";
+import { Article, useStore } from "../state/useStore";
+import { useData } from "../data/useData";
 import axios from "axios";
 import { ArticleForm } from "./ArticleForm";
 
@@ -48,7 +48,7 @@ export function EditArticlePage() {
             }
 
             article.userID = user._id;
-            
+
             const response = await axios.patch(`/api/articles/${article._id}`, article, {
                 headers: {
                     "Content-Type": "multipart/form-data"
@@ -90,7 +90,7 @@ export function EditArticlePage() {
             },
             []
         );
-    
+
 
     return (
 

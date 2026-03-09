@@ -1,0 +1,30 @@
+$admin-background:      #000000;
+$admin-foreground:      #ffffff;
+$admin-text: rgb(125, 152, 179);
+$admin-theme-color:     rgb(1, 82, 164);
+$admin-accent-color:    rgb(6, 103, 203);
+$admin-neutral-color:   rgb(82, 117, 153);
+$admin-panel:           rgb(53, 53, 53);
+$admin-caution:         rgb(203, 131, 6);
+$admin-danger:          rgb(133, 1, 1);
+$admin-rows:            rgba(255, 255, 255);
+
+
+
+$expandable-table-bg:   rgba($admin-background, .28);
+
+$caution-bg:            tint($admin-caution, .5);
+$caution-hover-bg:      tint($admin-caution .7);
+$dangerous-bg:          tint($admin-danger, .5);
+$dangerous-hover-bg:    tint($admin-danger, .25);
+
+$row-bg:                tint($admin-rows, .25);
+$row-color:             tint($admin-rows, .75);
+$row-hover-bg:          tint($admin-rows, .15);
+$kill-button-border:    $admin-rows;
+$kill-button-bg:        $admin-theme-color;
+$label-bg:              tint($admin-background, .5);
+$login-form-bg:         tint($admin-background, .25);
+$error-bg:              tint($admin-danger, .5);
+$checkbox-border:       $admin-rows;
+$admin-panel-border:    rgb(100, 180, 255);

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Article, useStore } from "../../state/useStore";
-import { useData } from "../../data/useData";
+import { Article, useStore } from "../state/useStore";
+import { useData } from "../data/useData";
 import axios from "axios";
 import { ArticleForm } from "./ArticleForm";
 

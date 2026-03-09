@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Article, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import axios from "axios";
-import { ArticleForm } from "./Articles/ArticleForm";
+import { ArticleForm } from "../admin/ArticleForm";
 import { BannerNav } from "../components/banner-nav";
 
 

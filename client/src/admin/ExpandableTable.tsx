@@ -21,7 +21,7 @@ export function ExpandableTable(props: ExpandableTableProps) {
         <>
         <div className="expandableTable">
             <div onClick={toggleExpansion}>
-              <TableHeader title={title} />
+              <TableHeader title={title} expanded={expanded} />
             </div>
 
           <div className={`expandableTableContent ${expanded ? 'expanded' : ''}`}>

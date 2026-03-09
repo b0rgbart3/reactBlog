@@ -1,20 +1,21 @@
 # Moon-Math.online
 
-A full-stack web application with a **Node.js + Express backend** using **TypeScript** and a **React frontend** using **Vite**, with MongoDB as the database. This setup supports development and production environments, with separate dev servers for backend and frontend, and proper build pipelines.
+A Bitcoin blog and content platform built with a **Node.js + Express backend** using **TypeScript** and a **React + Vite frontend**, backed by **MongoDB**. Features article publishing, a memes gallery, a merch store, user authentication, and an admin panel.
+
+![Homepage](docs/screenshot.png)
 
 ---
 
 ## Table of Contents
 
-1. [Project Structure](#project-structure)  
-2. [Prerequisites](#prerequisites)  
-3. [Installation](#installation)  
-4. [Development](#development)  
-5. [Production Build & Run](#production-build--run)  
-6. [Backend API](#backend-api)  
-7. [React Frontend](#react-frontend)  
-8. [TypeScript Configurations](#typescript-configurations)  
-9. [Notes](#notes)  
+1. [Project Structure](#project-structure)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#installation)
+4. [Development](#development)
+5. [Production Build & Run](#production-build--run)
+6. [Environment Variables](#environment-variables)
+7. [Backend API](#backend-api)
+8. [Notes](#notes)
 
 ---
 
@@ -24,50 +25,70 @@ A full-stack web application with a **Node.js + Express backend** using **TypeSc
 MyBlog/
 ├─ server/
 │  ├─ src/
-│  │  ├─ server.ts
-│  │  └─ models/
-│  │      └─ Data.ts
-│  ├─ dist/               # compiled TS output
+│  │  ├─ server.ts           # Express app + all API routes
+│  │  ├─ simpleHasher.ts
+│  │  ├─ seedMongoDB.ts
+│  │  ├─ models/
+│  │  │  ├─ Articles.ts
+│  │  │  ├─ Products.ts
+│  │  │  ├─ Users.ts
+│  │  │  ├─ Settings.ts
+│  │  │  └─ Contacts.ts
+│  │  └─ services/
+│  │      └─ email.ts        # Resend email integration
+│  ├─ uploads/               # User-uploaded images (articles, products)
+│  ├─ dist/                  # Compiled TS output
 │  ├─ package.json
 │  └─ tsconfig.json
 ├─ client/
 │  ├─ src/
-│  │  ├─ App.tsx
-│  │  └─ components/
-│  │      └─ Home.tsx
-│  ├─ dist/               # Vite build output
+│  │  ├─ App.tsx             # Router + route definitions
+│  │  ├─ Home.tsx            # Homepage (articles + memes/merch)
+│  │  ├─ state/
+│  │  │  └─ useStore.ts      # Zustand global state
+│  │  ├─ data/
+│  │  │  └─ useData.ts       # Data fetching hooks
+│  │  ├─ pages/
+│  │  │  ├─ Articles/        # Article list, detail, new, edit
+│  │  │  ├─ Products/        # Product pages, cart, checkout
+│  │  │  ├─ About.tsx
+│  │  │  ├─ Resources.tsx
+│  │  │  ├─ MemesPage.tsx
+│  │  │  ├─ Login.tsx
+│  │  │  ├─ CreateAccount.tsx
+│  │  │  ├─ EditUserPage.tsx
+│  │  │  └─ AdminPage.tsx
+│  │  ├─ components/
+│  │  │  ├─ banner-nav.tsx
+│  │  │  ├─ footer.tsx
+│  │  │  ├─ MemeThumbnails.tsx
+│  │  │  └─ image-modal.tsx
+│  │  ├─ admin/              # Admin panel components
+│  │  └─ assets/             # Images, logos, SVGs
+│  ├─ dist/                  # Vite build output
 │  ├─ package.json
 │  └─ tsconfig.json
-└─ package.json           # root-level scripts
+├─ docs/
+│  └─ screenshot.png
+└─ package.json              # Root scripts (dev, build, start)
 ```
 
 ---
 
 ## Prerequisites
 
-- Node.js >= 18.x  
-- npm >= 9.x  
-- MongoDB (locally or hosted)  
-
-Optional global installs:  
-```bash
-npm install -g typescript ts-node
-```
+- Node.js >= 18.x
+- npm >= 9.x
+- MongoDB (local or Atlas)
 
 ---
 
 ## Installation
 
-Clone the repository:
-
 ```bash
 git clone <repo-url>
 cd MyBlog
-```
-
-Install dependencies for **server** and **client**:
-
-```bash
+npm install
 npm install --prefix server
 npm install --prefix client
 ```
@@ -76,110 +97,83 @@ npm install --prefix client
 
 ## Development
 
-### Backend
-
-Run the Express + TypeScript backend in development:
+Run both backend and frontend concurrently from the root:
 
 ```bash
+npm run dev
+```
+
+Or separately:
+
+```bash
+# Backend — Express + TypeScript
 npm run dev --prefix server
-```
+# → http://localhost:3000
 
-- Runs `ts-node src/server.ts`  
-- API routes are served at: `http://localhost:3000/api/...`
-
-### Frontend
-
-Run React + Vite frontend:
-
-```bash
+# Frontend — React + Vite
 npm run dev --prefix client
+# → http://localhost:5173 (with hot reload)
 ```
-
-- Runs Vite dev server at: `http://localhost:5173`  
-- Supports hot reload and fast iteration.
-
-> **Tip:** Keep dev servers separate — frontend and backend run on different ports. Use Axios or fetch to hit backend APIs.
 
 ---
 
 ## Production Build & Run
 
-### Build both server and client
-
 ```bash
-npm run build --prefix server
-npm run build --prefix client
+# Build both
+npm run build
+
+# Start server (serves React build at port 3000)
+npm start
 ```
-
-### Start server with production React build
-
-```bash
-NODE_ENV=production npm start --prefix server
-```
-
-- Express serves the React `dist/` folder  
-- All other paths route to `index.html`  
 
 ---
 
-## Mongo-DB
+## Environment Variables
 
-https://www.mongodb.com/cloud/atlas
+Create a `.env` file in `server/`:
 
+```
+MONGO_URI=<your MongoDB connection string>
+JWT_SECRET=<your JWT secret>
+JWT_EXPIRES_IN=2h
+RESEND_API_KEY=<your Resend API key>
+MONGO_DUMP_PATH=<path to mongodump binary>
+PORT=3000
+```
+
+---
 
 ## Backend API
 
-Example endpoints:
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/articles` | Fetch all articles |
+| `POST` | `/api/articles` | Create article (multipart, with image) |
+| `PATCH` | `/api/articles/:id` | Update article |
+| `DELETE` | `/api/articles/:id` | Delete article |
+| `GET` | `/api/products` | Fetch all products |
+| `POST` | `/api/products` | Create product (multipart, with images) |
+| `PATCH` | `/api/products/:id` | Update product |
+| `DELETE` | `/api/products/:id` | Delete product |
+| `GET` | `/api/users` | Fetch all users |
+| `POST` | `/api/users` | Create user |
+| `PATCH` | `/api/user/:id` | Update user |
+| `POST` | `/api/login` | Login — returns JWT |
+| `GET` | `/api/settings` | Fetch app settings |
+| `POST` | `/api/toggleMerch` | Toggle merch/memes display on homepage |
+| `POST` | `/api/contact` | Submit contact form (sends email via Resend) |
+| `POST` | `/api/backup` | Trigger MongoDB backup (admin) |
+| `POST` | `/api/wipe` | Drop database (admin) |
 
-```ts
-GET /api/myData       # Retrieve all data
-POST /api/myData      # Add new data (JSON body)
-```
-
-Data schema example (`Data.ts`):
-
-```ts
-interface IData {
-  id: string;
-  message: string;
-}
-```
-
----
-
-## React Frontend
-
-- Developed with **React + Vite**  
-- TypeScript enabled (`.tsx` files)  
-- Axios used to call backend APIs:
-
-```ts
-const response = await axios.get("/api/myData");
-```
-
-- No `.js` extensions needed in imports — Vite handles module resolution.
-
----
-
-## TypeScript Configurations
-
-### Server (`server/tsconfig.json`)
-- `module: NodeNext` → full ESM support  
-- `rootDir: ./src`, `outDir: ./dist` → compiled output isolated  
-- `esModuleInterop` + `allowSyntheticDefaultImports` for smooth imports  
-
-### Client (`client/tsconfig.json`)
-- `moduleResolution: bundler` → allows extension-less imports  
-- `jsx: react-jsx` → modern React JSX transform  
-- `strict: true` → TypeScript strict mode  
+Uploaded files are served statically at `/uploads/`.
 
 ---
 
 ## Notes
 
-- Keep **`node_modules`**, environment and compiled output (`dist/`) out of Git  
-- Development ports:  
-  - Backend: 3000  
-  - Frontend (Vite): 5173  
-- Production: serve React through Express at port 3000  
-
+- Keep `node_modules`, `.env`, and `dist/` out of Git
+- Development ports: backend `3000`, frontend `5173`
+- Production: Express serves the React `dist/` at port `3000`
+- JWT auth is used for protected admin/author actions
+- The homepage toggles between a memes gallery and a merch store based on the `showMerch` setting

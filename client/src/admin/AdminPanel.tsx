@@ -8,174 +8,183 @@ import { TableHeader } from "./TableHeader";
 import { ExpandableTable } from "./ExpandableTable";
 
 export function AdminPanel() {
-      const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch} = useData();
-    const { user, articles, categories, loading, products, productCategories, users, setUser } = useStore((s) => s);
-    // console.log('BD: categories: ', categories);
+  const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch } =
+    useData();
+  const {
+    user,
+    articles,
+    categories,
+    products,
+    productCategories,
+    users,
+    setUser,
+  } = useStore((s) => s);
+  // console.log('BD: categories: ', categories);
 
-    const [showMerch, setShowMerch] = useState(true);
+  const [showMerch, setShowMerch] = useState(true);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const editArticle = useCallback((article: Article) => {
-        navigate(`/article/edit/${article._id}`);
-    }, []);
+  const editArticle = useCallback((article: Article) => {
+    navigate(`/article/edit/${article._id}`);
+  }, []);
 
-    const editProduct = useCallback((product: Product) => {
-        navigate(`/product/edit/${product._id}`);
-    }, []);
+  const editProduct = useCallback((product: Product) => {
+    navigate(`/product/edit/${product._id}`);
+  }, []);
 
-    const toggleMerch = useCallback(() => {
-        setShowMerch(!showMerch);
-        displayMerch();
-    }, [ showMerch ])
+  const toggleMerch = useCallback(() => {
+    setShowMerch(!showMerch);
+    displayMerch();
+  }, [showMerch]);
 
-    const killArticle = useCallback((article: Article) => {
-        const confirmDelete =
-            window.confirm(`Are you sure you want to delete this article, 
+  const killArticle = useCallback((article: Article) => {
+    const confirmDelete =
+      window.confirm(`Are you sure you want to delete this article, 
             titled: ${article.title} ?
             \nIt will be complete deleted from the database, and cannot be restored.`);
-        if (!confirmDelete) return; // cancel if user clicks "Cancel"
-        kill(article._id);
-        refresh();
-    }, []);
+    if (!confirmDelete) return; // cancel if user clicks "Cancel"
+    kill(article._id);
+    refresh();
+  }, []);
 
-    const killAProduct = useCallback((productToKill: Product) => {
-        const confirmDelete =
-            window.confirm(`Are you sure you want to delete this product, 
+  const killAProduct = useCallback((productToKill: Product) => {
+    const confirmDelete =
+      window.confirm(`Are you sure you want to delete this product, 
             named: ${productToKill.productName} ?
             \nIt will be complete deleted from the database, and cannot be restored.`);
-        if (!confirmDelete) return; // cancel if user clicks "Cancel"
-        killProduct(productToKill._id);
+    if (!confirmDelete) return; // cancel if user clicks "Cancel"
+    killProduct(productToKill._id);
+    refresh();
+  }, []);
+
+  const newArticle = useCallback(() => {
+    navigate(`/article/new`);
+  }, []);
+
+  const newProduct = useCallback(() => {
+    navigate(`/product/new`);
+  }, []);
+
+  const clearOut = useCallback(async () => {
+    let wiped;
+
+    try {
+      wiped = await wipeAndSeed({ id: user._id, key: user.phash });
+    } catch (err) {
+    } finally {
+      if (wiped.status === 200) {
         refresh();
-    }, []);
+      }
+    }
+  }, []);
 
-    const newArticle = useCallback(() => {
-        navigate(`/article/new`);
-    }, []);
+  const backUp = useCallback(async () => {
+    let wiped;
 
-    const newProduct = useCallback(() => {
-        navigate(`/product/new`);
-    }, []);
+    try {
+      wiped = await backUpDB({ id: user._id, key: user.phash });
+    } catch (err) {
+    } finally {
+      if (wiped.status === 200) {
+        refresh();
+      }
+    }
+  }, []);
 
-    const clearOut = useCallback(async () => {
-        let wiped;
+  return (
+    <div className="adminPanel">
+      <div className="titleBar">Admin Panel</div>
+      <div className="adminContent">
+        <ExpandableTable title="users" open={false}>
+          <UsersForm />
+        </ExpandableTable>
 
-        try {
-            wiped = await wipeAndSeed({ id: user._id, key: user.phash });
-
-        } catch (err) {
-
-        } finally {
-            if (wiped.status === 200) {
-                refresh();
-            }
-        }
-    }, []);
-    
-    const backUp = useCallback(async () => {
-        let wiped;
-
-        try {
-            wiped = await backUpDB({ id: user._id, key: user.phash });
-
-        } catch (err) {
-
-        } finally {
-            if (wiped.status === 200) {
-                refresh();
-            }
-        }
-    }, []);
-
-    return (
-
-        <>
-            <div className='titleBar'>Admin Panel</div>
-            <div className='adminContent'>
-                <ExpandableTable title='users' open={false}>
-                  <UsersForm />
-                </ExpandableTable>
-
-                <ExpandableTable title='articles' open={false}>
-                <div onClick={newArticle} className="newArticleButton">
-                    New Article
-                </div>
-                <br></br>
-                {categories?.map((category, categoryIndex) => (
-                    <div key={`category-${category}-${categoryIndex}`}>
-                        <div className="killCategory">{category}</div>
-                        <div>
-                            {articles
-                                ?.filter((a) => a.category === category)
-                                .map((a) => (
-                                    <React.Fragment key={a._id} >
-                                        <div className="aaRow">
-                                            <div className="aaItem" onClick={() => editArticle(a)}>
-                                                {a.title}</div>
-                                            <div className="killButton" onClick={() => killArticle(a)}>X</div>
-
-
-                                        </div>
-                                    </React.Fragment>
-                                ))}
+        <ExpandableTable title="articles" open={false}>
+          <div onClick={newArticle} className="newArticleButton">
+            New Article
+          </div>
+          <br></br>
+          {categories?.map((category, categoryIndex) => (
+            <div key={`category-${category}-${categoryIndex}`}>
+              <div className="killCategory">{category}</div>
+              <div className="articlesTable">
+                {articles
+                  ?.filter((a) => a.category === category)
+                  .map((a) => (
+                    <React.Fragment key={a._id}>
+                      <div className="aaRow">
+                        <div className="aaItem" onClick={() => editArticle(a)}>
+                          {a.title}
                         </div>
-                    </div>
-                ))}
-               </ExpandableTable>
-
-                <ExpandableTable title='merchandise' open={false}>
-                    <div onClick={toggleMerch} >
-                        {!showMerch && (<>Show Merch</>)}
-                        {showMerch && (<>Hide Merch</>)}
+                        <div
+                          className="killButton"
+                          onClick={() => killArticle(a)}
+                        >
+                          X
                         </div>
-                <div onClick={newProduct} className="newArticleButton">
-                    New Product
-                </div>
-
-                {products && ( <>
-                Products:
-                <br>
-                </br>
-                <div className='productsContainer'>
-                {products.map((product) => {
-                    return (
-                        <div key={product._id}>
-                            <div onClick={() => editProduct(product)}>
-                                {product.productName}
-                            </div>
-                            <div>{product.productDescription}</div>
-                        <div className='killProduct' onClick={() => killAProduct(product)}>X</div>
-                        
-                        </div>
-                    )
-                })}
-                </div>
-
-
-                </>)}
-               </ExpandableTable>
-
-                <ExpandableTable title='database' open={false}>
-                {user.sensi && (
-                    <>
-                        <div className='dangerous' onClick={() => clearOut()}>
-                            Wipe out the DataBase, and start over with original seed data.
-                        </div>
-                        <br></br>
-                        <div className='caution' onClick={() => backUp()}>
-                           Backup the current DataBase.
-                        </div>
-
-                        <div className="JsonData">
-                            Download data to your local download folder:<br></br>
-                            <DownloadJsonButton articles={articles} users={users} />
-                        </div>
-
-                    </>
-                )}</ExpandableTable>
-                
+                      </div>
+                    </React.Fragment>
+                  ))}
+              </div>
             </div>
-  
-        </>
-    )
+          ))}
+        </ExpandableTable>
+
+        <ExpandableTable title="merchandise" open={false}>
+          <div onClick={toggleMerch}>
+            {!showMerch && <>Show Merch</>}
+            {showMerch && <>Hide Merch</>}
+          </div>
+          <div onClick={newProduct} className="newArticleButton">
+            New Product
+          </div>
+
+          {products && (
+            <>
+              Products:
+              <br></br>
+              <div className="productsContainer">
+                {products.map((product) => {
+                  return (
+                    <div key={product._id}>
+                      <div onClick={() => editProduct(product)}>
+                        {product.productName}
+                      </div>
+                      <div>{product.productDescription}</div>
+                      <div
+                        className="killProduct"
+                        onClick={() => killAProduct(product)}
+                      >
+                        X
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </ExpandableTable>
+
+        <ExpandableTable title="database" open={false}>
+          {user.sensi && (
+            <>
+              <div className="dangerous" onClick={() => clearOut()}>
+                Wipe out the DataBase, and start over with original seed data.
+              </div>
+              <br></br>
+              <div className="caution" onClick={() => backUp()}>
+                Backup the current DataBase.
+              </div>
+
+              <div className="JsonData">
+                Download data to your local download folder:<br></br>
+                <DownloadJsonButton articles={articles} users={users} />
+              </div>
+            </>
+          )}
+        </ExpandableTable>
+      </div>
+    </div>
+  );
 }
