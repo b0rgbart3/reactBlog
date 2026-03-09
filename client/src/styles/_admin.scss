@@ -9,8 +9,8 @@
     background-color: rgba($admin-theme-color, 0.1);
     color: $admin-accent-color;
     max-width: 100%;
-    width: calc(100% - 40px);
-    margin: 20px;
+    width: calc(100% - 120px);
+    margin: auto;
     overflow: hidden;
 }
 
@@ -20,12 +20,34 @@
     padding: 20px 0;
 }
 
-.caution,
+.caution  {
+    border-radius: $border-radius-md;
+    padding: 8px;
+    cursor: pointer;
+    user-select: none;
+    border: 2px solid $admin-caution;
+    background: rgba($admin-caution, .15);
+    color: $admin-caution;
+    opacity: .5;
+    &:hover {
+        opacity: 1;
+    }
+}
+
 .dangerous {
     border-radius: $border-radius-md;
     padding: 8px;
     cursor: pointer;
     user-select: none;
+    border: 2px solid $admin-danger;
+    color: $admin-danger;
+    background: rgba($admin-danger, .15);
+    opacity: .5;
+    &:hover {
+        opacity: 1;
+        background: $admin-background;
+        // color: $admin-foreground;
+    }
 }
 
 .caution {
@@ -336,6 +358,7 @@
     margin-bottom: 40px;
     box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, .24);
     background-color: rgba($admin-panel, .21);
+    color: $admin-text;
 }
 
 .expandableTableContent.expanded {
@@ -421,5 +444,5 @@
 
 .JsonData {
     padding: 16px 0;
-    color: $admin-foreground;
+    color: $admin-text;
 }

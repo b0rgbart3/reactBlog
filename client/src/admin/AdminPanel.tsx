@@ -169,10 +169,6 @@ export function AdminPanel() {
         <ExpandableTable title="database" open={false}>
           {user.sensi && (
             <>
-              <div className="dangerous" onClick={() => clearOut()}>
-                Wipe out the DataBase, and start over with original seed data.
-              </div>
-              <br></br>
               <div className="caution" onClick={() => backUp()}>
                 Backup the current DataBase.
               </div>
@@ -180,6 +176,9 @@ export function AdminPanel() {
               <div className="JsonData">
                 Download data to your local download folder:<br></br>
                 <DownloadJsonButton articles={articles} users={users} />
+              </div>
+              <div className="dangerous" onClick={() => clearOut()}>
+                Wipe out the DataBase, and start over with original seed data.
               </div>
             </>
           )}
