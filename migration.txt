@@ -1,0 +1,453 @@
+================================================================================
+MOON-MATH.ONLINE — NEXT.JS MIGRATION LOG
+Date: March 2026
+================================================================================
+
+OVERVIEW
+--------
+Migrated moon-math.online from a Vite + React SPA monorepo (with a separate
+Express backend) to a single Next.js 15 App Router application.
+
+PRIMARY MOTIVATION: SEO
+Article pages had no dynamic <title> or Open Graph meta tags.
+Social shares showed no preview. Search engines saw empty pages (JS-rendered).
+Next.js enables server-side metadata per page via generateMetadata().
+
+
+================================================================================
+BEFORE — OLD ARCHITECTURE
+================================================================================
+
+MyBlog/
+├── client/              (Vite + React 18 + TypeScript, port 5173)
+│   ├── src/
+│   │   ├── App.tsx          ← React Router v7 routes
+│   │   ├── Home.tsx
+│   │   ├── state/useStore.ts ← Zustand store
+│   │   ├── data/useData.ts   ← axios data fetching
+│   │   ├── components/       ← banner-nav, footer, image-modal, etc.
+│   │   ├── pages/            ← page components
+│   │   ├── admin/            ← admin panel components
+│   │   ├── assets/memes/     ← 7 meme images
+│   │   └── styles/           ← SCSS partials
+│   ├── vite.config.js        ← proxied /api and /uploads to localhost:3000
+│   └── index.html
+├── server/              (Express + Node.js + TypeScript, port 3000)
+│   └── src/
+│       ├── server.ts         ← all Express routes + MongoDB connect
+│       ├── models/           ← Mongoose: Articles, Users, Products, Settings
+│       └── services/email.ts ← Resend API
+├── uploads/             ← was at root... actually at public/uploads/ already
+├── public/
+│   └── uploads/
+│       ├── articles/    ← user-uploaded article headline images
+│       └── products/    ← user-uploaded product images
+└── package.json         ← used concurrently to run both servers
+
+Dev command: npm run dev  (ran concurrently — client on 5173, server on 3000)
+Build command: npm run build --prefix server && npm run build --prefix client
+Start command: npm run start --prefix server (Express served client/dist/)
+
+
+================================================================================
+AFTER — NEW ARCHITECTURE
+================================================================================
+
+MyBlog/
+├── src/
+│   ├── app/                  ← Next.js App Router (INSIDE src/ — required)
+│   │   ├── layout.tsx        ← root layout (replaces index.html)
+│   │   ├── page.tsx          ← Home
+│   │   ├── about/page.tsx
+│   │   ├── resources/page.tsx
+│   │   ├── login/page.tsx
+│   │   ├── newUser/page.tsx
+│   │   ├── admin/page.tsx
+│   │   ├── memes/page.tsx
+│   │   ├── cart/page.tsx
+│   │   ├── check-out/page.tsx
+│   │   ├── user/page.tsx
+│   │   ├── article/
+│   │   │   ├── [id]/page.tsx      ← SSG + generateMetadata ← THE SEO WIN
+│   │   │   ├── new/page.tsx
+│   │   │   └── edit/[_id]/page.tsx
+│   │   ├── product/
+│   │   │   ├── [id]/page.tsx      ← SSG + generateMetadata
+│   │   │   ├── new/page.tsx
+│   │   │   └── edit/[_id]/page.tsx
+│   │   └── api/
+│   │       ├── articles/route.ts           (GET, POST)
+│   │       ├── articles/[id]/route.ts      (PATCH, DELETE)
+│   │       ├── products/route.ts           (GET, POST)
+│   │       ├── products/[id]/route.ts      (PATCH, DELETE)
+│   │       ├── users/route.ts              (GET, POST)
+│   │       ├── user/[id]/route.ts          (PATCH)
+│   │       ├── login/route.ts              (POST)
+│   │       ├── settings/route.ts           (GET)
+│   │       ├── showMerch/route.ts          (GET)
+│   │       ├── toggleMerch/route.ts        (POST)
+│   │       ├── contact/route.ts            (POST)
+│   │       ├── wipe/route.ts               (POST)
+│   │       └── backup/route.ts             (POST)
+│   ├── admin/                ← admin panel components (all "use client")
+│   │   ├── AdminPanel.tsx
+│   │   ├── NewArticlePage.tsx
+│   │   ├── EditArticlePage.tsx
+│   │   ├── ArticleForm.tsx
+│   │   ├── UsersForm.tsx
+│   │   ├── ExpandableTable.tsx
+│   │   ├── TableHeader.tsx
+│   │   └── Download.tsx
+│   ├── components/           ← shared UI (all "use client")
+│   │   ├── banner-nav.tsx
+│   │   ├── footer.tsx
+│   │   ├── image-modal.tsx
+│   │   ├── MemeThumbnails.tsx
+│   │   └── ArticleThumbnail.tsx
+│   ├── data/useData.ts       ← updated: useNavigate → useRouter
+│   ├── hooks/useClickOutside.tsx
+│   ├── lib/mongodb.ts        ← NEW: singleton connection for Next.js
+│   ├── models/               ← copied from server/src/models/
+│   │   ├── Articles.ts
+│   │   ├── Users.ts
+│   │   ├── Products.ts
+│   │   └── Settings.ts
+│   ├── services/email.ts     ← copied from server/src/services/
+│   ├── state/useStore.ts     ← unchanged (Zustand)
+│   ├── styles/               ← all SCSS partials (unchanged)
+│   ├── utils/articleUtils.ts ← NEW: splitIntoLines, splitIntoParagraphs
+│   ├── views/                ← page components (renamed from pages/ — see gotchas)
+│   │   ├── About.tsx
+│   │   ├── Resources.tsx
+│   │   ├── Login.tsx
+│   │   ├── CreateAccount.tsx
+│   │   ├── EditUserPage.tsx
+│   │   ├── AdminPage.tsx
+│   │   ├── MemesPage.tsx
+│   │   ├── Articles/
+│   │   │   ├── Articles.tsx
+│   │   │   └── ArticlePage.tsx
+│   │   └── Products/
+│   │       ├── ProductPage.tsx
+│   │       ├── ProductThumbnails.tsx
+│   │       ├── ShoppingCart.tsx
+│   │       ├── CheckOut.tsx
+│   │       ├── ProductForm.tsx
+│   │       ├── NewProductPage.tsx
+│   │       └── EditProductPage.tsx
+│   └── Home.tsx
+├── public/
+│   ├── favicon.ico (+ other favicon sizes)
+│   └── uploads/              ← pre-existing, served by Next.js at /uploads/...
+│       ├── articles/
+│       └── products/
+├── .env                      ← copied from server/.env to root
+├── next.config.ts
+├── package.json              ← merged deps, removed vite/express/react-router/multer
+└── tsconfig.json             ← Next.js App Router config
+
+Dev command:   npm run dev    (single server)
+Build command: npm run build
+Start command: npm run start  (use PM2 on EC2)
+
+
+================================================================================
+THE SEO IMPLEMENTATION (CORE GOAL)
+================================================================================
+
+src/app/article/[id]/page.tsx — Server Component
+
+export const revalidate = 3600; // ISR: regenerate at most once per hour
+
+export async function generateMetadata({ params }) {
+  const { id } = await params;       // params is a Promise in Next.js 15
+  await connectDB();
+  const article = await Articles.findById(id).lean();
+  const description = article?.body
+    ?.replace(/<[^>]*>/g, '')        // strip HTML tags
+    .substring(0, 160);
+
+  return {
+    title: article?.title,
+    description,
+    openGraph: {
+      title: article?.title,
+      description,
+      images: article?.headlineImage ? [{ url: article.headlineImage }] : [],
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article?.title,
+      description,
+      images: article?.headlineImage ? [article.headlineImage] : [],
+    },
+  };
+}
+
+export async function generateStaticParams() {
+  await connectDB();
+  const articles = await Articles.find({}, '_id').lean();
+  return articles.map(a => ({ id: String(a._id) }));
+}
+
+export default async function ArticlePageSSG({ params }) {
+  const { id } = await params;
+  await connectDB();
+  const article = await Articles.findById(id).lean();
+  const author = await Users.findById(article?.userID).lean();
+  // ... render article content server-side
+}
+
+RESULT: Every article URL has proper <title>, <meta name="description">,
+og:title, og:description, og:image in the server-sent HTML.
+Social media scrapers (Twitter, Discord, Slack, etc.) see the metadata
+WITHOUT executing JavaScript.
+
+
+================================================================================
+KEY CHANGES BY CATEGORY
+================================================================================
+
+1. DEPENDENCIES
+   Added:   next@^15.0.0
+   Removed: vite, @vitejs/plugin-react, react-router-dom,
+            express, cors, concurrently, multer
+   Unchanged: react, react-dom, typescript, zustand, axios, jwt-decode,
+              sass, mongoose, bcrypt, jsonwebtoken, resend, html-react-parser
+
+2. NAVIGATION (every component that used react-router-dom)
+   BEFORE:
+     import { useNavigate } from 'react-router-dom';
+     import { useParams } from 'react-router-dom';
+     import { Link } from 'react-router-dom';
+     const navigate = useNavigate();
+     navigate('/path');
+
+   AFTER:
+     import { useRouter } from 'next/navigation';
+     import { useParams } from 'next/navigation';
+     import Link from 'next/link';
+     const router = useRouter();
+     router.push('/path');
+
+3. "USE CLIENT" DIRECTIVE
+   All interactive components (useState, useEffect, event handlers,
+   Zustand store access) need:
+     'use client';
+   at the top of the file.
+
+   Server components (no directive needed):
+   - app/article/[id]/page.tsx
+   - app/product/[id]/page.tsx
+   - app/about/page.tsx
+   - app/resources/page.tsx
+   (Though About and Resources use BannerNav which is "use client",
+    Next.js handles this — server components can render client components.)
+
+4. FILE UPLOADS
+   BEFORE: multer disk storage middleware
+     const storage = multer.diskStorage({
+       destination: 'uploads/articles/',
+       filename: (req, file, cb) => cb(null, Date.now() + ext)
+     });
+     const upload = multer({ storage });
+     app.post('/api/articles', upload.single('headlineImage'), ...)
+
+   AFTER: Web Fetch API FormData in Next.js Route Handlers
+     export async function POST(request) {
+       const formData = await request.formData();
+       const file = formData.get('headlineImage') as File;
+       const bytes = await file.arrayBuffer();
+       const buffer = Buffer.from(bytes);
+       const filename = `${Date.now()}${path.extname(file.name)}`;
+       await fs.writeFile(
+         path.join(process.cwd(), 'public', 'uploads', 'articles', filename),
+         buffer
+       );
+     }
+   Files saved to public/uploads/ are served by Next.js at /uploads/...
+   (same URLs as before, no database changes needed)
+
+5. MONGODB CONNECTION
+   BEFORE: mongoose.connect() called once in server.ts on startup
+
+   AFTER: Singleton pattern for Next.js (hot-reloads would create
+          too many connections without it):
+
+   // src/lib/mongodb.ts
+   let cached = global.mongoose;
+   if (!cached) cached = global.mongoose = { conn: null, promise: null };
+   export async function connectDB() {
+     if (cached.conn) return cached.conn;
+     cached.promise = mongoose.connect(process.env.MONGO_URI!);
+     cached.conn = await cached.promise;
+     return cached.conn;
+   }
+
+6. RENDERING STRATEGY
+   Route                    | Strategy  | Reason
+   -------------------------|-----------|---------------------------
+   /                        | Static    | Renders client-side after load
+   /article/[id]            | SSG + ISR | SEO — server-rendered HTML
+   /product/[id]            | SSG + ISR | SEO — server-rendered HTML
+   /about                   | Static    | Fully static content
+   /resources               | Static    | Fully static content
+   /login, /newUser         | Static    | Client-rendered (auth)
+   /admin, /article/new     | Static    | Client-rendered (admin)
+   /cart, /check-out, /user | Static    | Client-rendered (user state)
+   /memes                   | Static    | Client-rendered (images + modal)
+
+   ISR revalidation: 3600 seconds (1 hour) for articles and products
+
+
+================================================================================
+GOTCHAS & LESSONS LEARNED
+================================================================================
+
+1. src/pages/ IS RESERVED by Next.js
+   We used src/pages/ for component files (not actual Next.js pages).
+   Next.js treats src/pages/ as the Pages Router and validates that every
+   file there has a default export following Page Router conventions.
+   FIX: Renamed src/pages/ → src/views/ throughout.
+
+2. app/ must be inside src/ when using the src/ directory layout
+   We initially put app/ at the project root. Next.js generated type
+   declarations looking for src/app/ and the validator.ts couldn't
+   find our pages.
+   FIX: Moved app/ to src/app/.
+
+3. params is a Promise in Next.js 15
+   Page components and generateMetadata must await params:
+     export default async function Page({ params }) {
+       const { id } = await params;  // NOT params.id directly
+     }
+
+4. useCallback requires a dependency array (2 arguments)
+   Original Vite code had many useCallback calls without dep arrays:
+     const fn = useCallback(() => { ... });  // WRONG in strict TS
+   Next.js/TypeScript enforced 2 args. Added dep arrays throughout.
+
+5. String vs string type
+   Original useStore.ts had:
+     phash: String;   // wrapper object
+     status: String,
+     userEmail: String
+   These caused type errors when used as function arguments expecting string
+   (primitive). FIX: Changed all to lowercase string.
+
+6. Vite image imports return StaticImageData objects in Next.js
+   Meme images imported as:
+     import orangePill from '../assets/memes/orange_pill.jpeg';
+   In Vite, this gives a URL string. In Next.js, it gives a StaticImageData
+   object with a .src property. Used: img.src ?? img for compatibility.
+
+7. FormData in Next.js API routes has a default size limit (~4.5MB)
+   Sufficient for typical article/product images. If larger images are
+   needed, configure: next.config.ts → experimental.serverBodySizeLimit
+
+8. metadataBase warning
+   Build output shows: "metadataBase property in metadata export is not set"
+   This affects absolute URL resolution for OG images.
+   FIX (future): Add to layout.tsx metadata:
+     metadataBase: new URL('https://moon-math.online')
+
+
+================================================================================
+DEPLOYMENT ON EC2
+================================================================================
+
+1. SSH into EC2
+2. git pull (or rsync the new files)
+3. npm install
+4. npm run build
+5. Stop old PM2 process: pm2 stop moon-math (or whatever it was named)
+6. Start new: pm2 start "npm run start" --name moon-math
+   OR update ecosystem.config.js if using one
+
+The .env file is now at project root (was at server/.env).
+Make sure the EC2 instance has the .env file at:
+  /path/to/MyBlog/.env
+
+Environment variables needed:
+  JWT_SECRET=...
+  JWT_EXPIRES_IN=2h
+  NODE_ENV=production
+  MONGO_URI=...
+  MONGO_DUMP_PATH=...
+  RESEND_API_KEY=...
+
+
+================================================================================
+VERIFICATION CHECKLIST
+================================================================================
+
+[ ] npm run dev starts without errors
+[ ] Visit / — articles and merch/memes load correctly
+[ ] Visit /article/[id] — check page <title> in browser tab
+[ ] view-source on an article URL — <title> and <meta> must be in the HTML,
+    not inserted by JavaScript after load
+[ ] Share an article URL in Discord/Slack — social preview card should show
+    title + description + headline image
+[ ] Test with Twitter Card Validator: https://cards-dev.twitter.com/validator
+[ ] Test with Facebook Debugger: https://developers.facebook.com/tools/debug/
+[ ] Test Open Graph: https://www.opengraph.xyz/
+[ ] Login works
+[ ] Admin panel accessible (login with sensi account)
+[ ] Create new article (with image upload)
+[ ] Edit existing article
+[ ] File uploads appear at /uploads/articles/...
+[ ] Contact form sends email
+[ ] Admin: DB backup works
+[ ] Products page loads
+[ ] Shopping cart works (add item, go to checkout)
+
+
+================================================================================
+FINAL BUILD OUTPUT
+================================================================================
+
+Route (app)                              Size    First Load JS   Revalidate
+┌ ○ /                                   12.1 kB  139 kB
+├ ○ /about                              3.36 kB  127 kB
+├ ○ /admin                              2.99 kB  127 kB
+├ ƒ /api/articles                         156 B  102 kB
+├ ƒ /api/articles/[id]                    156 B  102 kB
+├ ƒ /api/backup                           156 B  102 kB
+├ ƒ /api/contact                          156 B  102 kB
+├ ƒ /api/login                            156 B  102 kB
+├ ƒ /api/products                         156 B  102 kB
+├ ƒ /api/products/[id]                    156 B  102 kB
+├ ƒ /api/settings                         156 B  102 kB
+├ ƒ /api/showMerch                        156 B  102 kB
+├ ƒ /api/toggleMerch                      156 B  102 kB
+├ ƒ /api/user/[id]                        156 B  102 kB
+├ ƒ /api/users                            156 B  102 kB
+├ ƒ /api/wipe                             156 B  102 kB
+├ ● /article/[id]                       2.23 kB  126 kB           1h   1y
+├   ├ /article/691389b15d22fc979beab1a0                           1h   1y
+├   ├ /article/6913b68eb87319ff4eb48867                           1h   1y
+├   └ [+6 more paths]
+├ ○ /article/new                        2.42 kB  126 kB
+├ ƒ /article/edit/[_id]                 2.40 kB  126 kB
+├ ○ /cart                               3.04 kB  127 kB
+├ ○ /check-out                          2.53 kB  126 kB
+├ ○ /login                              2.65 kB  126 kB
+├ ○ /memes                                639 B  127 kB
+├ ○ /newUser                            2.73 kB  126 kB
+├ ● /product/[id]                       3.16 kB  127 kB           1h   1y
+├   ├ /product/6935cfcbcf4a9e47065a16ff                           1h   1y
+├   └ /product/69347c8e48d39a058ca611dd                           1h   1y
+├ ○ /product/new                        2.79 kB  126 kB
+├ ƒ /product/edit/[_id]                 2.83 kB  126 kB
+├ ○ /resources                          3.18 kB  127 kB
+└ ○ /user                               2.76 kB  126 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+8 article pages pre-built as static HTML.
+2 product pages pre-built as static HTML.
+All API routes are dynamic server functions.
+================================================================================

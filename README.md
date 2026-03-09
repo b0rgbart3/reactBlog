@@ -1,6 +1,6 @@
 # Moon-Math.online
 
-A Bitcoin blog and content platform built with a **Node.js + Express backend** using **TypeScript** and a **React + Vite frontend**, backed by **MongoDB**. Features article publishing, a memes gallery, a merch store, user authentication, and an admin panel.
+A Bitcoin blog and content platform built with **Next.js 15** (App Router), **TypeScript**, and **MongoDB**. Features article publishing with server-side SEO metadata, a memes gallery, a merch store, user authentication, and an admin panel.
 
 ![Homepage](docs/screenshot.png)
 
@@ -8,14 +8,36 @@ A Bitcoin blog and content platform built with a **Node.js + Express backend** u
 
 ## Table of Contents
 
-1. [Project Structure](#project-structure)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-4. [Development](#development)
-5. [Production Build & Run](#production-build--run)
-6. [Environment Variables](#environment-variables)
-7. [Backend API](#backend-api)
-8. [Notes](#notes)
+1. [Tech Stack](#tech-stack)
+2. [Project Structure](#project-structure)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Development](#development)
+6. [Production Build & Run](#production-build--run)
+7. [Environment Variables](#environment-variables)
+8. [API Routes](#api-routes)
+9. [Notes](#notes)
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| **Framework** | [Next.js 15](https://nextjs.org) (App Router) | SSG, SSR, API routes, file-based routing |
+| **UI Library** | [React 18](https://react.dev) | Component model, hooks |
+| **Language** | [TypeScript](https://www.typescriptlang.org) | Type safety across the full stack |
+| **Runtime** | [Node.js](https://nodejs.org) | Server runtime (via Next.js) |
+| **Database** | [MongoDB](https://www.mongodb.com) | Document store for articles, products, users |
+| **ODM** | [Mongoose](https://mongoosejs.com) | MongoDB schema definitions and queries |
+| **Styling** | [Sass / SCSS](https://sass-lang.com) | Modular stylesheets with partials and variables |
+| **State Management** | [Zustand](https://zustand-demo.pmnd.rs) | Lightweight global client state |
+| **HTTP Client** | [Axios](https://axios-http.com) | API calls from client components |
+| **Authentication** | [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) + [bcrypt](https://github.com/kelektiv/node.bcrypt.js) | JWT signing, password hashing |
+| **JWT Decoding** | [jwt-decode](https://github.com/auth0/jwt-decode) | Parse JWT on the client without verification |
+| **Email** | [Resend](https://resend.com) | Transactional email for contact form |
+| **HTML Rendering** | [html-react-parser](https://github.com/remarkablemark/html-react-parser) | Render article body HTML as React elements |
+| **Hosting** | AWS EC2 + PM2 | Self-hosted, filesystem-persistent |
 
 ---
 
@@ -23,54 +45,75 @@ A Bitcoin blog and content platform built with a **Node.js + Express backend** u
 
 ```
 MyBlog/
-├─ server/
-│  ├─ src/
-│  │  ├─ server.ts           # Express app + all API routes
-│  │  ├─ simpleHasher.ts
-│  │  ├─ seedMongoDB.ts
-│  │  ├─ models/
-│  │  │  ├─ Articles.ts
-│  │  │  ├─ Products.ts
-│  │  │  ├─ Users.ts
-│  │  │  ├─ Settings.ts
-│  │  │  └─ Contacts.ts
-│  │  └─ services/
-│  │      └─ email.ts        # Resend email integration
-│  ├─ uploads/               # User-uploaded images (articles, products)
-│  ├─ dist/                  # Compiled TS output
-│  ├─ package.json
-│  └─ tsconfig.json
-├─ client/
-│  ├─ src/
-│  │  ├─ App.tsx             # Router + route definitions
-│  │  ├─ Home.tsx            # Homepage (articles + memes/merch)
-│  │  ├─ state/
-│  │  │  └─ useStore.ts      # Zustand global state
-│  │  ├─ data/
-│  │  │  └─ useData.ts       # Data fetching hooks
-│  │  ├─ pages/
-│  │  │  ├─ Articles/        # Article list, detail, new, edit
-│  │  │  ├─ Products/        # Product pages, cart, checkout
-│  │  │  ├─ About.tsx
-│  │  │  ├─ Resources.tsx
-│  │  │  ├─ MemesPage.tsx
-│  │  │  ├─ Login.tsx
-│  │  │  ├─ CreateAccount.tsx
-│  │  │  ├─ EditUserPage.tsx
-│  │  │  └─ AdminPage.tsx
-│  │  ├─ components/
-│  │  │  ├─ banner-nav.tsx
-│  │  │  ├─ footer.tsx
-│  │  │  ├─ MemeThumbnails.tsx
-│  │  │  └─ image-modal.tsx
-│  │  ├─ admin/              # Admin panel components
-│  │  └─ assets/             # Images, logos, SVGs
-│  ├─ dist/                  # Vite build output
-│  ├─ package.json
-│  └─ tsconfig.json
+├─ src/
+│  ├─ app/                    # Next.js App Router pages + API routes
+│  │  ├─ layout.tsx           # Root layout (title template, global styles)
+│  │  ├─ page.tsx             # Homepage
+│  │  ├─ about/page.tsx
+│  │  ├─ resources/page.tsx
+│  │  ├─ login/page.tsx
+│  │  ├─ newUser/page.tsx
+│  │  ├─ admin/page.tsx
+│  │  ├─ memes/page.tsx
+│  │  ├─ cart/page.tsx
+│  │  ├─ check-out/page.tsx
+│  │  ├─ user/page.tsx
+│  │  ├─ article/
+│  │  │  ├─ [id]/page.tsx     # SSG + generateMetadata (SEO)
+│  │  │  ├─ new/page.tsx
+│  │  │  └─ edit/[_id]/page.tsx
+│  │  ├─ product/
+│  │  │  ├─ [id]/page.tsx     # SSG + generateMetadata (SEO)
+│  │  │  ├─ new/page.tsx
+│  │  │  └─ edit/[_id]/page.tsx
+│  │  └─ api/                 # Next.js Route Handlers (replaces Express)
+│  │     ├─ articles/route.ts
+│  │     ├─ articles/[id]/route.ts
+│  │     ├─ products/route.ts
+│  │     ├─ products/[id]/route.ts
+│  │     ├─ users/route.ts
+│  │     ├─ user/[id]/route.ts
+│  │     ├─ login/route.ts
+│  │     ├─ settings/route.ts
+│  │     ├─ toggleMerch/route.ts
+│  │     ├─ contact/route.ts
+│  │     ├─ backup/route.ts
+│  │     └─ wipe/route.ts
+│  ├─ admin/                  # Admin panel components
+│  ├─ components/             # Shared UI (banner-nav, footer, etc.)
+│  ├─ data/useData.ts         # Data fetching hooks (axios)
+│  ├─ hooks/
+│  ├─ lib/mongodb.ts          # MongoDB singleton connection
+│  ├─ models/                 # Mongoose models
+│  │  ├─ Articles.ts
+│  │  ├─ Products.ts
+│  │  ├─ Users.ts
+│  │  └─ Settings.ts
+│  ├─ services/email.ts       # Resend email integration
+│  ├─ state/useStore.ts       # Zustand global state
+│  ├─ styles/                 # SCSS partials
+│  ├─ utils/articleUtils.ts
+│  └─ views/                  # Page component files
+│     ├─ Articles/
+│     ├─ Products/
+│     ├─ About.tsx
+│     ├─ Resources.tsx
+│     ├─ Login.tsx
+│     ├─ CreateAccount.tsx
+│     ├─ EditUserPage.tsx
+│     ├─ AdminPage.tsx
+│     └─ MemesPage.tsx
+├─ public/
+│  ├─ uploads/                # User-uploaded images (served at /uploads/...)
+│  │  ├─ articles/
+│  │  └─ products/
+│  └─ favicon.ico (+ other sizes)
 ├─ docs/
 │  └─ screenshot.png
-└─ package.json              # Root scripts (dev, build, start)
+├─ .env
+├─ next.config.ts
+├─ package.json
+└─ tsconfig.json
 ```
 
 ---
@@ -89,30 +132,15 @@ MyBlog/
 git clone <repo-url>
 cd MyBlog
 npm install
-npm install --prefix server
-npm install --prefix client
 ```
 
 ---
 
 ## Development
 
-Run both backend and frontend concurrently from the root:
-
 ```bash
 npm run dev
-```
-
-Or separately:
-
-```bash
-# Backend — Express + TypeScript
-npm run dev --prefix server
 # → http://localhost:3000
-
-# Frontend — React + Vite
-npm run dev --prefix client
-# → http://localhost:5173 (with hot reload)
 ```
 
 ---
@@ -120,31 +148,35 @@ npm run dev --prefix client
 ## Production Build & Run
 
 ```bash
-# Build both
 npm run build
+npm run start
+```
 
-# Start server (serves React build at port 3000)
-npm start
+On EC2 with PM2:
+
+```bash
+npm run build
+pm2 start "npm run start" --name moon-math
 ```
 
 ---
 
 ## Environment Variables
 
-Create a `.env` file in `server/`:
+Create a `.env` file at the project root:
 
 ```
 MONGO_URI=<your MongoDB connection string>
 JWT_SECRET=<your JWT secret>
 JWT_EXPIRES_IN=2h
 RESEND_API_KEY=<your Resend API key>
-MONGO_DUMP_PATH=<path to mongodump binary>
-PORT=3000
+MONGO_DUMP_PATH=<path to directory containing mongodump binary>
+NODE_ENV=production
 ```
 
 ---
 
-## Backend API
+## API Routes
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -163,17 +195,17 @@ PORT=3000
 | `GET` | `/api/settings` | Fetch app settings |
 | `POST` | `/api/toggleMerch` | Toggle merch/memes display on homepage |
 | `POST` | `/api/contact` | Submit contact form (sends email via Resend) |
-| `POST` | `/api/backup` | Trigger MongoDB backup (admin) |
-| `POST` | `/api/wipe` | Drop database (admin) |
+| `POST` | `/api/backup` | Trigger MongoDB backup (admin only) |
+| `POST` | `/api/wipe` | Drop database (admin only) |
 
-Uploaded files are served statically at `/uploads/`.
+Uploaded files are served as static assets from `public/uploads/` at `/uploads/...`.
 
 ---
 
 ## Notes
 
-- Keep `node_modules`, `.env`, and `dist/` out of Git
-- Development ports: backend `3000`, frontend `5173`
-- Production: Express serves the React `dist/` at port `3000`
-- JWT auth is used for protected admin/author actions
-- The homepage toggles between a memes gallery and a merch store based on the `showMerch` setting
+- Keep `node_modules`, `.env`, and `.next/` out of Git
+- Article and product pages use **SSG + ISR** (regenerated every hour) with server-side `generateMetadata()` for SEO — proper `<title>`, description, and Open Graph tags are in the HTML before JavaScript runs
+- JWT auth is used for protected admin/author actions; tokens stored in `localStorage`
+- The homepage toggles between a memes gallery and a merch store based on the `showMerch` setting in the database
+- `src/views/` is used for page component files — Next.js reserves `src/pages/` for the Pages Router so that name is avoided

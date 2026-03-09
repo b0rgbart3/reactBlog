@@ -1,0 +1,105 @@
+'use client';
+import React, { useCallback, useState } from "react";
+import { useData } from "../../data/useData";
+import { Product, useStore } from "../../state/useStore";
+
+export type ProductFormProps = {
+  product: Product;
+  changeCategory: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  changeNewCategory: (e: React.FormEvent) => void;
+  editing: boolean;
+  handleChange: (e: React.FormEvent) => void;
+  handleFileChange: (e: React.FormEvent) => void;
+  handleBeautyChange: (e: React.FormEvent) => void;
+  handleThumbnailChange: (e: React.FormEvent) => void;
+  handleSubmit: (e: React.FormEvent) => Promise<void>;
+  newCategory: string;
+}
+
+export function ProductForm(props: ProductFormProps) {
+  const { product, changeCategory, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange, handleBeautyChange, handleThumbnailChange } = props;
+  const { categories, productCategories } = useStore((s) => s);
+  const { refresh } = useData();
+  const [images, setImages] = useState<string[]>([]);
+  const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ? product?.readyToPublish : false);
+
+  const toggleReadyStatus = useCallback(() => {
+    setIsReady(!isReady);
+  }, [isReady]);
+
+  const handleFormSubmit = useCallback((e) => {
+    product.readyToPublish = isReady;
+    handleSubmit(e);
+  }, [isReady, handleSubmit, product]);
+
+  const addAnotherImage = useCallback(() => {
+    setImages(prev => [...prev, ""]);
+  }, [images]);
+
+  const killProductImage = useCallback((imageNumber: number) => {
+    product.productImages.splice(imageNumber, 1);
+  }, [product]);
+
+  return (
+    <form onSubmit={handleFormSubmit} className="new-article-form">
+      <div>
+        <label htmlFor="readyToPublish">Ready to Publish</label>
+        <br></br>
+        {isReady && (<div className='lineContainer'><div className='bButton checkBoxSelected' onClick={toggleReadyStatus}></div>Ready to publish</div>)}
+        {!isReady && (<div className='lineContainer'><div className='bButton checkBox' onClick={toggleReadyStatus}></div>Ready to publish</div>)}
+
+        <label htmlFor="category">Category:</label>
+        {product?.category !== "New" && (
+          <div className="row">
+            <select id="category" name='category' value={product?.category} onChange={handleChange}>
+              {categories?.map((cat) => (<option key={cat} value={cat}>{cat}</option>))}
+            </select>
+            <div>
+              <input id="newCategory" name="category" type="text" value={newCategory} placeholder="Choose-- or enter a new category here" onChange={changeNewCategory} />
+            </div>
+          </div>
+        )}
+
+        <label htmlFor="productName">Product Name:</label>
+        <input id="productName" type="text" name='productName' value={product?.productName ?? ''} onChange={handleChange} required />
+      </div>
+      <div><label>Images:</label></div>
+      <div>
+        <div>
+          Beauty Image:
+          {editing && product.beauty && product.beauty !== '' && (<div className='beautyPreview'><img src={product.beauty} /></div>)}
+          <input id="beauty" type="file" accept="image/*" onChange={handleBeautyChange} name="beauty" />
+        </div>
+        <div>
+          Thumbnail Image:
+          {editing && product.thumbnail && product.thumbnail !== '' && (<div className='thumbnailPreview'><img src={product.thumbnail} /></div>)}
+          <input id="thumbnail" type="file" accept="image/*" onChange={handleThumbnailChange} name="thumbnail" />
+        </div>
+      </div>
+      <div className='imageUploadContainer'>
+        existing images:
+        {product?.productImages?.map((productImage, imageNumber) => (
+          <React.Fragment key={imageNumber}>
+            <div className='productImagePreview'>
+              <div className='productImagePreviewThumbnail'><img src={`${product.productImages[imageNumber]}`} /></div>
+              <div className='productImagePreviewKill' onClick={() => killProductImage(imageNumber)}>X</div>
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+      <div>
+        {images.map((image, imageNumber) => (
+          <React.Fragment key={imageNumber}>Image: {image}
+            <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images" />
+          </React.Fragment>
+        ))}
+      </div>
+      <div onClick={addAnotherImage}>Add another image</div>
+      <div>
+        <label htmlFor="body">Product Description:</label>
+        <textarea id="productDescription" name='productDescription' value={product?.productDescription ?? ''} onChange={handleChange} required rows={6} />
+      </div>
+      <button type="submit">{editing ? 'Submit Changes' : 'Post Product'}</button>
+    </form>
+  )
+}
