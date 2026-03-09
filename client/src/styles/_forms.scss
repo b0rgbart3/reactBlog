@@ -25,6 +25,31 @@ input {
     padding: 9px;
 }
 
+.loginForm input {
+    appearance: none;
+    -webkit-appearance: none;
+    background: $login-input-bg;
+    color: $login-input-text;
+    border: 2px solid $login-input-border;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    outline: none;
+    box-shadow: none;
+
+    &::placeholder {
+        color: rgba($login-input-text, 0.5);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $login-input-border-focus;
+        background: $login-input-bg-focus;
+        box-shadow: none;
+    }
+}
+
 label {
     padding-top: 1em;
     display: block;

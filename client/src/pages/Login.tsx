@@ -45,7 +45,7 @@ export function Login() {
       <BannerNav page="login" />
 
       <div className="loginForm">
-        Please Log In:
+        <h2>Please Log In:</h2>
         <form onSubmit={handleSubmit}>
           <label>User Name: </label>
           <input
@@ -77,7 +77,7 @@ export function Login() {
       </div>
 
       <div className="newToBorg">
-        <button onClick={newUser}>New to the B0rgBlog?</button>
+        <button onClick={newUser}>New to MoonMath?</button>
       </div>
     </>
   );

@@ -235,7 +235,11 @@
     border-radius: $border-radius-md;
     box-shadow:  0 0 12px $admin-background;
     margin:50px;
-    padding:50px;
+    padding:8px 50px 50px 50px;
+}
+
+.newToBorg {
+    margin-left: 50px;
 }
 
 .errorMessage {

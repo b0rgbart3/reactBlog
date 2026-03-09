@@ -131,6 +131,7 @@ export function useData() {
     } catch (err) {
       console.log('Failed to login.');
     } finally {
+      setLoginLoaded(false);
       if (loginResponse) {
 
 
