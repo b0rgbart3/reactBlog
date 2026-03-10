@@ -5,6 +5,7 @@ package-lock.json
 backup/
 adminBackup/
 *.pem
+.next
 public/uploads/articles/
 public/uploads/products/
 
