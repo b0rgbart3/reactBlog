@@ -6,4 +6,6 @@ backup/
 adminBackup/
 *.pem
 .next
+.env.local
+.env*
 

@@ -24,9 +24,11 @@ export function Home() {
     fetchSettings();
   }, [fetchArticles, fetchUsers, fetchSettings]);
 
+  const isLocal = process.env.NEXT_PUBLIC_ENV === 'local';
   const showMerch = useMemo(() => {
-    return settings?.find((setting) => setting.name === "showMerch")?.booleanValue;
-  }, [settings]);
+    const settingName = isLocal ? 'showMerchLocal' : 'showMerch';
+    return settings?.find((setting) => setting.name === settingName)?.booleanValue;
+  }, [settings, isLocal]);
 
   const [isMobile, setIsMobile] = useState(false);
 

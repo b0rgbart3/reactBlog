@@ -62,6 +62,9 @@ export function ProductForm(props: ProductFormProps) {
 
         <label htmlFor="productName">Product Name:</label>
         <input id="productName" type="text" name='productName' value={product?.productName ?? ''} onChange={handleChange} required />
+
+        <label htmlFor="price">Price (USD):</label>
+        <input id="price" type="number" name='price' min="0" step="0.01" value={product?.price != null ? (product.price / 100).toFixed(2) : ''} onChange={(e) => handleChange({ ...e, target: { ...e.target, name: 'price', value: String(Math.round(parseFloat(e.target.value || '0') * 100)) } } as React.ChangeEvent<HTMLInputElement>)} placeholder="0.00" />
       </div>
       <div><label>Images:</label></div>
       <div>

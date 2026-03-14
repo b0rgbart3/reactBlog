@@ -5,17 +5,20 @@ import { Settings } from '@/src/models/Settings';
 export async function POST(request: NextRequest) {
   await connectDB();
   try {
-    const settings = await Settings.find();
-    const showMerch = settings.find((s) => s.name === 'showMerch');
+    const body = await request.json().catch(() => ({}));
+    const settingName: string = body.settingName || 'showMerch';
 
-    if (showMerch) {
-      showMerch.booleanValue = !showMerch.booleanValue;
-      await Settings.findByIdAndUpdate(showMerch._id, showMerch);
-      return NextResponse.json({ success: true, booleanValue: showMerch.booleanValue });
+    const settings = await Settings.find();
+    const setting = settings.find((s) => s.name === settingName);
+
+    if (setting) {
+      setting.booleanValue = !setting.booleanValue;
+      await Settings.findByIdAndUpdate(setting._id, setting);
+      return NextResponse.json({ success: true, booleanValue: setting.booleanValue });
     } else {
-      const setting = new Settings({ name: 'showMerch', booleanValue: true });
-      await setting.save();
-      return NextResponse.json(setting);
+      const newSetting = new Settings({ name: settingName, booleanValue: true });
+      await newSetting.save();
+      return NextResponse.json(newSetting);
     }
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

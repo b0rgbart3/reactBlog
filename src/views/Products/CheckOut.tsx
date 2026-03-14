@@ -1,6 +1,5 @@
 'use client';
-import React, { useCallback } from "react";
-import { useRouter } from "next/navigation";
+import React, { useCallback, useState } from "react";
 import { useData } from "../../data/useData";
 import { useStore } from "../../state/useStore";
 import { BannerNav } from "../../components/banner-nav";
@@ -8,17 +7,31 @@ import { BannerNav } from "../../components/banner-nav";
 export function CheckOut() {
   useData();
   const { products, orders, setOrders } = useStore((s) => s);
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const removeOrder = useCallback((itemToRemove) => {
     const newOrderSet = orders.filter((order) => order._id !== itemToRemove);
     setOrders(newOrderSet);
   }, [orders]);
 
-  const completePurchase = useCallback(() => {
-    // TODO: implement actual purchase completion
-    router.push('/');
-  }, [router]);
+  const completePurchase = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orders }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Checkout failed');
+      window.location.href = data.url;
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
+  }, [orders]);
 
   return (
     <>
@@ -40,7 +53,10 @@ export function CheckOut() {
             )
           })}
         </div>
-        <button onClick={completePurchase}>Complete my Purchase</button>
+        {error && <div style={{ color: 'red' }}>{error}</div>}
+        <button onClick={completePurchase} disabled={loading}>
+          {loading ? 'Redirecting...' : 'Complete my Purchase'}
+        </button>
       </div>
     </>
   )

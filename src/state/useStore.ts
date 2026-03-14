@@ -1,5 +1,6 @@
 // src/state/useStore.ts
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export type Article = {
   body: string;
@@ -35,12 +36,45 @@ export type Product = {
   productName: string;
   readyToPublish: boolean;
   thumbnail: string;
+  price: number;
 }
 export type Order = {
   _id: number;
   productID: string;
   quantity: number;
   chosenSize: string;
+}
+
+export type PlacedOrderItem = {
+  productID: string;
+  productName: string;
+  quantity: number;
+  chosenSize: string;
+  unitAmount: number;
+}
+
+export type ShippingAddress = {
+  name: string;
+  line1: string;
+  line2: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+}
+
+export type PlacedOrder = {
+  _id: string;
+  stripeSessionId: string;
+  status: 'pending' | 'paid';
+  customerEmail: string;
+  customerName: string;
+  amountTotal: number;
+  items: PlacedOrderItem[];
+  shippingAddress?: ShippingAddress;
+  createdAt: string;
+  sentToPrinter: boolean;
+  sentToCustomer: boolean;
 }
 
 export type Setting = {
@@ -79,9 +113,13 @@ type State = {
   settingsLoaded: boolean;
   setSettingsLoaded: (boolean) => void;
   setUsersLoaded: (boolean) => void;
+  placedOrders: PlacedOrder[];
+  setPlacedOrders: (orders: PlacedOrder[]) => void;
+  placedOrdersLoaded: boolean;
+  setPlacedOrdersLoaded: (boolean) => void;
 };
 
-export const useStore = create<State>((set) => ({
+export const useStore = create<State>()(persist((set) => ({
   articlesById: {},
   usersById: {},
   articles: [],
@@ -119,5 +157,12 @@ export const useStore = create<State>((set) => ({
   settingsLoaded: false,
   setSettings: (settings: Setting[] | null) => set({ settings: settings }),
   usersLoaded: false,
-  setUsersLoaded: (loaded: boolean) => set({ usersLoaded: loaded })
+  setUsersLoaded: (loaded: boolean) => set({ usersLoaded: loaded }),
+  placedOrders: [],
+  setPlacedOrders: (placedOrders: PlacedOrder[]) => set({ placedOrders }),
+  placedOrdersLoaded: false,
+  setPlacedOrdersLoaded: (loaded: boolean) => set({ placedOrdersLoaded: loaded }),
+}), {
+  name: 'cart-storage',
+  partialize: (state) => ({ orders: state.orders }),
 }));

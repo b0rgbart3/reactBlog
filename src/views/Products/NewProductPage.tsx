@@ -54,6 +54,7 @@ export function NewProductPage() {
       formData.append("productDescription", product.productDescription);
       formData.append("readyToPublish", String(product.readyToPublish));
       formData.append("category", newCategory.length ? newCategory : category);
+      formData.append("price", String(product.price ?? 0));
       if (beauty) formData.append('newBeauty', beauty);
       if (thumbnail) formData.append('newThumbnail', thumbnail);
       images.forEach((img) => formData.append("images", img));

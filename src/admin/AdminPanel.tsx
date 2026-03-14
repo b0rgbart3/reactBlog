@@ -7,11 +7,13 @@ import { DownloadJsonButton } from "./Download";
 import { UsersForm } from "./UsersForm";
 import { TableHeader } from "./TableHeader";
 import { ExpandableTable } from "./ExpandableTable";
+import { PlacedOrdersTable } from "./PlacedOrdersTable";
 
 export function AdminPanel() {
   const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch } = useData();
   const { user, articles, categories, products, productCategories, users, settings } = useStore((s) => s);
-  const showMerch = settings?.find((s) => s.name === "showMerch")?.booleanValue ?? true;
+  const showMerch = settings?.find((s) => s.name === "showMerch")?.booleanValue ?? false;
+  const showMerchLocal = settings?.find((s) => s.name === "showMerchLocal")?.booleanValue ?? false;
   const router = useRouter();
 
   const editArticle = useCallback((article: Article) => {
@@ -23,7 +25,11 @@ export function AdminPanel() {
   }, [router]);
 
   const toggleMerch = useCallback(() => {
-    displayMerch({ id: user._id, key: user.phash });
+    displayMerch({ id: user._id, key: user.phash }, 'showMerch');
+  }, [user]);
+
+  const toggleMerchLocal = useCallback(() => {
+    displayMerch({ id: user._id, key: user.phash }, 'showMerchLocal');
   }, [user]);
 
   const killArticle = useCallback((article: Article) => {
@@ -96,11 +102,17 @@ export function AdminPanel() {
         </ExpandableTable>
 
         <ExpandableTable title="merchandise" open={false}>
+          <div className="merchToggle" onClick={toggleMerchLocal}>
+            <div className={showMerchLocal ? "bigCheckBoxSelected" : "bigCheckBox"}>
+              {showMerchLocal && <span className="bigCheckmark">✓</span>}
+            </div>
+            <span className="merchToggleLabel">Show Merch — Local</span>
+          </div>
           <div className="merchToggle" onClick={toggleMerch}>
             <div className={showMerch ? "bigCheckBoxSelected" : "bigCheckBox"}>
               {showMerch && <span className="bigCheckmark">✓</span>}
             </div>
-            <span className="merchToggleLabel">Show Merchandise</span>
+            <span className="merchToggleLabel">Show Merch — Production</span>
           </div>
           <div onClick={newProduct} className="newArticleButton">New Product</div>
 
@@ -118,6 +130,10 @@ export function AdminPanel() {
               </div>
             </>
           )}
+        </ExpandableTable>
+
+        <ExpandableTable title="placed orders" open={false}>
+          <PlacedOrdersTable />
         </ExpandableTable>
 
         <ExpandableTable title="database" open={false}>

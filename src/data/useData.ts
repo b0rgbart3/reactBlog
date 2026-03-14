@@ -1,6 +1,6 @@
 'use client';
 // UseData.ts
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { User, useStore } from "../state/useStore";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
@@ -15,7 +15,8 @@ export function useData() {
     productsLoaded, settingsLoaded, setSettingsLoaded, products,
     setArticlesLoaded, setArticles, setProducts, setProductCategories, setCategories,
     setLoginLoaded, loginLoaded, users, setUsers, setProductsLoaded,
-    setUser, setSettings, settings } = useStore((s) => s);
+    setUser, setSettings, settings,
+    setPlacedOrders, placedOrdersLoaded, setPlacedOrdersLoaded } = useStore((s) => s);
 
   const fetchSettings = useCallback(async () => {
     if (settingsLoaded) return;
@@ -126,9 +127,21 @@ export function useData() {
     localStorage.removeItem("jwt");
   }, [setUser])
 
-  const displayMerch = useCallback(async (auth: AuthObject) => {
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      try {
+        const decoded = jwtDecode<User>(token);
+        setUser(decoded);
+      } catch {
+        localStorage.removeItem("jwt");
+      }
+    }
+  }, [])
+
+  const displayMerch = useCallback(async (auth: AuthObject, settingName: string = 'showMerch') => {
     try {
-      await axios.post('/api/toggleMerch/', auth);
+      await axios.post('/api/toggleMerch/', { ...auth, settingName });
       const res = await axios.get("/api/settings");
       setSettings(res.data.data);
     }
@@ -149,6 +162,17 @@ export function useData() {
       return wiped;
     }
   }, []);
+
+  const fetchPlacedOrders = useCallback(async () => {
+    if (placedOrdersLoaded) return;
+    setPlacedOrdersLoaded(true);
+    try {
+      const res = await axios.get("/api/orders");
+      setPlacedOrders(res.data.data);
+    } catch (err) {
+      console.error("Failed to fetch placed orders:", err);
+    }
+  }, [placedOrdersLoaded]);
 
   const backUpDB = useCallback(async (auth: AuthObject) => {
     let backedUp;
@@ -175,6 +199,7 @@ export function useData() {
     fetchUsers,
     fetchProducts,
     fetchSettings,
+    fetchPlacedOrders,
     refresh,
     login,
     logout,
