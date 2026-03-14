@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useStore } from "../state/useStore";
 import { useData } from "../data/useData";
@@ -11,7 +11,8 @@ export type BannerNavProps = {
 
 export function BannerNav(props) {
   const { page } = props;
-  const { user, orders } = useStore((s) => s);
+  const { user, orders, cartFlashCount } = useStore((s) => s);
+  const [cartFlashing, setCartFlashing] = useState(false);
   const { logout } = useData();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -34,6 +35,31 @@ export function BannerNav(props) {
       setIsMenuOpen(false);
     }
   });
+
+  const prevCartFlashCount = useRef(cartFlashCount);
+
+  useEffect(() => {
+    if (cartFlashCount <= prevCartFlashCount.current) {
+      prevCartFlashCount.current = cartFlashCount;
+      return;
+    }
+    prevCartFlashCount.current = cartFlashCount;
+    setCartFlashing(true);
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.35);
+    const timer = setTimeout(() => setCartFlashing(false), 500);
+    return () => clearTimeout(timer);
+  }, [cartFlashCount]);
 
   const itemClick = useCallback((e) => {
     e.stopPropagation();
@@ -63,7 +89,7 @@ export function BannerNav(props) {
         <div className="middleBannerNav"></div>
         <div className="bannerRight">
           {orders.length > 0 && !isMenuOpen && (
-            <div className="orderInfo" onClick={gotoShoppingCart}>
+            <div className={`orderInfo${cartFlashing ? " orderInfo--flash" : ""}`} onClick={gotoShoppingCart}>
               Orders: {orders.length}
             </div>
           )}

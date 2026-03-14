@@ -617,6 +617,18 @@ box-sizing: border-box;;
   padding: 4px 10px;
   margin-top: 12px;
   display: block;
+  transition: padding 0.3s ease;
+}
+
+@keyframes cartButtonPulse {
+  0%   { padding: 4px 10px; }
+  50%  { padding: 14px 28px; }
+  100% { padding: 10px 22px; }
+}
+
+.cartButton--pulse {
+  animation: cartButtonPulse 0.5s ease forwards;
+  padding: 10px 22px;
 }
 
 .ordersContainer {
@@ -648,6 +660,17 @@ box-sizing: border-box;;
   position: absolute;
   right: 64px;
   top: 14px;
+}
+
+@keyframes cartFlash {
+  0%   { filter: brightness(1) drop-shadow(0 0 0px transparent); transform: scale(1); }
+  20%  { filter: brightness(12) drop-shadow(0 0 12px white); transform: scale(1.25); }
+  60%  { filter: brightness(3) drop-shadow(0 0 5px rgba(255,255,255,0.6)); transform: scale(1.1); }
+  100% { filter: brightness(1) drop-shadow(0 0 0px transparent); transform: scale(1); }
+}
+
+.orderInfo--flash {
+  animation: cartFlash 0.5s ease-out forwards;
 }
 
 .orderInfo:hover {

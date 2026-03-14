@@ -107,6 +107,8 @@ type State = {
   setUsers: (users: User[] | null) => void;
   orders: Order[];
   setOrders: (orders: Order[] | null) => void;
+  cartFlashCount: number;
+  setCartFlashCount: (n: number) => void;
   settings: Setting[];
   setSettings: (settings: Setting[] | null) => void;
   settingsLoaded: boolean;
@@ -152,6 +154,8 @@ export const useStore = create<State>()(persist((set) => ({
     }),
   orders: [],
   setOrders: (orders: Order[] | null) => set({ orders: orders }),
+  cartFlashCount: 0,
+  setCartFlashCount: (n: number) => set({ cartFlashCount: n }),
   settings: [],
   settingsLoaded: false,
   setSettings: (settings: Setting[] | null) => set({ settings: settings }),

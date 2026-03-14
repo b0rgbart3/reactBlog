@@ -1,8 +1,10 @@
 {
+  "/api/articles/route": "app/api/articles/route.js",
+  "/api/settings/route": "app/api/settings/route.js",
+  "/api/users/route": "app/api/users/route.js",
   "/page": "app/page.js",
   "/product/[id]/page": "app/product/[id]/page.js",
-  "/memes/page": "app/memes/page.js",
-  "/admin/page": "app/admin/page.js",
   "/products/page": "app/products/page.js",
-  "/cart/page": "app/cart/page.js"
+  "/cart/page": "app/cart/page.js",
+  "/memes/page": "app/memes/page.js"
 }

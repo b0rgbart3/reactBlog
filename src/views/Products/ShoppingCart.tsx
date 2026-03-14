@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useData } from "../../data/useData";
@@ -13,7 +13,7 @@ export function ShoppingCart() {
   }, []);
   const { products, orders, setOrders } = useStore((s) => s);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const [hasHydrated, setHasHydrated] = useState(false);
@@ -22,33 +22,38 @@ export function ShoppingCart() {
     if (useStore.persist.hasHydrated()) {
       setHasHydrated(true);
     } else {
-      const unsub = useStore.persist.onFinishHydration(() => setHasHydrated(true));
+      const unsub = useStore.persist.onFinishHydration(() =>
+        setHasHydrated(true),
+      );
       return unsub;
     }
   }, []);
 
   useEffect(() => {
     if (hasHydrated && orders.length === 0) {
-      router.push('/');
+      router.push("/");
     }
   }, [hasHydrated, orders]);
 
-  const removeOrder = useCallback((itemToRemove) => {
-    const newOrderSet = orders.filter((order) => order._id !== itemToRemove);
-    setOrders(newOrderSet);
-  }, [orders]);
+  const removeOrder = useCallback(
+    (itemToRemove) => {
+      const newOrderSet = orders.filter((order) => order._id !== itemToRemove);
+      setOrders(newOrderSet);
+    },
+    [orders],
+  );
 
   const proceedToCheckout = useCallback(async () => {
     setLoading(true);
-    setError('');
+    setError("");
     try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orders }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Checkout failed');
+      if (!res.ok) throw new Error(data.error || "Checkout failed");
       window.location.href = data.url;
     } catch (err: any) {
       setError(err.message);
@@ -58,33 +63,61 @@ export function ShoppingCart() {
 
   return (
     <>
-      <BannerNav page='product' />
-      <div className='basicBox'>
-        <div><h1>Your Shopping Cart:</h1></div>
-        Orders: {orders.length}
-        <div className='ordersContainer'>
-          {orders.map((order) => {
-            const associatedProduct = products.find((p) => p._id === order.productID);
+      <BannerNav page="product" />
+      <div className="basicBox">
+        <div>
+          <h1>Your Shopping Cart:</h1>
+        </div>
+        <div
+          style={{
+            color: "white",
+            fontSize: "1.5em",
+            fontWeight: "bold",
+            paddingBottom: "8px",
+          }}
+        >
+          You have {orders.length} {orders.length === 1 ? "order" : "orders"}.
+        </div>
+        <div className="ordersContainer">
+          {orders.map((order, index) => {
+            const associatedProduct = products.find(
+              (p) => p._id === order.productID,
+            );
             return (
-              <div className='orderBox' key={order._id}>
-                Order:
-                <div className='orderProductImg'><img src={associatedProduct?.beauty} /></div>
+              <div className="orderBox" key={order._id}>
+                Order #{index + 1}
+                <div className="orderProductImg">
+                  <img src={associatedProduct?.beauty} />
+                </div>
                 <div>Product: {associatedProduct?.productName}</div>
                 <div>Quantity: {order.quantity}</div>
                 <div>Size: {order.chosenSize}</div>
-                <div className='removeOrder' onClick={() => removeOrder(order._id)}>Remove this order</div>
+                <div
+                  className="removeOrder"
+                  onClick={() => removeOrder(order._id)}
+                >
+                  Remove this order
+                </div>
               </div>
-            )
+            );
           })}
         </div>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        <p style={{ fontSize: '0.85rem', color: '#00c000', margin: '0.5rem 0' }}>
+        {error && <div style={{ color: "red" }}>{error}</div>}
+        <p
+          style={{ fontSize: "0.85rem", color: "#00c000", margin: "0.5rem 0" }}
+        >
+          Please note: <br />
           You will be redirected to Stripe to complete your payment securely.
         </p>
-        <button onClick={proceedToCheckout} disabled={loading}>
-          {loading ? 'Redirecting...' : 'Proceed To Checkout'}
-        </button>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <button onClick={proceedToCheckout} disabled={loading}>
+            {loading ? "Redirecting..." : "Proceed To Checkout"}
+          </button>
+          <button onClick={() => router.push("/products")}>
+            Continue Shopping
+          </button>
+        </div>
       </div>
     </>
-  )
+  );
 }

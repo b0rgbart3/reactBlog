@@ -2,6 +2,10 @@
 @use 'colors' as *;
 @use 'variables' as *;
 
+.sizeWarning {
+  color: orange;
+}
+
 
 .productsGrid {
   display: grid;
@@ -125,6 +129,47 @@
     padding: 0 30px;
 }
 
+.productBeautyImageWrap {
+    position: relative;
+}
+
+.productBeautyNav {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.productNavArrow {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: all;
+    transition: background-color 0.2s;
+    line-height: 1;
+    padding: 0;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+}
+
+.productNavArrow--hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .productBeauty img {
     width: 100%;
     margin-top: 20px;
@@ -149,6 +194,16 @@
   font-weight: 700;
   color: #7ec8e3;
   margin-bottom: 20px;
+}
+
+.addToCartSection {
+  transition: opacity 0.3s ease;
+}
+
+.addToCartSection--ghosted {
+  opacity: 0.3;
+  pointer-events: none;
+  user-select: none;
 }
 
 .sizeBoxes {
