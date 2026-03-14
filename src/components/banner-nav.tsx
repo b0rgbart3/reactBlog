@@ -46,6 +46,7 @@ export function BannerNav(props) {
       case "about": router.push("/about"); break;
       case "resources": router.push("/resources"); break;
       case "memes": router.push("/memes"); break;
+      case "products": router.push("/products"); break;
       case "logout":
         logout();
         setIsMenuOpen(false);
@@ -88,6 +89,9 @@ export function BannerNav(props) {
             </div>
             <div data-nav="memes" data-type="menuItem" className="innerMenuOption" id="menuItem6" onClick={itemClick}>
               Memes
+            </div>
+            <div data-nav="products" data-type="menuItem" className="innerMenuOption" onClick={itemClick}>
+              Merch
             </div>
             {orders && orders.length > 0 && (
               <div data-nav="cart" data-type="menuItem" className="innerMenuOption" id="menuItem4" onClick={itemClick}>

@@ -1,14 +1,37 @@
 'use client';
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useData } from "../../data/useData";
 import { useStore } from "../../state/useStore";
 import { BannerNav } from "../../components/banner-nav";
 
 export function ShoppingCart() {
-  useData();
+  const { fetchProducts } = useData();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   const { products, orders, setOrders } = useStore((s) => s);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const router = useRouter();
+
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  useEffect(() => {
+    if (useStore.persist.hasHydrated()) {
+      setHasHydrated(true);
+    } else {
+      const unsub = useStore.persist.onFinishHydration(() => setHasHydrated(true));
+      return unsub;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (hasHydrated && orders.length === 0) {
+      router.push('/');
+    }
+  }, [hasHydrated, orders]);
 
   const removeOrder = useCallback((itemToRemove) => {
     const newOrderSet = orders.filter((order) => order._id !== itemToRemove);
@@ -55,6 +78,9 @@ export function ShoppingCart() {
           })}
         </div>
         {error && <div style={{ color: 'red' }}>{error}</div>}
+        <p style={{ fontSize: '0.85rem', color: '#00c000', margin: '0.5rem 0' }}>
+          You will be redirected to Stripe to complete your payment securely.
+        </p>
         <button onClick={proceedToCheckout} disabled={loading}>
           {loading ? 'Redirecting...' : 'Proceed To Checkout'}
         </button>

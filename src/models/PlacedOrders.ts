@@ -27,7 +27,6 @@ const PlacedOrderSchema = new Schema({
   items: [OrderItemSchema],
   shippingAddress: ShippingAddressSchema,
   sentToPrinter: { type: Boolean, default: false },
-  sentToCustomer: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export const PlacedOrders =

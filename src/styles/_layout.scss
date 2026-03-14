@@ -613,6 +613,12 @@ box-sizing: border-box;;
   cursor: pointer;
 }
 
+.cartButton--nav {
+  padding: 4px 10px;
+  margin-top: 12px;
+  display: block;
+}
+
 .ordersContainer {
   display: block;
   // border: 2px solid fuchsia;
@@ -641,6 +647,7 @@ box-sizing: border-box;;
   box-sizing: border-box;
   position: absolute;
   right: 64px;
+  top: 14px;
 }
 
 .orderInfo:hover {

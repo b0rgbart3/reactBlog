@@ -10,7 +10,7 @@ export function PlacedOrdersTable() {
   const [activeOpen, setActiveOpen] = useState(true);
   const [completedOpen, setCompletedOpen] = useState(true);
 
-  const toggleField = useCallback((id: string, field: 'sentToPrinter' | 'sentToCustomer', value: boolean) => {
+  const toggleField = useCallback((id: string, field: 'sentToPrinter', value: boolean) => {
     setTogglingId(id);
     fetch('/api/orders', {
       method: 'PATCH',
@@ -42,11 +42,11 @@ export function PlacedOrdersTable() {
 
   useEffect(() => { loadOrders(); }, []);
 
-  const activeOrders = placedOrders.filter((o) => !(o.sentToPrinter && o.sentToCustomer));
-  const completedOrders = placedOrders.filter((o) => o.sentToPrinter && o.sentToCustomer);
+  const activeOrders = placedOrders.filter((o) => !o.sentToPrinter);
+  const completedOrders = placedOrders.filter((o) => o.sentToPrinter);
 
-  const renderOrder = (order) => (
-        <div key={order._id} className="bUser">
+  const renderOrder = (order, completed = false) => (
+        <div key={order._id} className={`bUser ${completed ? 'bUser-completed' : 'bUser-active'}`}>
           <div className="bUserHeader" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span>
               {order.customerName || order.customerEmail || 'Pending payment'}
@@ -129,17 +129,6 @@ export function PlacedOrdersTable() {
             </div>
           </div>
 
-          <div className="bRow">
-            <div className="bLabel">Sent to Customer</div>
-            <div className="bItem">
-              <input
-                type="checkbox"
-                checked={!!order.sentToCustomer}
-                disabled={togglingId === order._id}
-                onChange={(e) => toggleField(order._id, 'sentToCustomer', e.target.checked)}
-              />
-            </div>
-          </div>
         </div>
   );
 
@@ -162,7 +151,7 @@ export function PlacedOrdersTable() {
       </div>
       {activeOpen && (activeOrders.length === 0
         ? <div className="bMeta">No active orders.</div>
-        : activeOrders.map((order) => <React.Fragment key={order._id}>{renderOrder(order)}</React.Fragment>)
+        : activeOrders.map((order) => <React.Fragment key={order._id}>{renderOrder(order, false)}</React.Fragment>)
       )}
 
       <div
@@ -175,7 +164,7 @@ export function PlacedOrdersTable() {
       </div>
       {completedOpen && (completedOrders.length === 0
         ? <div className="bMeta">No completed orders.</div>
-        : completedOrders.map((order) => <React.Fragment key={order._id}>{renderOrder(order)}</React.Fragment>)
+        : completedOrders.map((order) => <React.Fragment key={order._id}>{renderOrder(order, true)}</React.Fragment>)
       )}
     </div>
   );

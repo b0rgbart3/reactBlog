@@ -74,7 +74,6 @@ export type PlacedOrder = {
   shippingAddress?: ShippingAddress;
   createdAt: string;
   sentToPrinter: boolean;
-  sentToCustomer: boolean;
 }
 
 export type Setting = {

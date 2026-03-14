@@ -90,6 +90,21 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/newUser/page.js"
+    ],
+    "/resources/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/resources/page.js"
+    ],
+    "/memes/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/memes/page.js"
+    ],
+    "/products/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/products/page.js"
     ]
   }
 }

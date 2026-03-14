@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useData } from "../../data/useData";
 import { Order, useStore } from "../../state/useStore";
 import { BannerNav } from "../../components/banner-nav";
@@ -10,6 +10,7 @@ export function ProductPage() {
   useData();
   const params = useParams<{ id: string }>();
   const id = params.id;
+  const router = useRouter();
 
   const { products, orders, setOrders } = useStore((s) => s);
   const [chosenSize, setChosenSize] = useState('');
@@ -89,6 +90,8 @@ export function ProductPage() {
                 <button className='quantityButton' onClick={addQuantity}>+</button>
               </div>
               <button className='cartButton' onClick={addToCart}>Add to Cart</button>
+              <button className='cartButton cartButton--nav' onClick={() => router.push('/products')}>Continue Shopping</button>
+              <button className='cartButton cartButton--nav' onClick={() => router.push('/cart')}>Go to my Cart</button>
             </div>
           </div>
           <div className='productDetails'>

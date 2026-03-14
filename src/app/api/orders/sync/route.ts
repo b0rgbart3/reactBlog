@@ -54,9 +54,13 @@ export async function POST(request: NextRequest) {
 
   const result = await PlacedOrders.findOneAndUpdate(
     { stripeSessionId: sessionId },
-    { $set: updateFields }
+    { $set: updateFields },
+    { new: true }
   );
 
   console.log('Order sync result:', result ? 'updated' : 'NOT FOUND', '| sessionId:', sessionId);
-  return NextResponse.json({ status: result ? 'synced' : 'order_not_found' });
+  if (!result) {
+    return NextResponse.json({ status: 'order_not_found' });
+  }
+  return NextResponse.json({ status: 'synced', order: result });
 }

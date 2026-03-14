@@ -151,6 +151,15 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
+.bUser-active {
+    border-left: 3px solid rgba(34, 197, 94, 0.55);
+}
+
+.bUser-completed {
+    border-left: 3px solid rgba(255,255,255,0.1);
+    opacity: 0.72;
+}
+
 .bUserHeader {
     background-color: $admin-theme-color;
     color: $admin-foreground;

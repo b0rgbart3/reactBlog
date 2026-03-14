@@ -17,10 +17,9 @@ export async function GET() {
 export async function PATCH(request: Request) {
   await connectDB();
   try {
-    const { id, sentToPrinter, sentToCustomer } = await request.json();
+    const { id, sentToPrinter } = await request.json();
     const update: Record<string, boolean> = {};
     if (sentToPrinter !== undefined) update.sentToPrinter = sentToPrinter;
-    if (sentToCustomer !== undefined) update.sentToCustomer = sentToCustomer;
     const order = await PlacedOrders.findByIdAndUpdate(id, update, { new: true }).lean();
     return NextResponse.json({ data: order });
   } catch (err: any) {
