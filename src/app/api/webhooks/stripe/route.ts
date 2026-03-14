@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
     await connectDB();
     const cd = session.customer_details;
-    const shippingDetails = session.shipping_details;
+    const shippingDetails = (session as any).shipping_details;
     const addressSource = shippingDetails?.address?.line1 ? shippingDetails.address : null;
     const address = addressSource ?? (cd?.address?.line1 ? cd.address : null);
     const updateFields: any = {
