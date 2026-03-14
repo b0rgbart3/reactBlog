@@ -4,7 +4,7 @@ import { useData } from "../../data/useData";
 import { useStore } from "../../state/useStore";
 import { useRouter } from "next/navigation";
 
-export function ProductThumbnails({ grid = false }: { grid?: boolean }) {
+export function ProductThumbnails({ grid = false, linkHeader = false }: { grid?: boolean, linkHeader?: boolean }) {
   const { fetchProducts } = useData();
   const { products } = useStore((s) => s);
   const router = useRouter();
@@ -19,7 +19,7 @@ export function ProductThumbnails({ grid = false }: { grid?: boolean }) {
 
   return (
     <>
-      <div className='sticker'>Merch</div>
+      <div className={`sticker${linkHeader ? ' sticker--link' : ''}`} onClick={linkHeader ? () => router.push('/products') : undefined}>Merch</div>
       <div className={grid ? 'productsGrid' : undefined}>
         {products.map((product, index) => (
           product.readyToPublish && (

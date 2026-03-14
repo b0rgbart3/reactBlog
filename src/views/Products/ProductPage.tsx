@@ -22,6 +22,7 @@ export function ProductPage() {
   const [count, setCount] = useState<number>(1);
   const [chooseSizeWarning, setChooseSizeWarning] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const addQuantity = useCallback(() => {
     if (count <= 19) setCount(count + 1);
@@ -88,8 +89,33 @@ export function ProductPage() {
       <div className="productPageLayout">
         <div className="pplChild pplChild-left">
           <div className="productBeauty">
+            <button
+              className="cartButton cartButton--nav productBackArrow"
+              onClick={() => router.push("/products")}
+              aria-label="Back to products"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="11 6 5 12 11 18" />
+              </svg>
+              All Products
+            </button>
             <div className="productBeautyImageWrap">
-              <img src={`${product?.beauty}`} alt="headline" />
+              <img
+                src={`${product?.beauty}`}
+                alt="headline"
+                className="productBeautyClickable"
+                onClick={() => window.innerWidth >= 1024 && setLightboxOpen(true)}
+              />
               <div className="productBeautyNav">
                 <button
                   className={`productNavArrow productNavArrow--left${!prevProduct ? " productNavArrow--hidden" : ""}`}
@@ -221,6 +247,11 @@ export function ProductPage() {
           </div>
         </div>
       </div>
+      {lightboxOpen && (
+        <div className="beautyLightbox" onClick={() => setLightboxOpen(false)}>
+          <img src={`${product?.beauty}`} alt="headline enlarged" />
+        </div>
+      )}
     </>
   );
 }

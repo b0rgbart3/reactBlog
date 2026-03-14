@@ -185,6 +185,15 @@ h1 {
       text-align: center;
 }
 
+.sticker--link {
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  &:hover {
+    background-color: $sticker-text;
+    color: $sticker-color;
+  }
+}
+
 .thankYou {
   font-weight: 500;
   color: $foreground;

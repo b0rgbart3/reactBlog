@@ -92,6 +92,7 @@ export function ShoppingCart() {
                 <div>Product: {associatedProduct?.productName}</div>
                 <div>Quantity: {order.quantity}</div>
                 <div>Size: {order.chosenSize}</div>
+                <div>Price: ${((associatedProduct?.price ?? 0) / 100 * order.quantity).toFixed(2)}</div>
                 <div
                   className="removeOrder"
                   onClick={() => removeOrder(order._id)}
@@ -103,6 +104,22 @@ export function ShoppingCart() {
           })}
         </div>
         {error && <div style={{ color: "red" }}>{error}</div>}
+        <div
+          style={{
+            fontSize: "1.8rem",
+            fontWeight: "bold",
+            color: "#add8e6",
+            margin: "0.75rem 0 0.5rem",
+          }}
+        >
+          Total: $
+          {orders
+            .reduce((sum, order) => {
+              const product = products.find((p) => p._id === order.productID);
+              return sum + ((product?.price ?? 0) / 100) * order.quantity;
+            }, 0)
+            .toFixed(2)}
+        </div>
         <p
           style={{ fontSize: "0.85rem", color: "#00c000", margin: "0.5rem 0" }}
         >

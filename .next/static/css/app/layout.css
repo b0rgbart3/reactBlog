@@ -179,6 +179,15 @@ h1 {
   text-align: center;
 }
 
+.sticker--link {
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.sticker--link:hover {
+  background-color: #3d5893;
+  color: rgb(2.2, 5.6, 9);
+}
+
 .thankYou {
   font-weight: 500;
   color: #ffffff;
@@ -1321,6 +1330,17 @@ button:active {
   padding: 0 30px;
 }
 
+.productBackArrow {
+  display: flex;
+  width: -moz-fit-content;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0;
+  margin-bottom: 8px;
+  align-self: flex-start;
+}
+
 .productBeautyImageWrap {
   position: relative;
 }
@@ -1367,6 +1387,29 @@ button:active {
   border-radius: 8px;
 }
 
+@media (min-width: 1024px) {
+  .productBeautyClickable {
+    cursor: zoom-in;
+  }
+}
+
+.beautyLightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+.beautyLightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
 .prodcutTitle {
   text-align: left;
   margin-top: 20px;
@@ -1378,6 +1421,7 @@ button:active {
 .productDescriptionBlock {
   text-align: left;
   padding: 0 10px;
+  font-size: 1.15rem;
 }
 
 .productPrice {

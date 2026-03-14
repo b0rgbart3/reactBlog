@@ -115,6 +115,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/products/[id]/route.js"
+    ],
+    "/product/new/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/product/new/page.js"
     ]
   }
 }

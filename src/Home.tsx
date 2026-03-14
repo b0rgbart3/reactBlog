@@ -48,7 +48,7 @@ export function Home() {
         <BannerNav page="home" />
         <div className="home">
           <div className="mainColumn">
-            {isMobile && showMerch && <ProductThumbnails />}
+            {isMobile && showMerch && <ProductThumbnails linkHeader />}
             <div className="sticker">Articles</div>
             <Articles />
             {showMerch && (
@@ -59,7 +59,7 @@ export function Home() {
             )}
           </div>
           <div className="sideColumn">
-            {showMerch && !isMobile && <ProductThumbnails />}
+            {showMerch && !isMobile && <ProductThumbnails linkHeader />}
             {!showMerch && (
               <>
                 <div className="sticker">Memes</div>
