@@ -7,6 +7,8 @@ export function PlacedOrdersTable() {
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [activeOpen, setActiveOpen] = useState(true);
+  const [completedOpen, setCompletedOpen] = useState(true);
 
   const toggleField = useCallback((id: string, field: 'sentToPrinter' | 'sentToCustomer', value: boolean) => {
     setTogglingId(id);
@@ -40,16 +42,10 @@ export function PlacedOrdersTable() {
 
   useEffect(() => { loadOrders(); }, []);
 
-  return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-        <span className="bMeta">{placedOrders.length} order{placedOrders.length !== 1 ? 's' : ''}</span>
-        <div className="newArticleButton" onClick={loadOrders} style={{ opacity: loading ? 0.5 : 1 }}>
-          {loading ? 'Loading…' : 'Refresh'}
-        </div>
-      </div>
-      {placedOrders.length === 0 && <div className="bMeta">No orders placed yet.</div>}
-      {placedOrders.map((order) => (
+  const activeOrders = placedOrders.filter((o) => !(o.sentToPrinter && o.sentToCustomer));
+  const completedOrders = placedOrders.filter((o) => o.sentToPrinter && o.sentToCustomer);
+
+  const renderOrder = (order) => (
         <div key={order._id} className="bUser">
           <div className="bUserHeader" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span>
@@ -145,7 +141,42 @@ export function PlacedOrdersTable() {
             </div>
           </div>
         </div>
-      ))}
+  );
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <span className="bMeta">{activeOrders.length} active · {completedOrders.length} completed</span>
+        <div className="newArticleButton" onClick={loadOrders} style={{ opacity: loading ? 0.5 : 1 }}>
+          {loading ? 'Loading…' : 'Refresh'}
+        </div>
+      </div>
+
+      <div
+        className="killCategory"
+        onClick={() => setActiveOpen((v) => !v)}
+        style={{ padding: '10px 12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}
+      >
+        <span>Active Orders ({activeOrders.length})</span>
+        <span style={{ fontSize: 12, opacity: 0.6 }}>{activeOpen ? '▲' : '▼'}</span>
+      </div>
+      {activeOpen && (activeOrders.length === 0
+        ? <div className="bMeta">No active orders.</div>
+        : activeOrders.map((order) => <React.Fragment key={order._id}>{renderOrder(order)}</React.Fragment>)
+      )}
+
+      <div
+        className="killCategory"
+        onClick={() => setCompletedOpen((v) => !v)}
+        style={{ marginTop: 16, padding: '10px 12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}
+      >
+        <span>Completed Orders ({completedOrders.length})</span>
+        <span style={{ fontSize: 12, opacity: 0.6 }}>{completedOpen ? '▲' : '▼'}</span>
+      </div>
+      {completedOpen && (completedOrders.length === 0
+        ? <div className="bMeta">No completed orders.</div>
+        : completedOrders.map((order) => <React.Fragment key={order._id}>{renderOrder(order)}</React.Fragment>)
+      )}
     </div>
   );
 }

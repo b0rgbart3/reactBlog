@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useCallback, useState } from "react";
 import { User, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
@@ -26,7 +26,9 @@ export function Login() {
     }
   };
 
-  const newUser = useCallback(() => { router.push(`/newUser`); }, [router]);
+  const newUser = useCallback(() => {
+    router.push(`/newUser`);
+  }, [router]);
 
   return (
     <>
@@ -36,18 +38,35 @@ export function Login() {
           <h2>Please Log In:</h2>
           <form onSubmit={handleSubmit}>
             <label>User Name: </label>
-            <input type="text" id="user_name" size={50} value={userName} onChange={(e) => setUserName(e.target.value)} />
+            <input
+              type="text"
+              id="user_name"
+              size={50}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
             <br></br>
             <label>Password: </label>
-            <input type="password" id="phash" value={loginWord} onChange={(e) => setLoginWord(e.target.value)} size={50} />
-            {errorState && <div className="errorMessage">Not able to login, please try again.</div>}
-            <br></br><br></br>
+            <input
+              type="password"
+              id="phash"
+              value={loginWord}
+              onChange={(e) => setLoginWord(e.target.value)}
+              size={50}
+            />
+            {errorState && (
+              <div className="errorMessage">
+                Not able to login, please try again.
+              </div>
+            )}
+            <br></br>
+            <br></br>
             <button type="submit">Login</button>
           </form>
         </div>
-        <div className="newToBorg">
+        {/* <div className="newToBorg">
           <button onClick={newUser}>New to MoonMath?</button>
-        </div>
+        </div> */}
       </div>
     </>
   );

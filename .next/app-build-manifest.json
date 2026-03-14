@@ -80,6 +80,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/toggleMerch/route.js"
+    ],
+    "/article/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/article/[id]/page.js"
+    ],
+    "/newUser/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/newUser/page.js"
     ]
   }
 }
