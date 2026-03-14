@@ -31,7 +31,9 @@ export function ProductThumbnails({ grid = false }: { grid?: boolean }) {
               </div>
               <div className='productThumbnailDescriptionBox'>
                 <div className="productThumbnailTitle">{product.productName}</div>
-                <div className='productThumbnailDescriptionBoxText'>{product.productDescription}</div>
+                <div className='productThumbnailDescriptionBoxText'>
+                  {product.productDescription?.split(/\s+/).slice(0, 30).join(' ')}{product.productDescription?.split(/\s+/).length > 30 ? '…' : ''}
+                </div>
               </div>
             </div>
           )

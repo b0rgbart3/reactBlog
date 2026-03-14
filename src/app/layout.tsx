@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '@/src/styles/index.scss';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://moon-math.online'),
   title: {
     default: 'moon-math.online',
     template: '%s | moon-math.online',
