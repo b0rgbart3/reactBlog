@@ -1,10 +1,10 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useStore } from '../../state/useStore';
 import { useSearchParams } from 'next/navigation';
 
-export default function OrderSuccessPage() {
+function OrderSuccessContent() {
   const { setOrders } = useStore((s) => s);
   const searchParams = useSearchParams();
   const session_id = searchParams.get('session_id');
@@ -77,5 +77,13 @@ export default function OrderSuccessPage() {
 
       <Link href='/'>Back to Home</Link>
     </div>
+  );
+}
+
+export default function OrderSuccessPage() {
+  return (
+    <Suspense>
+      <OrderSuccessContent />
+    </Suspense>
   );
 }
