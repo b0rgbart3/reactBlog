@@ -1,14 +1,8 @@
 {
-  "/api/articles/route": "app/api/articles/route.js",
-  "/api/settings/route": "app/api/settings/route.js",
-  "/api/products/route": "app/api/products/route.js",
-  "/api/users/route": "app/api/users/route.js",
-  "/api/products/[id]/route": "app/api/products/[id]/route.js",
-  "/api/orders/route": "app/api/orders/route.js",
-  "/products/page": "app/products/page.js",
-  "/admin/page": "app/admin/page.js",
   "/page": "app/page.js",
-  "/product/new/page": "app/product/new/page.js",
-  "/product/edit/[_id]/page": "app/product/edit/[_id]/page.js",
-  "/product/[id]/page": "app/product/[id]/page.js"
+  "/products/page": "app/products/page.js",
+  "/product/[id]/page": "app/product/[id]/page.js",
+  "/article/[id]/page": "app/article/[id]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/product/edit/[_id]/page": "app/product/edit/[_id]/page.js"
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Article, Product, useStore } from "../state/useStore";
@@ -10,30 +10,48 @@ import { ExpandableTable } from "./ExpandableTable";
 import { PlacedOrdersTable } from "./PlacedOrdersTable";
 
 export function AdminPanel() {
-  const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch } = useData();
-  const { user, articles, categories, products, productCategories, users, settings } = useStore((s) => s);
-  const showMerch = settings?.find((s) => s.name === "showMerch")?.booleanValue ?? false;
-  const showMerchLocal = settings?.find((s) => s.name === "showMerchLocal")?.booleanValue ?? false;
+  const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch } =
+    useData();
+  const {
+    user,
+    articles,
+    categories,
+    products,
+    productCategories,
+    users,
+    settings,
+  } = useStore((s) => s);
+  const showMerch =
+    settings?.find((s) => s.name === "showMerch")?.booleanValue ?? false;
+  const showMerchLocal =
+    settings?.find((s) => s.name === "showMerchLocal")?.booleanValue ?? false;
   const router = useRouter();
 
-  const editArticle = useCallback((article: Article) => {
-    router.push(`/article/edit/${article._id}`);
-  }, [router]);
+  const editArticle = useCallback(
+    (article: Article) => {
+      router.push(`/article/edit/${article._id}`);
+    },
+    [router],
+  );
 
-  const editProduct = useCallback((product: Product) => {
-    router.push(`/product/edit/${product._id}`);
-  }, [router]);
+  const editProduct = useCallback(
+    (product: Product) => {
+      router.push(`/product/edit/${product._id}`);
+    },
+    [router],
+  );
 
   const toggleMerch = useCallback(() => {
-    displayMerch({ id: user._id, key: user.phash }, 'showMerch');
+    displayMerch({ id: user._id, key: user.phash }, "showMerch");
   }, [user]);
 
   const toggleMerchLocal = useCallback(() => {
-    displayMerch({ id: user._id, key: user.phash }, 'showMerchLocal');
+    displayMerch({ id: user._id, key: user.phash }, "showMerchLocal");
   }, [user]);
 
   const killArticle = useCallback((article: Article) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete this article,
+    const confirmDelete =
+      window.confirm(`Are you sure you want to delete this article,
             titled: ${article.title} ?
             \nIt will be complete deleted from the database, and cannot be restored.`);
     if (!confirmDelete) return;
@@ -42,7 +60,8 @@ export function AdminPanel() {
   }, []);
 
   const killAProduct = useCallback((productToKill: Product) => {
-    const confirmDelete = window.confirm(`Are you sure you want to delete this product,
+    const confirmDelete =
+      window.confirm(`Are you sure you want to delete this product,
             named: ${productToKill.productName} ?
             \nIt will be complete deleted from the database, and cannot be restored.`);
     if (!confirmDelete) return;
@@ -50,8 +69,12 @@ export function AdminPanel() {
     refresh();
   }, []);
 
-  const newArticle = useCallback(() => { router.push(`/article/new`); }, [router]);
-  const newProduct = useCallback(() => { router.push(`/product/new`); }, [router]);
+  const newArticle = useCallback(() => {
+    router.push(`/article/new`);
+  }, [router]);
+  const newProduct = useCallback(() => {
+    router.push(`/product/new`);
+  }, [router]);
 
   const clearOut = useCallback(async () => {
     let wiped;
@@ -82,49 +105,91 @@ export function AdminPanel() {
         </ExpandableTable>
 
         <ExpandableTable title="articles" open={false}>
-          <div onClick={newArticle} className="newArticleButton">New Article</div>
-          <br></br>
-          {categories?.map((category, categoryIndex) => (
-            <div key={`category-${category}-${categoryIndex}`}>
-              <div className="killCategory">{category}</div>
-              <div className="articlesTable">
-                {articles?.filter((a) => a.category === category).map((a) => (
-                  <React.Fragment key={a._id}>
-                    <div className="aaRow">
-                      <div className="aaItem" onClick={() => editArticle(a)}>{a.title}</div>
-                      <div className="killButton" onClick={() => killArticle(a)}>X</div>
+          <div onClick={newArticle} className="newArticleButton">
+            + Add a New Article
+          </div>
+          <div className="articlesListLabel">
+            Articles
+            <span className="articlesListCount">{articles?.length ?? 0}</span>
+          </div>
+          <div className="articlesContainer">
+            {categories?.map((category, categoryIndex) => (
+              <div className="articleCategoryGroup" key={`category-${category}-${categoryIndex}`}>
+                <div className="articleCategoryHeader">{category}</div>
+                {articles
+                  ?.filter((a) => a.category === category)
+                  .map((a) => (
+                    <div className="aaRow" key={a._id}>
+                      <div className="aaItem" onClick={() => editArticle(a)}>
+                        {a.title}
+                      </div>
+                      <div className="killButton" onClick={() => killArticle(a)}>
+                        ✕
+                      </div>
                     </div>
-                  </React.Fragment>
-                ))}
+                  ))}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </ExpandableTable>
 
         <ExpandableTable title="merchandise" open={false}>
-          <div className="merchToggle" onClick={toggleMerchLocal}>
-            <div className={showMerchLocal ? "bigCheckBoxSelected" : "bigCheckBox"}>
-              {showMerchLocal && <span className="bigCheckmark">✓</span>}
+          <div className="merchToggleRow">
+            <div className="merchToggle" onClick={toggleMerchLocal}>
+              <div
+                className={
+                  showMerchLocal ? "bigCheckBoxSelected" : "bigCheckBox"
+                }
+              >
+                {showMerchLocal && <span className="bigCheckmark">✓</span>}
+              </div>
+              <span className="merchToggleLabel">Show Merch — Local</span>
             </div>
-            <span className="merchToggleLabel">Show Merch — Local</span>
-          </div>
-          <div className="merchToggle" onClick={toggleMerch}>
-            <div className={showMerch ? "bigCheckBoxSelected" : "bigCheckBox"}>
-              {showMerch && <span className="bigCheckmark">✓</span>}
+            <div className="merchToggle" onClick={toggleMerch}>
+              <div
+                className={showMerch ? "bigCheckBoxSelected" : "bigCheckBox"}
+              >
+                {showMerch && <span className="bigCheckmark">✓</span>}
+              </div>
+              <span className="merchToggleLabel">Show Merch — Production</span>
             </div>
-            <span className="merchToggleLabel">Show Merch — Production</span>
           </div>
-          <div onClick={newProduct} className="newArticleButton">New Product</div>
+          <div onClick={newProduct} className="newArticleButton">
+            + Add a New Product
+          </div>
 
           {products && (
             <>
-              Products:<br></br>
+              <div className="productsListLabel">
+                Products
+                <span className="productsListCount">{products.length}</span>
+              </div>
               <div className="productsContainer">
                 {products.map((product) => (
-                  <div key={product._id}>
-                    <div onClick={() => editProduct(product)}>{product.productName}</div>
-                    <div>{product.productDescription}</div>
-                    <div className="killProduct" onClick={() => killAProduct(product)}>X</div>
+                  <div className="productRow" key={product._id}>
+                    <div
+                      className="productRowMain"
+                      onClick={() => editProduct(product)}
+                    >
+                      <div className="adminProductName">
+                        {product.productName}
+                      </div>
+                      <div className="productRowDesc">
+                        {product.productDescription
+                          ?.split(" ")
+                          .slice(0, 15)
+                          .join(" ")}
+                        {product.productDescription?.split(" ").length > 15
+                          ? "…"
+                          : ""}
+                      </div>
+                    </div>
+                    <div
+                      className="killProduct"
+                      onClick={() => killAProduct(product)}
+                    >
+                      ✕
+                    </div>
                   </div>
                 ))}
               </div>
@@ -139,12 +204,16 @@ export function AdminPanel() {
         <ExpandableTable title="database" open={false}>
           {user.sensi && (
             <>
-              <div className="caution" onClick={() => backUp()}>Backup the current DataBase.</div>
+              <div className="caution" onClick={() => backUp()}>
+                Backup the current DataBase.
+              </div>
               <div className="JsonData">
                 Download data to your local download folder:<br></br>
                 <DownloadJsonButton articles={articles} users={users} />
               </div>
-              <div className="dangerous" onClick={() => clearOut()}>Wipe out the DataBase, and start over with original seed data.</div>
+              <div className="dangerous" onClick={() => clearOut()}>
+                Wipe out the DataBase, and start over with original seed data.
+              </div>
             </>
           )}
         </ExpandableTable>

@@ -68,34 +68,87 @@
 }
 
 
-.killCategory {
-    background-color: $admin-background;
-    text-align: left;
+.articlesListLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($admin-text, 0.5);
+    margin-top: 16px;
+    margin-bottom: 6px;
+}
+
+.articlesListCount {
+    font-size: 14px;
+    font-weight: 700;
+    color: $admin-foreground;
+    background-color: rgba($admin-text, 0.1);
+    border: 1px solid rgba($admin-text, 0.2);
+    border-radius: 10px;
+    padding: 1px 8px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.articlesContainer {
+    border: 1px solid rgba($admin-text, 0.15);
+    border-radius: $border-radius-md;
+    overflow: hidden;
+}
+
+.articleCategoryGroup {
+    & + & {
+        margin-top: 12px;
+        border-top: 1px solid rgba($admin-text, 0.12);
+        padding-top: 4px;
+    }
+}
+
+.articleCategoryHeader {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($admin-text, 0.45);
+    background-color: rgba($admin-background, 0.5);
+    padding: 5px 14px;
+    border-bottom: 1px solid rgba($admin-text, 0.1);
 }
 
 .aaRow {
-    background-color: $row-bg;
+    background-color: rgba($admin-background, 0.3);
     cursor: pointer;
     display: flex;
-    align-items: center;    /* vertically center items if heights differ */
-    justify-content: space-between; /* push them apart horizontally */
+    align-items: center;
     width: 100%;
     user-select: none;
-    color: $row-color;
+    border-bottom: 1px solid rgba($admin-text, 0.08);
+    transition: background-color $transition-fast;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:nth-child(even) {
+        background-color: rgba($admin-neutral-color, 0.2);
+    }
+
+    &:hover {
+        background-color: rgba($admin-theme-color, 0.2);
+    }
 }
 
 .aaItem {
-    flex: 1;                /* take up all remaining space */
+    flex: 1;
     text-align: left;
-    padding-left: 14px;
-    padding-top: 8px;
-    padding-bottom: 12px;
+    padding: 9px 14px;
+    font-size: 14px;
+    font-weight: 600;
     color: $admin-text;
-}
-
-.aaRow:hover {
-    background-color: $row-hover-bg;
-    color: $admin-foreground;
+    transition: color $transition-fast;
 }
 
 .aaRow:hover .aaItem {
@@ -103,7 +156,7 @@
 }
 
 .aaRow:hover:has(.killButton:hover) {
-    background-color: $row-bg;/* or your normal background */
+    background-color: rgba($admin-background, 0.3);
 }
 
 .killButton,
@@ -419,9 +472,7 @@
 
 /* ---- Admin Panel UI ---- */
 
-.articlesTable {
-    border: 1px solid rgba($admin-text, .5);
-}
+
 .titleBar {
     color: $admin-accent-color;
     font-family: $font-serif;
@@ -451,19 +502,101 @@
     background-color: $admin-accent-color;
 }
 
+.productsListLabel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba($admin-text, 0.5);
+    margin-top: 16px;
+    margin-bottom: 6px;
+}
+
+.productsListCount {
+    font-size: 14px;
+    font-weight: 700;
+    color: $admin-foreground;
+    background-color: rgba($admin-text, 0.1);
+    border: 1px solid rgba($admin-text, 0.2);
+    border-radius: 10px;
+    padding: 1px 8px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
 .productsContainer {
-    padding: 8px 0;
+    border: 1px solid rgba($admin-text, 0.15);
+    border-radius: $border-radius-md;
+    overflow: hidden;
+}
+
+.productRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba($admin-text, 0.1);
+    background-color: rgba($admin-background, 0.3);
+    transition: background-color $transition-fast;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:nth-child(even) {
+        background-color: rgba($admin-neutral-color, 0.25);
+    }
+
+    &:hover {
+        background-color: rgba($admin-theme-color, 0.2);
+    }
+}
+
+.productRowMain {
+    flex: 1;
+    cursor: pointer;
+    min-width: 0;
+}
+
+.adminProductName {
+    font-size: 14px;
+    font-weight: 600;
+    color: $admin-text;
+    transition: color $transition-fast;
+    user-select: none;
+
+    .productRow:hover & {
+        color: $admin-foreground;
+    }
+}
+
+.productRowDesc {
+    font-size: 11px;
+    color: rgba($admin-text, 0.55);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* ---- Merch Toggle ---- */
 
+.merchToggleRow {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
 .merchToggle {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
     cursor: pointer;
     user-select: none;
-    margin-bottom: 16px;
 
     &:hover .bigCheckBox {
         border-color: $admin-accent-color;
@@ -473,10 +606,10 @@
 
 .bigCheckBox,
 .bigCheckBoxSelected {
-    width: 48px;
-    height: 48px;
-    border: 3px solid $admin-text;
-    border-radius: $border-radius-lg;
+    width: 28px;
+    height: 28px;
+    border: 2px solid $admin-text;
+    border-radius: $border-radius-md;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -491,7 +624,7 @@
 
 .bigCheckmark {
     color: $admin-accent-color;
-    font-size: 32px;
+    font-size: 18px;
     line-height: 1;
     font-weight: 700;
 }

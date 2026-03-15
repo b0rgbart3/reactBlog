@@ -681,7 +681,7 @@ box-sizing: border-box;;
   // border: 1px solid cyan;
   padding-top:50px;
   width: 80px;
-  color: $accent;
+  color: $highlight;
   user-select: none;
   cursor: pointer;
   box-sizing: border-box;
@@ -850,10 +850,14 @@ box-sizing: border-box;;
   // height: 100px;
 }
 
-.bannerRight { 
+.bannerRight {
   margin:0;
   padding:0;
   margin-right: 18px;
+}
+
+.orderInfo {
+  display: none;
 }
 
 .menu.open {

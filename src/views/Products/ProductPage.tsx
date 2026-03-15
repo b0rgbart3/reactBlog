@@ -114,7 +114,9 @@ export function ProductPage() {
                 src={`${product?.beauty}`}
                 alt="headline"
                 className="productBeautyClickable"
-                onClick={() => window.innerWidth >= 1024 && setLightboxOpen(true)}
+                onClick={() =>
+                  window.innerWidth >= 1024 && setLightboxOpen(true)
+                }
               />
               <div className="productBeautyNav">
                 <button
@@ -165,6 +167,13 @@ export function ProductPage() {
             <div className="productDescriptionBlock">
               {product.productDescription}
             </div>
+            {product.productImages?.length > 0 && (
+              <div className="productImagesStrip">
+                {product.productImages.map((img, i) => (
+                  <img key={i} src={img} alt={`Product image ${i + 1}`} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="pplChild pplChild-right">
@@ -204,7 +213,7 @@ export function ProductPage() {
                   </button>
                 </div>
                 <button className="cartButton" onClick={addToCart}>
-                  Add to Cart
+                  Add to My Cart
                 </button>
               </div>
             </div>

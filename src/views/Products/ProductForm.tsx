@@ -1,6 +1,5 @@
 'use client';
 import React, { useCallback, useState } from "react";
-import { useData } from "../../data/useData";
 import { Product, useStore } from "../../state/useStore";
 
 export type ProductFormProps = {
@@ -17,15 +16,14 @@ export type ProductFormProps = {
 }
 
 export function ProductForm(props: ProductFormProps) {
-  const { product, changeCategory, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange, handleBeautyChange, handleThumbnailChange } = props;
-  const { categories, productCategories } = useStore((s) => s);
-  const { refresh } = useData();
+  const { product, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange, handleBeautyChange, handleThumbnailChange } = props;
+  const { categories } = useStore((s) => s);
   const [images, setImages] = useState<string[]>([]);
-  const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ? product?.readyToPublish : false);
+  const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ?? false);
 
   const toggleReadyStatus = useCallback(() => {
-    setIsReady(!isReady);
-  }, [isReady]);
+    setIsReady(prev => !prev);
+  }, []);
 
   const handleFormSubmit = useCallback((e) => {
     product.readyToPublish = isReady;
@@ -34,75 +32,158 @@ export function ProductForm(props: ProductFormProps) {
 
   const addAnotherImage = useCallback(() => {
     setImages(prev => [...prev, ""]);
-  }, [images]);
+  }, []);
 
   const killProductImage = useCallback((imageNumber: number) => {
     product.productImages.splice(imageNumber, 1);
   }, [product]);
 
   return (
-    <form onSubmit={handleFormSubmit} className="new-article-form">
-      <div>
-        <label htmlFor="readyToPublish">Ready to Publish</label>
-        <br></br>
-        {isReady && (<div className='lineContainer'><div className='bButton checkBoxSelected' onClick={toggleReadyStatus}></div>Ready to publish</div>)}
-        {!isReady && (<div className='lineContainer'><div className='bButton checkBox' onClick={toggleReadyStatus}></div>Ready to publish</div>)}
+    <div className="pf-shell">
 
-        <label htmlFor="category">Category:</label>
+      {/* Header bar */}
+      <div className="pf-header">
+        <span className="pf-header-title">
+          {editing ? "Edit Product" : "New Product"}
+        </span>
+        <div className="pf-publish-toggle" onClick={toggleReadyStatus}>
+          <div className={isReady ? "pf-checkbox pf-checkbox--on" : "pf-checkbox"} />
+          <span className="pf-publish-toggle-label">Ready to Publish</span>
+        </div>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleFormSubmit} className="pf-form">
+
+        {/* Name + Price */}
+        <div className="pf-row-2">
+          <div className="pf-field">
+            <label className="pf-label" htmlFor="productName">Product Name</label>
+            <input
+              id="productName"
+              type="text"
+              name="productName"
+              value={product?.productName ?? ''}
+              onChange={handleChange}
+              required
+              placeholder="Product name"
+            />
+          </div>
+          <div className="pf-field">
+            <label className="pf-label" htmlFor="price">Price (USD)</label>
+            <input
+              id="price"
+              type="number"
+              name="price"
+              min="0"
+              step="0.01"
+              value={product?.price != null ? (product.price / 100).toFixed(2) : ''}
+              onChange={(e) => handleChange({ ...e, target: { ...e.target, name: 'price', value: String(Math.round(parseFloat(e.target.value || '0') * 100)) } } as React.ChangeEvent<HTMLInputElement>)}
+              placeholder="0.00"
+            />
+          </div>
+        </div>
+
+        {/* Category */}
         {product?.category !== "New" && (
-          <div className="row">
-            <select id="category" name='category' value={product?.category} onChange={handleChange}>
-              {categories?.map((cat) => (<option key={cat} value={cat}>{cat}</option>))}
-            </select>
-            <div>
-              <input id="newCategory" name="category" type="text" value={newCategory} placeholder="Choose-- or enter a new category here" onChange={changeNewCategory} />
+          <div className="pf-field">
+            <label className="pf-label" htmlFor="category">Category</label>
+            <div className="pf-category-row">
+              <select id="category" name="category" value={product?.category} onChange={handleChange}>
+                {categories?.map((cat) => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <input
+                id="newCategory"
+                name="category"
+                type="text"
+                value={newCategory}
+                placeholder="or enter a new category"
+                onChange={changeNewCategory}
+              />
             </div>
           </div>
         )}
 
-        <label htmlFor="productName">Product Name:</label>
-        <input id="productName" type="text" name='productName' value={product?.productName ?? ''} onChange={handleChange} required />
+        {/* Images: beauty + thumbnail */}
+        <div className="pf-section-label">Images</div>
 
-        <label htmlFor="price">Price (USD):</label>
-        <input id="price" type="number" name='price' min="0" step="0.01" value={product?.price != null ? (product.price / 100).toFixed(2) : ''} onChange={(e) => handleChange({ ...e, target: { ...e.target, name: 'price', value: String(Math.round(parseFloat(e.target.value || '0') * 100)) } } as React.ChangeEvent<HTMLInputElement>)} placeholder="0.00" />
-      </div>
-      <div><label>Images:</label></div>
-      <div>
-        <div>
-          Beauty Image:
-          {editing && product.beauty && product.beauty !== '' && (<div className='beautyPreview'><img src={product.beauty} /></div>)}
-          <input id="beauty" type="file" accept="image/*" onChange={handleBeautyChange} name="beauty" />
+        <div className="pf-image-grid">
+          <div className="pf-image-slot">
+            <div className="pf-image-slot-label">Beauty Shot</div>
+            {editing && product.beauty && product.beauty !== '' && (
+              <div className="pf-preview-wrap">
+                <img src={product.beauty} alt="Beauty preview" />
+              </div>
+            )}
+            <input className="pf-file-input" id="beauty" type="file" accept="image/*" onChange={handleBeautyChange} name="beauty" />
+          </div>
+
+          <div className="pf-image-slot">
+            <div className="pf-image-slot-label">Thumbnail</div>
+            {editing && product.thumbnail && product.thumbnail !== '' && (
+              <div className="pf-preview-wrap">
+                <img src={product.thumbnail} alt="Thumbnail preview" />
+              </div>
+            )}
+            <input className="pf-file-input" id="thumbnail" type="file" accept="image/*" onChange={handleThumbnailChange} name="thumbnail" />
+          </div>
         </div>
-        <div>
-          Thumbnail Image:
-          {editing && product.thumbnail && product.thumbnail !== '' && (<div className='thumbnailPreview'><img src={product.thumbnail} /></div>)}
-          <input id="thumbnail" type="file" accept="image/*" onChange={handleThumbnailChange} name="thumbnail" />
-        </div>
-      </div>
-      <div className='imageUploadContainer'>
-        existing images:
-        {product?.productImages?.map((productImage, imageNumber) => (
-          <React.Fragment key={imageNumber}>
-            <div className='productImagePreview'>
-              <div className='productImagePreviewThumbnail'><img src={`${product.productImages[imageNumber]}`} /></div>
-              <div className='productImagePreviewKill' onClick={() => killProductImage(imageNumber)}>X</div>
+
+        {/* Existing gallery images */}
+        {editing && product?.productImages?.length > 0 && (
+          <div className="pf-field">
+            <div className="pf-section-label">Gallery Images</div>
+            <div className="pf-gallery-grid">
+              {product.productImages.map((productImage, imageNumber) => (
+                <div className="pf-gallery-item" key={imageNumber}>
+                  <img src={productImage} alt={`Gallery ${imageNumber + 1}`} />
+                  <div className="pf-gallery-kill" onClick={() => killProductImage(imageNumber)}>✕</div>
+                </div>
+              ))}
             </div>
-          </React.Fragment>
-        ))}
-      </div>
-      <div>
-        {images.map((image, imageNumber) => (
-          <React.Fragment key={imageNumber}>Image: {image}
-            <input id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images" />
-          </React.Fragment>
-        ))}
-      </div>
-      <div onClick={addAnotherImage}>Add another image</div>
-      <div>
-        <label htmlFor="body">Product Description:</label>
-        <textarea id="productDescription" name='productDescription' value={product?.productDescription ?? ''} onChange={handleChange} required rows={6} />
-      </div>
-      <button type="submit">{editing ? 'Submit Changes' : 'Post Product'}</button>
-    </form>
-  )
+          </div>
+        )}
+
+        {/* Additional image inputs */}
+        {images.length > 0 && (
+          <div className="pf-extra-images">
+            {images.map((_, imageNumber) => (
+              <div className="pf-extra-image-row" key={imageNumber}>
+                <span className="pf-image-slot-label">Image {imageNumber + 1}</span>
+                <input className="pf-file-input" id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="pf-add-image-btn" onClick={addAnotherImage}>
+          Add Image
+        </div>
+
+        {/* Description */}
+        <div className="pf-field">
+          <label className="pf-label" htmlFor="productDescription">Description</label>
+          <textarea
+            id="productDescription"
+            name="productDescription"
+            value={product?.productDescription ?? ''}
+            onChange={handleChange}
+            required
+            rows={5}
+            placeholder="Describe the product…"
+          />
+        </div>
+
+        {/* Submit */}
+        <div className="pf-submit-row">
+          <button type="submit" className="pf-submit-btn">
+            {editing ? 'Save Changes' : 'Post Product'}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  );
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useCallback, useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Product, useStore } from "../../state/useStore";
@@ -12,8 +12,10 @@ export function EditProductPage() {
   const _id = params._id;
   const { user, categories, products, productCategories } = useStore((s) => s);
   const [category, setCategory] = useState(categories[0] || "");
-  const [newCategory, setNewCategory] = useState('');
-  const [product, setProduct] = useState<Product>(products.find((p) => p._id === _id));
+  const [newCategory, setNewCategory] = useState("");
+  const [product, setProduct] = useState<Product>(
+    products.find((p) => p._id === _id),
+  );
   const [images, setImages] = useState<File[]>([]);
   const [beauty, setBeauty] = useState<File>(null);
   const [thumbnail, setThumbnail] = useState<File>(null);
@@ -30,7 +32,8 @@ export function EditProductPage() {
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) setImages(prev => [...prev, e.target.files[0]]);
+    if (e.target.files && e.target.files[0])
+      setImages((prev) => [...prev, e.target.files[0]]);
   };
   const handleBeautyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) setBeauty(e.target.files[0]);
@@ -41,7 +44,7 @@ export function EditProductPage() {
 
   const routeHome = useCallback(() => {
     refresh();
-    router.push(`/`);
+    router.push(`/admin`);
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -53,11 +56,11 @@ export function EditProductPage() {
       formData.append("readyToPublish", String(product.readyToPublish));
       formData.append("category", newCategory.length ? newCategory : category);
       formData.append("price", String(product.price ?? 0));
-      formData.append('productImages', product.productImages as any);
-      formData.append('beauty', product.beauty);
-      formData.append('thumbnail', product.thumbnail);
-      if (beauty) formData.append('newBeauty', beauty);
-      if (thumbnail) formData.append('newThumbnail', thumbnail);
+      formData.append("productImages", product.productImages as any);
+      formData.append("beauty", product.beauty);
+      formData.append("thumbnail", product.thumbnail);
+      if (beauty) formData.append("newBeauty", beauty);
+      if (thumbnail) formData.append("newThumbnail", thumbnail);
       images.forEach((img) => formData.append("images", img));
       await axios.patch(`/api/products/${product._id}`, formData);
       router.push(`/`);
@@ -66,20 +69,35 @@ export function EditProductPage() {
     }
   };
 
-  const changeNewCategory = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setNewCategory(e.target.value);
-    setProduct((prev) => ({ ...prev, category: e?.target?.value }));
-  }, []);
+  const changeNewCategory = useCallback(
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
+    ) => {
+      setNewCategory(e.target.value);
+      setProduct((prev) => ({ ...prev, category: e?.target?.value }));
+    },
+    [],
+  );
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setProduct((prev) => ({ ...prev, [name]: value }));
-  }, []);
+  const handleChange = useCallback(
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
+    ) => {
+      const { name, value } = e.target;
+      setProduct((prev) => ({ ...prev, [name]: value }));
+    },
+    [],
+  );
 
   return (
-    <div className={'article'}>
-      <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
-      <div className='articlePageTitle'>{`Edit Product:`}</div>
+    <div className="pf-page">
+      <div className="pf-back-link" onClick={routeHome}>
+        ← Back to Admin
+      </div>
       <ProductForm
         product={product}
         handleSubmit={handleSubmit}
@@ -93,5 +111,6 @@ export function EditProductPage() {
         newCategory={newCategory}
       />
     </div>
-  )
+  );
 }
+

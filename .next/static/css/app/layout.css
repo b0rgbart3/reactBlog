@@ -811,7 +811,7 @@ h1 {
 }
 
 .orderInfo {
-  background-image: url(/_next/static/media/shopping_cart.130368c4.svg);
+  background-image: url(/_next/static/media/shopping_cart.5a141d63.svg);
   background-repeat: no-repeat;
   background-size: 40px 40px;
   background-position: 0 16px;
@@ -851,13 +851,13 @@ h1 {
 }
 
 .orderInfo:hover {
-  background-image: url(/_next/static/media/shopping_cart_hi.c95b1f36.svg);
+  background-image: url(/_next/static/media/shopping_cart_hi.f8f7eb5e.svg);
   background-repeat: no-repeat;
   background-size: 40px 40px;
   background-position: 0 16px;
   padding-top: 50px;
   width: 80px;
-  color: #367dc7;
+  color: #5fc2ff;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
@@ -1028,6 +1028,9 @@ h1 {
     padding: 0;
     margin-right: 18px;
   }
+  .orderInfo {
+    display: none;
+  }
   .menu.open {
     transform: scaleY(1) scaleX(1);
     opacity: 1;
@@ -1042,9 +1045,9 @@ h1 {
 input,
 textarea,
 select {
-  background: tint(#0b1c2d, 6%);
+  background: tint(#0b1c2d, 86%);
   color: #929fb7;
-  border: 1px solid shade(tint(#0b1c2d, 6%), 10%);
+  border: 1px solid shade(tint(#0b1c2d, 86%), 10%);
   border-radius: 4px;
   padding: 0.5rem 0.75rem;
 }
@@ -1259,14 +1262,6 @@ button:active {
   width: 100%;
 }
 
-.productImagePreviewThumbnail {
-  width: 200px;
-}
-
-.productImagePreviewThumbnail img {
-  width: 100%;
-}
-
 .productThumbnailTitle {
   font-family: "Noto Serif", serif;
   font-size: 20px;
@@ -1424,6 +1419,19 @@ button:active {
   font-size: 1.15rem;
 }
 
+.productImagesStrip {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0 10px;
+}
+.productImagesStrip img {
+  height: 240px;
+  width: auto;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
 .productPrice {
   font-size: 36px;
   font-weight: 700;
@@ -1473,6 +1481,418 @@ button:active {
 .standout {
   font-weight: 700;
   color: #5fc2ff;
+}
+
+.pf-page {
+  box-sizing: border-box;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 20px 60px;
+}
+
+.pf-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  color: rgb(125, 152, 179);
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  margin-bottom: 10px;
+  padding: 4px 0;
+  transition: color 120ms ease;
+}
+.pf-back-link:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pf-shell {
+  box-sizing: border-box;
+  border: 2px solid rgba(6, 103, 203, 0.35);
+  border-radius: 12px;
+  background-color: rgba(30, 38, 50, 0.6);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.pf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.55);
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(6, 103, 203, 0.35);
+  gap: 16px;
+  min-height: 36px;
+}
+
+.pf-header-title {
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgb(6, 103, 203);
+}
+
+.pf-publish-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  flex-shrink: 0;
+}
+
+.pf-publish-toggle-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgb(125, 152, 179);
+  transition: color 120ms ease;
+}
+
+.pf-publish-toggle:hover .pf-publish-toggle-label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pf-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgb(125, 152, 179);
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.pf-checkbox--on {
+  border-color: rgb(6, 103, 203);
+  background-color: rgba(6, 103, 203, 0.2);
+  background-image: url(/_next/static/media/checkmark.87697821.svg);
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pf-form {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pf-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  grid-gap: 12px;
+  gap: 12px;
+  align-items: start;
+}
+
+.pf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pf-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(125, 152, 179, 0.65);
+  padding: 0;
+}
+
+.pf-form input[type=text],
+.pf-form input[type=number] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: rgb(38, 46, 56);
+  border: 1px solid rgba(6, 103, 203, 0.3);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  padding: 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.pf-form input[type=text]:focus,
+.pf-form input[type=number]:focus {
+  outline: none;
+  border-color: rgb(6, 103, 203);
+  box-shadow: 0 0 0 2px rgba(6, 103, 203, 0.2);
+}
+.pf-form input[type=text]::placeholder,
+.pf-form input[type=number]::placeholder {
+  color: rgba(125, 152, 179, 0.35);
+  font-style: italic;
+}
+
+.pf-form select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: rgb(38, 46, 56) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237d98b3'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid rgba(6, 103, 203, 0.3);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  padding: 6px 28px 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+.pf-form select:focus {
+  outline: none;
+  border-color: rgb(6, 103, 203);
+  box-shadow: 0 0 0 2px rgba(6, 103, 203, 0.2);
+}
+
+.pf-form textarea {
+  background: rgb(38, 46, 56);
+  border: 1px solid rgba(6, 103, 203, 0.3);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  padding: 7px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.6;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.pf-form textarea:focus {
+  outline: none;
+  border-color: rgb(6, 103, 203);
+  box-shadow: 0 0 0 2px rgba(6, 103, 203, 0.2);
+}
+
+.pf-category-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-gap: 8px;
+  gap: 8px;
+  align-items: center;
+}
+
+.pf-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(125, 152, 179, 0.45);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(6, 103, 203, 0.2);
+}
+
+.pf-image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 12px;
+  gap: 12px;
+}
+@media (max-width: 540px) {
+  .pf-image-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pf-image-slot {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed rgba(6, 103, 203, 0.28);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pf-image-slot-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(125, 152, 179, 0.5);
+}
+
+.pf-preview-wrap {
+  width: 100%;
+  max-height: 110px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.pf-preview-wrap img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+}
+
+.pf-file-input {
+  display: block;
+  width: 100%;
+  font-size: 11px;
+  color: rgb(125, 152, 179);
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+}
+.pf-file-input::-webkit-file-upload-button {
+  -webkit-appearance: none;
+          appearance: none;
+  background: rgb(1, 82, 164);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  padding: 3px 8px;
+  margin-right: 8px;
+  -webkit-transition: background-color 120ms ease;
+  transition: background-color 120ms ease;
+}
+.pf-file-input::-webkit-file-upload-button:hover {
+  background: rgb(6, 103, 203);
+}
+
+.pf-gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pf-gallery-item {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(6, 103, 203, 0.2);
+}
+.pf-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pf-gallery-kill {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+.pf-gallery-kill:hover {
+  background: rgba(180, 20, 20, 0.9);
+  color: white;
+}
+
+.pf-gallery-empty {
+  font-size: 11px;
+  color: rgba(125, 152, 179, 0.4);
+  font-style: italic;
+}
+
+.pf-add-image-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgb(6, 103, 203);
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px dashed rgba(6, 103, 203, 0.4);
+  transition: background-color 120ms ease, border-color 120ms ease;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.pf-add-image-btn::before {
+  content: "+";
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+.pf-add-image-btn:hover {
+  background-color: rgba(6, 103, 203, 0.1);
+  border-color: rgba(6, 103, 203, 0.6);
+}
+
+.pf-extra-images {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pf-extra-image-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgb(125, 152, 179);
+}
+
+.pf-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid rgba(6, 103, 203, 0.18);
+}
+
+.pf-submit-btn {
+  background-color: rgb(1, 82, 164);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 26px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background-color 200ms ease, box-shadow 200ms ease, transform 120ms ease;
+}
+.pf-submit-btn:hover {
+  background-color: rgb(6, 103, 203);
+  box-shadow: 0 0 12px rgba(6, 103, 203, 0.45);
+}
+.pf-submit-btn:active {
+  transform: scale(0.97);
 }
 
 .adminPanel {
@@ -1544,36 +1964,84 @@ button:active {
   background-color: tint(rgb(133, 1, 1), 0.25);
 }
 
-.killCategory {
-  background-color: #000000;
-  text-align: left;
+.articlesListLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(125, 152, 179, 0.5);
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+.articlesListCount {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: rgba(125, 152, 179, 0.1);
+  border: 1px solid rgba(125, 152, 179, 0.2);
+  border-radius: 10px;
+  padding: 1px 8px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.articlesContainer {
+  border: 1px solid rgba(125, 152, 179, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.articleCategoryGroup + .articleCategoryGroup {
+  margin-top: 12px;
+  border-top: 1px solid rgba(125, 152, 179, 0.12);
+  padding-top: 4px;
+}
+
+.articleCategoryHeader {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(125, 152, 179, 0.45);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 14px;
+  border-bottom: 1px solid rgba(125, 152, 179, 0.1);
 }
 
 .aaRow {
-  background-color: tint(rgb(255, 255, 255), 0.25);
+  background-color: rgba(0, 0, 0, 0.3);
   cursor: pointer;
   display: flex;
-  align-items: center; /* vertically center items if heights differ */
-  justify-content: space-between; /* push them apart horizontally */
+  align-items: center;
   width: 100%;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  color: tint(rgb(255, 255, 255), 0.75);
+  border-bottom: 1px solid rgba(125, 152, 179, 0.08);
+  transition: background-color 120ms ease;
+}
+.aaRow:last-child {
+  border-bottom: none;
+}
+.aaRow:nth-child(even) {
+  background-color: rgba(51, 60, 69, 0.2);
+}
+.aaRow:hover {
+  background-color: rgba(1, 82, 164, 0.2);
 }
 
 .aaItem {
-  flex: 1 1; /* take up all remaining space */
+  flex: 1 1;
   text-align: left;
-  padding-left: 14px;
-  padding-top: 8px;
-  padding-bottom: 12px;
+  padding: 9px 14px;
+  font-size: 14px;
+  font-weight: 600;
   color: rgb(125, 152, 179);
-}
-
-.aaRow:hover {
-  background-color: tint(rgb(255, 255, 255), 0.15);
-  color: #ffffff;
+  transition: color 120ms ease;
 }
 
 .aaRow:hover .aaItem {
@@ -1581,7 +2049,7 @@ button:active {
 }
 
 .aaRow:hover:has(.killButton:hover) {
-  background-color: tint(rgb(255, 255, 255), 0.25); /* or your normal background */
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .killButton,
@@ -1896,10 +2364,6 @@ button:active {
 }
 
 /* ---- Admin Panel UI ---- */
-.articlesTable {
-  border: 1px solid rgba(125, 152, 179, 0.5);
-}
-
 .titleBar {
   color: rgb(6, 103, 203);
   font-family: "Noto Serif", serif;
@@ -1933,20 +2397,100 @@ button:active {
   background-color: rgb(6, 103, 203);
 }
 
+.productsListLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(125, 152, 179, 0.5);
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+.productsListCount {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: rgba(125, 152, 179, 0.1);
+  border: 1px solid rgba(125, 152, 179, 0.2);
+  border-radius: 10px;
+  padding: 1px 8px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .productsContainer {
-  padding: 8px 0;
+  border: 1px solid rgba(125, 152, 179, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.productRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(125, 152, 179, 0.1);
+  background-color: rgba(0, 0, 0, 0.3);
+  transition: background-color 120ms ease;
+}
+.productRow:last-child {
+  border-bottom: none;
+}
+.productRow:nth-child(even) {
+  background-color: rgba(51, 60, 69, 0.25);
+}
+.productRow:hover {
+  background-color: rgba(1, 82, 164, 0.2);
+}
+
+.productRowMain {
+  flex: 1 1;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.adminProductName {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(125, 152, 179);
+  transition: color 120ms ease;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.productRow:hover .adminProductName {
+  color: #ffffff;
+}
+
+.productRowDesc {
+  font-size: 11px;
+  color: rgba(125, 152, 179, 0.55);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ---- Merch Toggle ---- */
+.merchToggleRow {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
 .merchToggle {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  margin-bottom: 16px;
 }
 .merchToggle:hover .bigCheckBox {
   border-color: rgb(6, 103, 203);
@@ -1955,10 +2499,10 @@ button:active {
 
 .bigCheckBox,
 .bigCheckBoxSelected {
-  width: 48px;
-  height: 48px;
-  border: 3px solid rgb(125, 152, 179);
-  border-radius: 12px;
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgb(125, 152, 179);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1973,7 +2517,7 @@ button:active {
 
 .bigCheckmark {
   color: rgb(6, 103, 203);
-  font-size: 32px;
+  font-size: 18px;
   line-height: 1;
   font-weight: 700;
 }

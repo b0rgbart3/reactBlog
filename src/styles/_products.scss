@@ -49,13 +49,6 @@
 }
 
 
-.productImagePreviewThumbnail {
-  width: 200px;
-}
-
-.productImagePreviewThumbnail img {
-  width: 100%;
-}
 
 .productThumbnailTitle {
     font-family: $font-serif;
@@ -222,6 +215,20 @@
     text-align: left;
     padding: 0 10px;
     font-size: 1.15rem;
+}
+
+.productImagesStrip {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0 10px;
+
+  img {
+    height: 240px;
+    width: auto;
+    border-radius: 6px;
+    object-fit: cover;
+  }
 }
 
 .productPrice {

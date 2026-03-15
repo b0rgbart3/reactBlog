@@ -1,0 +1,454 @@
+
+// _product-form.scss
+// Admin-style product edit form — compact and streamlined
+
+@use 'colors' as *;
+@use 'variables' as *;
+
+// Local aliases that mirror the admin panel palette
+$pf-bg:           #000000;
+$pf-surface:      rgb(38, 46, 56);
+$pf-surface-alt:  rgb(51, 60, 69);
+$pf-panel:        rgba(30, 38, 50, 0.6);
+$pf-border:       rgb(6, 103, 203);
+$pf-border-dim:   rgba(6, 103, 203, 0.35);
+$pf-accent:       rgb(1, 82, 164);
+$pf-accent-hi:    rgb(6, 103, 203);
+$pf-text:         rgb(125, 152, 179);
+$pf-text-light:   rgba(255, 255, 255, 0.85);
+$pf-label-bg:     rgba(0, 0, 0, 0.4);
+
+// ── Page shell ──────────────────────────────────────────────────────────────
+
+.pf-page {
+  box-sizing: border-box;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 20px 60px;
+}
+
+.pf-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: $font-sans;
+  color: $pf-text;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 10px;
+  padding: 4px 0;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $pf-text-light;
+  }
+}
+
+// ── Card shell ───────────────────────────────────────────────────────────────
+
+.pf-shell {
+  box-sizing: border-box;
+  border: 2px solid $pf-border-dim;
+  border-radius: $border-radius-lg;
+  background-color: $pf-panel;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba($pf-bg, 0.5);
+}
+
+// ── Header bar (matches .titleBar / .expandableTableHeaderRow feel) ──────────
+
+.pf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba($pf-bg, 0.55);
+  padding: 8px 16px;
+  border-bottom: 1px solid $pf-border-dim;
+  gap: 16px;
+  min-height: 36px;
+}
+
+.pf-header-title {
+  font-family: $font-sans;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: $pf-accent-hi;
+}
+
+// ── Publish toggle (in header) ────────────────────────────────────────────────
+
+.pf-publish-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.pf-publish-toggle-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: $pf-text;
+  transition: color $transition-fast;
+}
+
+.pf-publish-toggle:hover .pf-publish-toggle-label {
+  color: $pf-text-light;
+}
+
+.pf-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid $pf-text;
+  border-radius: $border-radius-sm;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color $transition-fast, background-color $transition-fast;
+}
+
+.pf-checkbox--on {
+  border-color: $pf-accent-hi;
+  background-color: rgba($pf-accent-hi, 0.2);
+  background-image: url('../assets/checkmark.svg');
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+// ── Form body ────────────────────────────────────────────────────────────────
+
+.pf-form {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ── Generic two-column row ───────────────────────────────────────────────────
+
+.pf-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 12px;
+  align-items: start;
+}
+
+// ── Field ────────────────────────────────────────────────────────────────────
+
+.pf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pf-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba($pf-text, 0.65);
+  padding: 0;
+}
+
+// ── Inputs (scoped to .pf-form to avoid global bleed) ────────────────────────
+
+.pf-form input[type="text"],
+.pf-form input[type="number"] {
+  appearance: none;
+  background: $pf-surface;
+  border: 1px solid rgba($pf-border, 0.3);
+  border-radius: $border-radius-sm;
+  color: $pf-text-light;
+  font-size: 13px;
+  font-family: $font-sans;
+  font-weight: 400;
+  padding: 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $pf-border;
+    box-shadow: 0 0 0 2px rgba($pf-border, 0.2);
+  }
+
+  &::placeholder {
+    color: rgba($pf-text, 0.35);
+    font-style: italic;
+  }
+}
+
+.pf-form select {
+  appearance: none;
+  background: $pf-surface url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237d98b3'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid rgba($pf-border, 0.3);
+  border-radius: $border-radius-sm;
+  color: $pf-text-light;
+  font-size: 13px;
+  font-family: $font-sans;
+  padding: 6px 28px 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $pf-border;
+    box-shadow: 0 0 0 2px rgba($pf-border, 0.2);
+  }
+}
+
+.pf-form textarea {
+  background: $pf-surface;
+  border: 1px solid rgba($pf-border, 0.3);
+  border-radius: $border-radius-sm;
+  color: $pf-text-light;
+  font-size: 13px;
+  font-family: $font-sans;
+  padding: 7px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.6;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $pf-border;
+    box-shadow: 0 0 0 2px rgba($pf-border, 0.2);
+  }
+}
+
+// ── Category row (select + new-category input side by side) ──────────────────
+
+.pf-category-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+// ── Section divider ───────────────────────────────────────────────────────────
+
+.pf-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba($pf-text, 0.45);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba($pf-border, 0.2);
+}
+
+// ── Image upload grid (beauty + thumbnail) ────────────────────────────────────
+
+.pf-image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 540px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pf-image-slot {
+  background: rgba($pf-bg, 0.4);
+  border: 1px dashed rgba($pf-border, 0.28);
+  border-radius: $border-radius-md;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pf-image-slot-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba($pf-text, 0.5);
+}
+
+.pf-preview-wrap {
+  width: 100%;
+  max-height: 110px;
+  overflow: hidden;
+  border-radius: $border-radius-sm;
+  background: rgba($pf-bg, 0.5);
+
+  img {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.pf-file-input {
+  display: block;
+  width: 100%;
+  font-size: 11px;
+  color: $pf-text;
+  font-family: $font-sans;
+
+  &::-webkit-file-upload-button {
+    appearance: none;
+    background: $pf-accent;
+    border: none;
+    border-radius: $border-radius-sm;
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: $font-sans;
+    padding: 3px 8px;
+    margin-right: 8px;
+    transition: background-color $transition-fast;
+  }
+
+  &::-webkit-file-upload-button:hover {
+    background: $pf-accent-hi;
+  }
+}
+
+// ── Gallery (existing product images) ────────────────────────────────────────
+
+.pf-gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pf-gallery-item {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: $border-radius-sm;
+  overflow: hidden;
+  border: 1px solid rgba($pf-border, 0.2);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.pf-gallery-kill {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background: rgba(180, 20, 20, 0.9);
+    color: white;
+  }
+}
+
+.pf-gallery-empty {
+  font-size: 11px;
+  color: rgba($pf-text, 0.4);
+  font-style: italic;
+}
+
+// ── New image uploads ─────────────────────────────────────────────────────────
+
+.pf-add-image-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $pf-accent-hi;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 10px;
+  border-radius: $border-radius-sm;
+  border: 1px dashed rgba($pf-border, 0.4);
+  transition: background-color $transition-fast, border-color $transition-fast;
+  width: fit-content;
+
+  &::before {
+    content: "+";
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  &:hover {
+    background-color: rgba($pf-border, 0.1);
+    border-color: rgba($pf-border, 0.6);
+  }
+}
+
+.pf-extra-images {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pf-extra-image-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: $pf-text;
+}
+
+// ── Submit row ────────────────────────────────────────────────────────────────
+
+.pf-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid rgba($pf-border, 0.18);
+}
+
+.pf-submit-btn {
+  background-color: $pf-accent;
+  color: white;
+  border: none;
+  border-radius: $border-radius-md;
+  padding: 8px 26px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: $font-sans;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background-color $transition-base, box-shadow $transition-base, transform $transition-fast;
+
+  &:hover {
+    background-color: $pf-accent-hi;
+    box-shadow: 0 0 12px rgba($pf-border, 0.45);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
