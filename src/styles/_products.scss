@@ -30,6 +30,7 @@
   cursor: pointer;
   color: $text-basic;
   transition: all .25s;
+  margin-bottom: 10px;
 }
 
 .productBox:hover {
@@ -229,6 +230,10 @@
     border-radius: 6px;
     object-fit: cover;
   }
+}
+
+.productGalleryThumb {
+  cursor: zoom-in;
 }
 
 .productPrice {

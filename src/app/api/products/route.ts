@@ -16,7 +16,7 @@ async function saveFile(file: File, subdir: string): Promise<string> {
 
 export async function GET() {
   await connectDB();
-  const all = await Products.find();
+  const all = await Products.find().sort({ _id: -1 });
   return NextResponse.json({ data: all });
 }
 

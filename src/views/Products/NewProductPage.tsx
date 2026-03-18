@@ -79,7 +79,7 @@ export function NewProductPage() {
     <div className={'article'}>
       <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
       <div className='articlePageTitle'>{`New Product:`}</div>
-      <ProductForm
+      {product && <ProductForm
         product={product as Product}
         handleSubmit={handleSubmit}
         handleChange={handleChange}
@@ -90,7 +90,7 @@ export function NewProductPage() {
         changeCategory={handleChange}
         changeNewCategory={changeNewCategory}
         newCategory={newCategory}
-      />
+      />}
     </div>
   )
 }

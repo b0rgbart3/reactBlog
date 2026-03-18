@@ -13,12 +13,13 @@ export type ProductFormProps = {
   handleThumbnailChange: (e: React.FormEvent) => void;
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   newCategory: string;
+  removeProductImage?: (index: number) => void;
 }
 
 export function ProductForm(props: ProductFormProps) {
-  const { product, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange, handleBeautyChange, handleThumbnailChange } = props;
+  const { product, editing, changeNewCategory, handleSubmit, newCategory, handleChange, handleFileChange, handleBeautyChange, handleThumbnailChange, removeProductImage } = props;
   const { categories } = useStore((s) => s);
-  const [images, setImages] = useState<string[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isReady, setIsReady] = useState<boolean>(product?.readyToPublish ?? false);
 
   const toggleReadyStatus = useCallback(() => {
@@ -31,12 +32,26 @@ export function ProductForm(props: ProductFormProps) {
   }, [isReady, handleSubmit, product]);
 
   const addAnotherImage = useCallback(() => {
-    setImages(prev => [...prev, ""]);
+    setImagePreviews(prev => [...prev, ""]);
   }, []);
 
+  const handleGalleryFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    if (e.target.files && e.target.files[0]) {
+      const url = URL.createObjectURL(e.target.files[0]);
+      setImagePreviews(prev => {
+        const next = [...prev];
+        next[index] = url;
+        return next;
+      });
+    }
+    handleFileChange(e);
+  }, [handleFileChange]);
+
   const killProductImage = useCallback((imageNumber: number) => {
-    product.productImages.splice(imageNumber, 1);
-  }, [product]);
+    if (removeProductImage) {
+      removeProductImage(imageNumber);
+    }
+  }, [removeProductImage]);
 
   return (
     <div className="pf-shell">
@@ -112,7 +127,7 @@ export function ProductForm(props: ProductFormProps) {
         <div className="pf-image-grid">
           <div className="pf-image-slot">
             <div className="pf-image-slot-label">Beauty Shot</div>
-            {editing && product.beauty && product.beauty !== '' && (
+            {product.beauty && product.beauty !== '' && (
               <div className="pf-preview-wrap">
                 <img src={product.beauty} alt="Beauty preview" />
               </div>
@@ -122,7 +137,7 @@ export function ProductForm(props: ProductFormProps) {
 
           <div className="pf-image-slot">
             <div className="pf-image-slot-label">Thumbnail</div>
-            {editing && product.thumbnail && product.thumbnail !== '' && (
+            {product.thumbnail && product.thumbnail !== '' && (
               <div className="pf-preview-wrap">
                 <img src={product.thumbnail} alt="Thumbnail preview" />
               </div>
@@ -147,12 +162,17 @@ export function ProductForm(props: ProductFormProps) {
         )}
 
         {/* Additional image inputs */}
-        {images.length > 0 && (
+        {imagePreviews.length > 0 && (
           <div className="pf-extra-images">
-            {images.map((_, imageNumber) => (
+            {imagePreviews.map((preview, imageNumber) => (
               <div className="pf-extra-image-row" key={imageNumber}>
                 <span className="pf-image-slot-label">Image {imageNumber + 1}</span>
-                <input className="pf-file-input" id={`image_${imageNumber}`} type="file" accept="image/*" onChange={handleFileChange} name="images" />
+                {preview && (
+                  <div className="pf-preview-wrap">
+                    <img src={preview} alt={`New image ${imageNumber + 1} preview`} />
+                  </div>
+                )}
+                <input className="pf-file-input" id={`image_${imageNumber}`} type="file" accept="image/*" onChange={(e) => handleGalleryFileChange(e, imageNumber)} name="images" />
               </div>
             ))}
           </div>

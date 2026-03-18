@@ -23,6 +23,7 @@ export function ProductPage() {
   const [chooseSizeWarning, setChooseSizeWarning] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [galleryLightboxSrc, setGalleryLightboxSrc] = useState<string | null>(null);
 
   const addQuantity = useCallback(() => {
     if (count <= 19) setCount(count + 1);
@@ -170,7 +171,13 @@ export function ProductPage() {
             {product.productImages?.length > 0 && (
               <div className="productImagesStrip">
                 {product.productImages.map((img, i) => (
-                  <img key={i} src={img} alt={`Product image ${i + 1}`} />
+                  <img
+                    key={i}
+                    src={img}
+                    alt={`Product image ${i + 1}`}
+                    className="productGalleryThumb"
+                    onClick={() => setGalleryLightboxSrc(img)}
+                  />
                 ))}
               </div>
             )}
@@ -259,6 +266,11 @@ export function ProductPage() {
       {lightboxOpen && (
         <div className="beautyLightbox" onClick={() => setLightboxOpen(false)}>
           <img src={`${product?.beauty}`} alt="headline enlarged" />
+        </div>
+      )}
+      {galleryLightboxSrc && (
+        <div className="beautyLightbox" onClick={() => setGalleryLightboxSrc(null)}>
+          <img src={galleryLightboxSrc} alt="Gallery image enlarged" />
         </div>
       )}
     </>

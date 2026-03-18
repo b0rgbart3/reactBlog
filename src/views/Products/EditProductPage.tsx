@@ -36,10 +36,18 @@ export function EditProductPage() {
       setImages((prev) => [...prev, e.target.files[0]]);
   };
   const handleBeautyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) setBeauty(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setBeauty(file);
+      setProduct((prev) => ({ ...prev, beauty: URL.createObjectURL(file) }));
+    }
   };
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) setThumbnail(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setThumbnail(file);
+      setProduct((prev) => ({ ...prev, thumbnail: URL.createObjectURL(file) }));
+    }
   };
 
   const routeHome = useCallback(() => {
@@ -56,7 +64,7 @@ export function EditProductPage() {
       formData.append("readyToPublish", String(product.readyToPublish));
       formData.append("category", newCategory.length ? newCategory : category);
       formData.append("price", String(product.price ?? 0));
-      formData.append("productImages", product.productImages as any);
+      product.productImages?.forEach((img) => formData.append("productImages", img));
       formData.append("beauty", product.beauty);
       formData.append("thumbnail", product.thumbnail);
       if (beauty) formData.append("newBeauty", beauty);
@@ -80,6 +88,13 @@ export function EditProductPage() {
     },
     [],
   );
+
+  const removeProductImage = useCallback((index: number) => {
+    setProduct((prev) => ({
+      ...prev,
+      productImages: prev.productImages.filter((_, i) => i !== index),
+    }));
+  }, []);
 
   const handleChange = useCallback(
     (
@@ -109,6 +124,7 @@ export function EditProductPage() {
         changeCategory={handleChange}
         changeNewCategory={changeNewCategory}
         newCategory={newCategory}
+        removeProductImage={removeProductImage}
       />
     </div>
   );

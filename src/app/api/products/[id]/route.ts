@@ -22,7 +22,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const body: Record<string, any> = {};
 
     for (const [key, value] of formData.entries()) {
-      if (!['images', 'newBeauty', 'newThumbnail'].includes(key)) {
+      if (!['images', 'newBeauty', 'newThumbnail', 'productImages'].includes(key)) {
         body[key] = value;
       }
     }
@@ -33,7 +33,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       if (img.size > 0) uploadedImages.push(await saveFile(img, 'products'));
     }
 
-    const existingImages = body.productImages ? (Array.isArray(body.productImages) ? body.productImages : [body.productImages]) : [];
+    const existingImages = formData.getAll('productImages') as string[];
     body.productImages = [...existingImages, ...uploadedImages];
 
     const beautyFile = formData.get('newBeauty') as File | null;
