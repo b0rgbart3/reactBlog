@@ -48,6 +48,9 @@ export function ArticleThumbnail({ article, isHero = false }: ArticleProps) {
               <div className="articleCategory">{article.category}</div>
             )}
             <div className="heroTitle">{article.title}</div>
+            {article.subtitle && (
+              <div className="heroSubtitle">{article.subtitle}</div>
+            )}
             <div className="heroExcerpt">{excerpt}</div>
             <div className="readMoreCta">Read →</div>
           </div>
@@ -77,6 +80,9 @@ export function ArticleThumbnail({ article, isHero = false }: ArticleProps) {
           <div className="articleCategory">{article.category}</div>
         )}
         <div className="articleThumbTitle">{article.title}</div>
+        {article.subtitle && (
+          <div className="articleThumbSubtitle">{article.subtitle}</div>
+        )}
         <div className="briefArticleStart">{excerpt}</div>
         <div className="readMoreCta">Read →</div>
       </div>

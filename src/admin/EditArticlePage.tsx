@@ -11,7 +11,7 @@ export function EditArticlePage() {
   const router = useRouter();
   const params = useParams<{ _id: string }>();
   const _id = params._id;
-  const { user, articles } = useStore((s) => s);
+  const { user, articles, setArticlesLoaded } = useStore((s) => s);
   const categories = useStore((s) => s.categories);
   const [article, setArticle] = useState<Article>(articles.find((a) => a._id === _id));
   const [newCategory, setNewCategory] = useState('');
@@ -39,6 +39,7 @@ export function EditArticlePage() {
       await axios.patch(`/api/articles/${article._id}`, article, {
         headers: { "Content-Type": "multipart/form-data" }
       });
+      setArticlesLoaded(false);
       router.push(`/`);
     } catch (err) {
       console.error("Failed to submit edited article:", err);
@@ -56,19 +57,23 @@ export function EditArticlePage() {
   }, []);
 
   return (
-    <div className={'article'}>
-      <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
-      <div className='articlePageTitle'>{`Edit Article:`}</div>
-      <ArticleForm
-        article={article}
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        handleFileChange={handleFileChange}
-        editing
-        changeCategory={handleChange}
-        changeNewCategory={changeNewCategory}
-        newCategory={newCategory}
-      />
+    <div className={'adminPanel'}>
+      <div className="titleBar">
+        <span className="adminBack" onClick={routeHome}>← b0rgBlog</span>
+        {` :: Edit Article`}
+      </div>
+      <div className='adminContent'>
+        <ArticleForm
+          article={article}
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          handleFileChange={handleFileChange}
+          editing
+          changeCategory={handleChange}
+          changeNewCategory={changeNewCategory}
+          newCategory={newCategory}
+        />
+      </div>
     </div>
   )
 }

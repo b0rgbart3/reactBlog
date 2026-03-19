@@ -81,6 +81,8 @@ export function ArticleForm(props: ArticleFormProps) {
 
         <label htmlFor="title">Title:</label>
         <input id="title" type="text" name="title" value={article?.title ?? ""} onChange={handleChange} required />
+        <label htmlFor="subtitle">Subtitle:</label>
+        <input id="subtitle" type="text" name="subtitle" value={article?.subtitle ?? ""} onChange={handleChange} />
       </div>
       <div>
         <label htmlFor="headlineImage">Headline Image:</label>
@@ -90,6 +92,10 @@ export function ArticleForm(props: ArticleFormProps) {
           </div>
         )}
         <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
+      </div>
+      <div>
+        <label htmlFor="originDate">Originally Published:</label>
+        <input id="originDate" type="date" name="originDate" value={article?.originDate ?? ""} onChange={handleChange} />
       </div>
       <div>
         <label htmlFor="summary">Summary (optional — shown on homepage card):</label>

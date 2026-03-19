@@ -17,7 +17,8 @@ $error: #ef4444;
 $surface: tint($base, 86%);
 $cards: color.scale($base, $lightness: -30%);
 $sticker-color:  color.scale($base, $lightness: -80%);
-$sticker-text: #3d5893; 
+$sticker-text: #3d5893;
+$subtitle-blue: rgba(38, 186, 255, 0.88);
 $title-text: #d2d3d5;
 
 $text-basic: #929fb7;

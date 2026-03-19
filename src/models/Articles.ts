@@ -8,6 +8,7 @@ const ArticlesSchema = new mongoose.Schema({
   lastModifiedDate: String,
   randomColor: String,
   readyToPublish: Boolean,
+  subtitle: String,
   summary: String,
   title: String,
   userID: String

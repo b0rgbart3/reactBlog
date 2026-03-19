@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useStore } from "../state/useStore";
 
 export function UsersForm() {
@@ -32,6 +33,11 @@ export function UsersForm() {
               <div className="bItem"><span className={`bBadge ${u.sensi ? "bBadge-true" : "bBadge-false"}`}>{u.sensi ? "true" : "false"}</span></div>
             </div>
             <div className="bRow"><div className="bLabel">Hash</div><div className="bItem bHash">{u.phash}</div></div>
+            {u._id === user._id && (
+              <div className="bRow">
+                <Link href="/user" className="bButton">Edit My Account</Link>
+              </div>
+            )}
           </div>
         ))}
       </>

@@ -78,6 +78,9 @@ export default async function ArticlePageSSG({ params }: { params: Promise<{ id:
 
         <div className="articleContainer">
           <div className="articlePageTitle">{article.title}</div>
+          {article.subtitle && (
+            <div className="articlePageSubtitle">{article.subtitle}</div>
+          )}
           <div className="authorName">
             Author: {author?.authorName || author?.userName || 'Unknown'}
           </div>

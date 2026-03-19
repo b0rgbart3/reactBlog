@@ -313,50 +313,61 @@
 }
 
 .new-article-form {
-    background-color: $row-hover-bg;
-    padding: 28px;
+    background-color: rgba($admin-background, 0.4);
+    padding: 20px 24px 28px;
 }
 
 .new-article-form label {
     display: block;
-    padding: 8px;
-    background-color: $admin-background;
-    color: $admin-foreground;
+    padding: 0;
+    padding-top: 12px;
+    padding-bottom: 4px;
+    background-color: transparent;
+    color: rgba($admin-text, 0.65);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: $font-sans;
 }
 
 .new-article-form input,
 .new-article-form textarea,
 .new-article-form select {
-    border: 2px solid $admin-background;
+    border: 1px solid rgba($admin-text, 0.18);
     box-sizing: border-box;
-    font-size: 24px;
-    font-weight: 500;
-    color: $admin-background;
-    background-color: $admin-neutral-color;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba($admin-foreground, 0.9);
+    background-color: rgba($admin-neutral-color, 0.45);
     outline: none;
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    border-radius: $border-radius-sm;
 }
 
 .new-article-form input,
 .new-article-form textarea {
-    padding: 18px;
+    padding: 8px 10px;
     width: 100%;
 }
 
 .new-article-form textarea {
-    resize: vertical; /* allow vertical resizing only, optional */
+    resize: vertical;
+    font-size: 12px;
+    line-height: 1.65;
+    color: rgba($admin-foreground, 0.75);
 }
 
 .new-article-form select {
-    border-radius: $border-radius-md;
-    padding: 18px 30px;
+    border-radius: $border-radius-sm;
+    padding: 8px 12px;
 }
 
-.new-article-form input:active,
 .new-article-form input:focus,
 .new-article-form textarea:focus,
 .new-article-form select:focus {
-    border: 2px solid $admin-foreground;
+    border-color: rgba($admin-accent-color, 0.55);
+    background-color: rgba($admin-neutral-color, 0.65);
 }
 
 .new-article-form .row {
@@ -368,19 +379,37 @@
 
 .new-article-form .row select {
     float: left;
-    width: 200px;
+    width: 180px;
 }
 
 .new-article-form .row input {
     display: inline-block;
-    width: calc(100% - 212px);
+    width: calc(100% - 192px);
     box-sizing: border-box;
     margin-left: 8px;
 }
 
 .new-article-form input::placeholder {
-    color: $admin-background;
+    color: rgba($admin-text, 0.45);
     font-style: italic;
+}
+
+.new-article-form button[type="submit"] {
+    background-color: $admin-theme-color;
+    color: $admin-foreground;
+    border: none;
+    border-radius: $border-radius-sm;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 16px;
+    letter-spacing: 0.04em;
+    user-select: none;
+
+    &:hover {
+        background-color: $admin-accent-color;
+    }
 }
 
 .titleText {
@@ -409,8 +438,14 @@
 }
 
 .lineContainer {
-    border: 1px solid $admin-background;
-    display: block;
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 13px;
+    color: $admin-text;
+    margin-bottom: 4px;
+    user-select: none;
+    cursor: pointer;
 }
 
 /* ---- Expandable Table ---- */
@@ -479,6 +514,20 @@
     font-size: 20px;
     padding: 12px 20px;
     user-select: none;
+}
+
+.adminBack {
+    opacity: 0.5;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: $font-sans;
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+
+    &:hover {
+        opacity: 1;
+    }
 }
 
 .adminButton {

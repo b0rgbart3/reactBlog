@@ -8,7 +8,7 @@ import { ArticleForm } from "./ArticleForm";
 
 export function NewArticlePage() {
   const router = useRouter();
-  const { user, categories } = useStore((s) => s);
+  const { user, categories, setArticlesLoaded } = useStore((s) => s);
   const [category, setCategory] = useState(categories[0] || "");
   const [newCategory, setNewCategory] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -20,7 +20,9 @@ export function NewArticlePage() {
       const freshArticle: Partial<Article> = {
         body: "",
         category: categories[0] || "",
+        originDate: "",
         readyToPublish: false,
+        subtitle: "",
         summary: "",
         title: "",
         userID: user._id
@@ -50,6 +52,7 @@ export function NewArticlePage() {
       await axios.post("/api/articles", article, {
         headers: { "Content-Type": "multipart/form-data" }
       });
+      setArticlesLoaded(false);
       router.push(`/`);
     } catch (err) {
       console.error("Failed to submit article:", err);
@@ -67,21 +70,25 @@ export function NewArticlePage() {
   }, []);
 
   return (
-    <div className={'article'}>
-      <div className="articlePageCategory" onClick={routeHome}>{`<- `}b0rgBlog ::</div>
-      <div className='articlePageTitle'>{`New Article:`}</div>
-      {article && (
-        <ArticleForm
-          article={article as Article}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          handleFileChange={handleFileChange}
-          editing={false}
-          changeCategory={handleChange}
-          changeNewCategory={changeNewCategory}
-          newCategory={newCategory}
-        />
-      )}
+    <div className={'adminPanel'}>
+      <div className="titleBar">
+        <span className="adminBack" onClick={routeHome}>← b0rgBlog</span>
+        {` :: New Article`}
+      </div>
+      <div className='adminContent'>
+        {article && (
+          <ArticleForm
+            article={article as Article}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            handleFileChange={handleFileChange}
+            editing={false}
+            changeCategory={handleChange}
+            changeNewCategory={changeNewCategory}
+            newCategory={newCategory}
+          />
+        )}
+      </div>
     </div>
   )
 }
