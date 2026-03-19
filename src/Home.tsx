@@ -53,7 +53,7 @@ export function Home() {
             <Articles />
             {showMerch && (
               <>
-                <div className="sticker">Memes</div>
+                <div className="sticker sticker--link" onClick={() => router.push('/memes')}>Memes</div>
                 <div className="thumbnailMemes"><MemeThumbnails /></div>
               </>
             )}
