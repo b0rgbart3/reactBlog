@@ -1,13 +1,14 @@
 {
+  "/api/orders/route": "app/api/orders/route.js",
+  "/api/articles/[id]/route": "app/api/articles/[id]/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/articles/route": "app/api/articles/route.js",
   "/api/users/route": "app/api/users/route.js",
   "/api/settings/route": "app/api/settings/route.js",
   "/api/products/route": "app/api/products/route.js",
-  "/api/orders/route": "app/api/orders/route.js",
-  "/api/articles/[id]/route": "app/api/articles/[id]/route.js",
+  "/article/edit/[_id]/page": "app/article/edit/[_id]/page.js",
+  "/admin/page": "app/admin/page.js",
   "/page": "app/page.js",
   "/article/[id]/page": "app/article/[id]/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/article/edit/[_id]/page": "app/article/edit/[_id]/page.js",
   "/articles/page": "app/articles/page.js"
 }

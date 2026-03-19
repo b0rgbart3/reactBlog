@@ -92,6 +92,10 @@ export function ArticleForm(props: ArticleFormProps) {
         <input id="headlineImage" type="file" accept="image/*" onChange={handleFileChange} />
       </div>
       <div>
+        <label htmlFor="summary">Summary (optional — shown on homepage card):</label>
+        <textarea id="summary" name="summary" value={article?.summary ?? ""} onChange={handleChange} rows={3} />
+      </div>
+      <div>
         <label htmlFor="body">Body:</label>
         <textarea id="body" name="body" value={article?.body ?? ""} onChange={handleChange} required rows={6} />
       </div>

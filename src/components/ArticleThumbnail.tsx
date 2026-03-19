@@ -3,13 +3,13 @@ import React, { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Article } from "../state/useStore";
 import { splitIntoLines } from "../utils/articleUtils";
-import parse from "html-react-parser";
 
 export type ArticleProps = {
   article: Article;
+  isHero?: boolean;
 };
 
-export function ArticleThumbnail({ article }: ArticleProps) {
+export function ArticleThumbnail({ article, isHero = false }: ArticleProps) {
   const router = useRouter();
   const [imgFailed, setImgFailed] = useState(false);
   const paragraphs = splitIntoLines(article.body);
@@ -20,14 +20,45 @@ export function ArticleThumbnail({ article }: ArticleProps) {
 
   const showImage = !imgFailed && article?.headlineImage && article.headlineImage !== '';
 
-  const briefArticleStart = useMemo(() => {
+  const excerpt = useMemo(() => {
+    if (article.summary) return article.summary;
     const combined = `${paragraphs?.[0] ?? ''}${paragraphs?.[1] ?? ''}${paragraphs?.[2] ?? ''}`;
-    return combined.substring(0, 190) + ' ... ';
-  }, [article, paragraphs])
+    const stripped = combined.replace(/<[^>]+>/g, '');
+    return stripped.substring(0, 190) + ' ...';
+  }, [article.summary, paragraphs]);
+
+  if (isHero) {
+    return (
+      <div className="articleThumb articleThumb--hero" onClick={readArticle}>
+        <div className="heroImageContainer">
+          {showImage && (
+            <img
+              src={article.headlineImage}
+              alt="article image"
+              onError={() => setImgFailed(true)}
+            />
+          )}
+          {!showImage && (
+            <div className="noHeadlineImageContainer" style={{
+              backgroundColor: article?.randomColor ? `#${article.randomColor}` : undefined,
+            }} />
+          )}
+          <div className="heroOverlay">
+            {article.category && (
+              <div className="articleCategory">{article.category}</div>
+            )}
+            <div className="heroTitle">{article.title}</div>
+            <div className="heroExcerpt">{excerpt}</div>
+            <div className="readMoreCta">Read →</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="articleThumb" onClick={readArticle}>
-      <div className='headlineImageThumbnail'>
+      <div className="headlineImageThumbnail">
         {showImage && (
           <img
             src={article.headlineImage}
@@ -36,15 +67,18 @@ export function ArticleThumbnail({ article }: ArticleProps) {
           />
         )}
         {!showImage && (
-          <div className='noHeadlineImageContainer' style={{
+          <div className="noHeadlineImageContainer" style={{
             backgroundColor: article?.randomColor ? `#${article.randomColor}` : undefined,
-          }}>
-          </div>
+          }} />
         )}
       </div>
-      <div className='articleThumbText'>
-        {article.title}
-        <div className='briefArticleStart'>{parse(briefArticleStart)}</div>
+      <div className="articleThumbText">
+        {article.category && (
+          <div className="articleCategory">{article.category}</div>
+        )}
+        <div className="articleThumbTitle">{article.title}</div>
+        <div className="briefArticleStart">{excerpt}</div>
+        <div className="readMoreCta">Read →</div>
       </div>
     </div>
   );

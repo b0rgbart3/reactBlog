@@ -24,9 +24,9 @@ export function Articles() {
   return (
     <>
       <div className="articleBlock">
-        {shuffledArticles.map((a) => (
+        {shuffledArticles.map((a, index) => (
           <React.Fragment key={a._id}>
-            <ArticleThumbnail article={a} />
+            <ArticleThumbnail article={a} isHero={index === 0} />
           </React.Fragment>
         ))}
       </div>

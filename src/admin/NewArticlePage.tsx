@@ -21,6 +21,7 @@ export function NewArticlePage() {
         body: "",
         category: categories[0] || "",
         readyToPublish: false,
+        summary: "",
         title: "",
         userID: user._id
       };
