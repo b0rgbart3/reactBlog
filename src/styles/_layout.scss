@@ -134,9 +134,9 @@
 }
 
 .briefArticleStart {
-  font-family: $font-sans;
-  line-height: 1.8em;
-  font-size: 14px;
+  font-family: $font-body;
+  line-height: 1.75em;
+  font-size: 15px;
   color: $text-basic;
 }
 
@@ -203,7 +203,7 @@
 .heroTitle {
   font-family: $font-serif;
   font-weight: 700;
-  font-size: 32px;
+  font-size: 25px;
   line-height: 1.25em;
   color: #fff;
   margin-bottom: 10px;
@@ -211,8 +211,8 @@
 }
 
 .heroExcerpt {
-  font-family: $font-sans;
-  font-size: 14px;
+  font-family: $font-body;
+  font-size: 15px;
   line-height: 1.7em;
   color: rgba(255, 255, 255, 0.82);
   margin-bottom: 4px;
@@ -275,6 +275,58 @@
 .child {
   width: 100%;
   /* Mobile: each child takes full width */
+}
+
+/* Mobile: hero renders like a regular thumbnail */
+@media (max-width: 767px) {
+  .heroImageContainer {
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heroImageContainer img {
+    position: static;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .heroImageContainer .noHeadlineImageContainer {
+    position: static;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  .heroOverlay {
+    position: static;
+    background: none;
+    padding: 16px 20px 20px;
+  }
+
+  .heroTitle {
+    font-family: $font-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: $foreground;
+    text-shadow: none;
+    line-height: 1.3em;
+    margin-bottom: 8px;
+  }
+
+  .heroExcerpt {
+    color: $text-basic;
+  }
+
+  .heroOverlay .articleCategory {
+    color: $accent;
+  }
+
+  .heroOverlay .readMoreCta {
+    color: $accent;
+  }
 }
 
 /* Tablet  */
@@ -915,6 +967,10 @@ box-sizing: border-box;;
     margin: 8px;
     object-fit: cover;
     border-radius: $border-radius-md;
+  }
+
+  .mainColumn .thumbnailMemes .memeThumb img:hover {
+    box-shadow: none;
   }
 }
 
