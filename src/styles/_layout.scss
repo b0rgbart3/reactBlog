@@ -774,6 +774,28 @@ box-sizing: border-box;;
   .mainColumn .thumbnailMemes {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .mainColumn .thumbnailMemes .memeThumb {
+    height: 260px;
+    overflow: hidden;
+    border-radius: $border-radius-md;
+    background-color: $cards;
+    box-shadow: 0 0 8px $background;
+    cursor: pointer;
+    transition: all .5s;
+  }
+
+  .mainColumn .thumbnailMemes .memeThumb:hover {
+    box-shadow: 0 0 18px $highlight;
+  }
+
+  .mainColumn .thumbnailMemes .memeThumb img {
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 8px;
+    object-fit: cover;
+    border-radius: $border-radius-md;
+  }
 }
 
 @media (min-width: 1400px) {

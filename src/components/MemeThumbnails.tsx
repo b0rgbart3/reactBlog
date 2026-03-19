@@ -16,15 +16,15 @@ export function MemeThumbnails() {
     router.push("/memes");
   }, [router]);
 
+  const memes = [orangePill, rigged, elementzero, buymore, keepcalm, fortune, unstoppable];
+
   return (
     <>
-      <img src={orangePill.src ?? orangePill as any} onClick={goToMemesPage} />
-      <img src={rigged.src ?? rigged as any} onClick={goToMemesPage} />
-      <img src={elementzero.src ?? elementzero as any} onClick={goToMemesPage} />
-      <img src={buymore.src ?? buymore as any} onClick={goToMemesPage} />
-      <img src={keepcalm.src ?? keepcalm as any} onClick={goToMemesPage} />
-      <img src={fortune.src ?? fortune as any} onClick={goToMemesPage} />
-      <img src={unstoppable.src ?? unstoppable as any} onClick={goToMemesPage} />
+      {memes.map((meme, i) => (
+        <div key={i} className="memeThumb">
+          <img src={meme.src ?? meme as any} onClick={goToMemesPage} />
+        </div>
+      ))}
     </>
   );
 }

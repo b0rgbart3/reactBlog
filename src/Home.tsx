@@ -48,8 +48,8 @@ export function Home() {
         <BannerNav page="home" />
         <div className="home">
           <div className="mainColumn">
-            {isMobile && showMerch && <ProductThumbnails linkHeader />}
-            <div className="sticker">Articles</div>
+            {isMobile && showMerch && <ProductThumbnails linkHeader limit={2} />}
+            <div className="sticker sticker--link" onClick={() => router.push('/articles')}>Articles</div>
             <Articles />
             {showMerch && (
               <>

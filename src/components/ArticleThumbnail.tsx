@@ -21,7 +21,8 @@ export function ArticleThumbnail({ article }: ArticleProps) {
   const showImage = !imgFailed && article?.headlineImage && article.headlineImage !== '';
 
   const briefArticleStart = useMemo(() => {
-    return `${paragraphs?.[0]}${paragraphs?.[1]}`.substring(0, 190) + ' ... ';
+    const combined = `${paragraphs?.[0] ?? ''}${paragraphs?.[1] ?? ''}${paragraphs?.[2] ?? ''}`;
+    return combined.substring(0, 190) + ' ... ';
   }, [article, paragraphs])
 
   return (
