@@ -10,6 +10,13 @@ import React from 'react';
 
 export const revalidate = 3600; // regenerate at most once per hour
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://moon-math.online';
+
+function absoluteUrl(path: string): string {
+  if (!path) return '';
+  return path.startsWith('http') ? path : `${BASE_URL}${path}`;
+}
+
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
@@ -30,14 +37,16 @@ export async function generateMetadata(
     openGraph: {
       title: article.title,
       description,
-      images: article.headlineImage ? [{ url: article.headlineImage }] : [],
+      images: article.headlineImage
+        ? [{ url: absoluteUrl(article.headlineImage), width: 1200, height: 630 }]
+        : [],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
       description,
-      images: article.headlineImage ? [article.headlineImage] : [],
+      images: article.headlineImage ? [absoluteUrl(article.headlineImage)] : [],
     },
   };
 }
