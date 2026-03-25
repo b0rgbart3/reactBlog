@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "4bf09d928a8597f9add1f8d0519b4391",
-    "previewModeSigningKey": "e6509cb60c8240711040f98560f3c3c047626b3c49765b2bfea87439e5f8936c",
-    "previewModeEncryptionKey": "0b144f0d8360581806b10f2fc7b7bdae040d451e1d066b7c683b78ec84e4fb3a"
-  }
-}
+{"version":4,"routes":{"/article/691389b15d22fc979beab19f":{},"/article/691389b15d22fc979beab1a0":{},"/article/6913b68eb87319ff4eb48867":{},"/article/691e2e9914c2fea1065b1b6e":{},"/article/692db5bc1f5ff010e6021c99":{},"/article/6959a1706f563a2ea500a10d":{},"/article/69bb20305e51d893bcb512c2":{},"/article/69bb2089027aea92f25f605f":{}},"dynamicRoutes":{"/article/[id]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/article/[id]","routeRegex":"^\\/article\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"5cae9f791cd9dab102e8e727c988cbaa","previewModeSigningKey":"f73d45dbd9c8b6f7f3b48380c195f6dfa9caaa9c61e61586e13abb1f7fbf9e42","previewModeEncryptionKey":"bc0ced3097d547912b4342ec3468707daf0907b197a05898792cfb7d332cd3d5"}}

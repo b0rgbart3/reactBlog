@@ -86,6 +86,7 @@ export function NewArticlePage() {
             changeCategory={handleChange}
             changeNewCategory={changeNewCategory}
             newCategory={newCategory}
+            onBodyChange={(html) => setArticle((prev) => ({ ...prev, body: html }))}
           />
         )}
       </div>

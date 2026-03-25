@@ -1,0 +1,98 @@
+@use 'colors' as *;
+@use 'variables' as *;
+
+// ── Editor wrapper ──────────────────────────────────────────────────────────
+.rte-wrapper {
+  border: 1px solid shade($surface, 10%);
+  border-radius: $border-radius-sm;
+  background: $surface;
+  display: flex;
+  flex-direction: column;
+
+  &:focus-within {
+    border-color: $highlight;
+    box-shadow: 0 0 0 1px tint($highlight, 40%);
+  }
+}
+
+// ── Toolbar ─────────────────────────────────────────────────────────────────
+.rte-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border-bottom: 1px solid shade($surface, 10%);
+  background: shade($surface, 4%);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.rte-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: $border-radius-sm;
+  color: $text-basic;
+  cursor: pointer;
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 4px 8px;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: tint($highlight, 85%);
+    color: $accent;
+    border-color: tint($highlight, 60%);
+  }
+
+  &--active {
+    background: tint($highlight, 70%);
+    color: $accent;
+    border-color: $highlight;
+  }
+}
+
+.rte-divider {
+  width: 1px;
+  height: 18px;
+  background: shade($surface, 15%);
+  margin: 0 4px;
+}
+
+// ── Editable content area ────────────────────────────────────────────────────
+.rte-content {
+  height: 400px;
+  overflow-y: auto;
+
+  .tiptap {
+    min-height: 100%;
+    padding: 0.75rem;
+    color: $text-basic;
+    font-family: $font-body;
+    font-size: 1rem;
+    line-height: 1.7;
+    outline: none;
+
+    p { margin: 0 0 0.75em; }
+    h1 { font-size: 1.8rem; font-weight: 700; margin: 0.5em 0; color: $title-text; }
+    h2 { font-size: 1.4rem; font-weight: 600; margin: 0.5em 0; color: $title-text; }
+    h3 { font-size: 1.15rem; font-weight: 600; margin: 0.5em 0; color: $title-text; }
+    ul, ol { padding-left: 1.5em; margin: 0 0 0.75em; }
+    li { margin-bottom: 0.25em; }
+    strong { color: $foreground; }
+    em { font-style: italic; }
+    u { text-decoration: underline; }
+
+    &.ProseMirror-focused { outline: none; }
+  }
+}
+
+// ── Article body headings (display page) ────────────────────────────────────
+.articleBody {
+  h1 { font-size: 1.8rem; font-weight: 700; margin: 1em 0 0.4em; color: $title-text; }
+  h2 { font-size: 1.4rem; font-weight: 600; margin: 1em 0 0.4em; color: $title-text; }
+  h3 { font-size: 1.15rem; font-weight: 600; margin: 1em 0 0.4em; color: $title-text; }
+  ul, ol { padding-left: 1.5em; }
+  li { margin-bottom: 0.25em; }
+}

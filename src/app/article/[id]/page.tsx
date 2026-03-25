@@ -68,7 +68,9 @@ export default async function ArticlePageSSG({ params }: { params: Promise<{ id:
     return <div>Article not found</div>;
   }
 
-  const paragraphs = splitIntoLines(article.body ?? '');
+  const body = article.body ?? '';
+  const isHtml = /<[a-z][\s\S]*>/i.test(body);
+  const paragraphs = isHtml ? [] : splitIntoLines(body);
 
   return (
     <>
@@ -100,9 +102,12 @@ export default async function ArticlePageSSG({ params }: { params: Promise<{ id:
             Last modified: {article.lastModifiedDate ?? ''}
           </div>
           <div className="articleBody">
-            {paragraphs.map((par, index) => (
-              <p key={index}>{parse(par)}</p>
-            ))}
+            {isHtml
+              ? parse(body)
+              : paragraphs.map((par, index) => (
+                  <p key={index}>{parse(par)}</p>
+                ))
+            }
           </div>
         </div>
       </div>

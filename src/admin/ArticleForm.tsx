@@ -2,6 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { useData } from "../data/useData";
 import { Article, useStore } from "../state/useStore";
+import { RichTextEditor } from "../components/RichTextEditor";
 
 export type ArticleFormProps = {
   article: Article;
@@ -12,6 +13,7 @@ export type ArticleFormProps = {
   handleFileChange: (e: React.FormEvent) => void;
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   newCategory: string;
+  onBodyChange: (html: string) => void;
 };
 
 export function ArticleForm(props: ArticleFormProps) {
@@ -24,6 +26,7 @@ export function ArticleForm(props: ArticleFormProps) {
     newCategory,
     handleChange,
     handleFileChange,
+    onBodyChange,
   } = props;
 
   const { user, categories } = useStore((s) => s);
@@ -103,7 +106,7 @@ export function ArticleForm(props: ArticleFormProps) {
       </div>
       <div>
         <label htmlFor="body">Body:</label>
-        <textarea id="body" name="body" value={article?.body ?? ""} onChange={handleChange} required rows={6} />
+        <RichTextEditor value={article?.body ?? ""} onChange={onBodyChange} />
       </div>
       <button type="submit">{editing ? "Submit Changes" : "Post Article"}</button>
     </form>
