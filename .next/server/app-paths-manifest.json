@@ -1,10 +1,7 @@
 {
-  "/api/orders/route": "app/api/orders/route.js",
-  "/api/articles/[id]/route": "app/api/articles/[id]/route.js",
-  "/api/articles/route": "app/api/articles/route.js",
-  "/admin/page": "app/admin/page.js",
   "/article/[id]/page": "app/article/[id]/page.js",
-  "/page": "app/page.js",
+  "/article/new/page": "app/article/new/page.js",
   "/article/edit/[_id]/page": "app/article/edit/[_id]/page.js",
-  "/article/new/page": "app/article/new/page.js"
+  "/page": "app/page.js",
+  "/admin/page": "app/admin/page.js"
 }
