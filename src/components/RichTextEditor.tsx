@@ -2,7 +2,8 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
-import { useEffect } from 'react';
+import Image from '@tiptap/extension-image';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   value: string;
@@ -11,13 +12,16 @@ type Props = {
 
 export function RichTextEditor({ value, onChange }: Props) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline],
+    extensions: [StarterKit, Underline, Image],
     content: value,
     immediatelyRender: false,
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   // Sync external value changes (e.g. when editing an existing article loads)
   useEffect(() => {
@@ -28,14 +32,34 @@ export function RichTextEditor({ value, onChange }: Props) {
     }
   }, [value, editor]);
 
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editor) return;
+    e.target.value = '';
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const res = await fetch('/api/articles/upload-image', { method: 'POST', body: formData });
+      const data = await res.json();
+      if (data.url) {
+        editor.chain().focus().setImage({ src: data.url }).run();
+      }
+    } finally {
+      setUploading(false);
+    }
+  };
+
   if (!editor) return null;
 
-  const btn = (label: string, action: () => void, active: boolean) => (
+  const btn = (label: string, action: () => void, active: boolean, disabled = false) => (
     <button
       type="button"
       onClick={action}
       className={`rte-btn${active ? ' rte-btn--active' : ''}`}
       title={label}
+      disabled={disabled}
     >
       {label}
     </button>
@@ -55,9 +79,18 @@ export function RichTextEditor({ value, onChange }: Props) {
         {btn('• List', () => editor.chain().focus().toggleBulletList().run(), editor.isActive('bulletList'))}
         {btn('1. List', () => editor.chain().focus().toggleOrderedList().run(), editor.isActive('orderedList'))}
         <span className="rte-divider" />
+        {btn(uploading ? '…' : '🖼 Image', () => fileInputRef.current?.click(), false, uploading)}
+        <span className="rte-divider" />
         {btn('↩', () => editor.chain().focus().undo().run(), false)}
         {btn('↪', () => editor.chain().focus().redo().run(), false)}
       </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleImageFileChange}
+      />
       <EditorContent editor={editor} className="rte-content" />
     </div>
   );

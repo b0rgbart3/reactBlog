@@ -36,6 +36,13 @@ export function EditArticlePage() {
         article.headlineImage = selectedFile as any;
       }
       article.userID = user._id;
+      const srcRegex = /<img[^>]+src="([^"]+)"/gi;
+      const images: string[] = [];
+      let match: RegExpExecArray | null;
+      while ((match = srcRegex.exec(article.body ?? '')) !== null) {
+        images.push(match[1]);
+      }
+      article.articleImages = images;
       await axios.patch(`/api/articles/${article._id}`, article, {
         headers: { "Content-Type": "multipart/form-data" }
       });

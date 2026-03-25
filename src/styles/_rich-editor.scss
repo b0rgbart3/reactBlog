@@ -83,6 +83,7 @@
     strong { color: $foreground; }
     em { font-style: italic; }
     u { text-decoration: underline; }
+    img { max-width: 100%; border-radius: $border-radius-sm; margin: 0.75em 0; display: block; }
 
     &.ProseMirror-focused { outline: none; }
   }
@@ -95,4 +96,5 @@
   h3 { font-size: 1.15rem; font-weight: 600; margin: 1em 0 0.4em; color: $title-text; }
   ul, ol { padding-left: 1.5em; }
   li { margin-bottom: 0.25em; }
+  img { max-width: 100%; border-radius: $border-radius-md; margin: 1.5em auto; display: block; }
 }

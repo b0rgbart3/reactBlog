@@ -21,7 +21,10 @@ export async function POST(request: NextRequest) {
     const body: Record<string, any> = {};
 
     for (const [key, value] of formData.entries()) {
-      if (key !== 'headlineImage') {
+      if (key === 'headlineImage') continue;
+      if (key === 'articleImages') {
+        body.articleImages = [...(body.articleImages ?? []), value];
+      } else {
         body[key] = value;
       }
     }

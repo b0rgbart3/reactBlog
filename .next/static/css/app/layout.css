@@ -2262,6 +2262,12 @@ button:active {
 .rte-content .tiptap u {
   text-decoration: underline;
 }
+.rte-content .tiptap img {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 0.75em 0;
+  display: block;
+}
 .rte-content .tiptap.ProseMirror-focused {
   outline: none;
 }
@@ -2289,6 +2295,12 @@ button:active {
 }
 .articleBody li {
   margin-bottom: 0.25em;
+}
+.articleBody img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1.5em auto;
+  display: block;
 }
 
 .adminPanel {

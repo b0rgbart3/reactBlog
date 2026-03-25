@@ -11,7 +11,8 @@ const ArticlesSchema = new mongoose.Schema({
   subtitle: String,
   summary: String,
   title: String,
-  userID: String
+  userID: String,
+  articleImages: [String]
 });
 
 export const Articles = mongoose.models.articles || mongoose.model("articles", ArticlesSchema);

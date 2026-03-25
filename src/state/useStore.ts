@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 export type Article = {
   body: string;
   category: string;
+  articleImages?: string[];
   headlineImage?: string;
   originDate: string;
   lastModifiedDate: string;

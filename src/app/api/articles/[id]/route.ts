@@ -16,7 +16,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const body: Record<string, any> = {};
 
     for (const [key, value] of formData.entries()) {
-      if (key !== 'headlineImage') {
+      if (key === 'headlineImage') continue;
+      if (key === 'articleImages') {
+        body.articleImages = [...(body.articleImages ?? []), value];
+      } else {
         body[key] = value;
       }
     }
