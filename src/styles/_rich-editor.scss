@@ -84,6 +84,7 @@
     em { font-style: italic; }
     u { text-decoration: underline; }
     img { max-width: 100%; border-radius: $border-radius-sm; margin: 0.75em 0; display: block; }
+    p.caption { font-size: 0.8rem; color: rgba($text-basic, 0.7); text-align: center; font-style: italic; margin: 0.25em 0 1em; }
 
     &.ProseMirror-focused { outline: none; }
   }
@@ -92,9 +93,15 @@
 // ── Article body headings (display page) ────────────────────────────────────
 .articleBody {
   h1 { font-size: 1.8rem; font-weight: 700; margin: 1em 0 0.4em; color: $title-text; }
-  h2 { font-size: 1.4rem; font-weight: 600; margin: 1em 0 0.4em; color: $title-text; }
+  h2 { font-size: 1.4rem; font-weight: 600; margin: 2em 0 0.4em; color: $title-text; }
   h3 { font-size: 1.15rem; font-weight: 600; margin: 1em 0 0.4em; color: $title-text; }
   ul, ol { padding-left: 1.5em; }
   li { margin-bottom: 0.25em; }
   img { max-width: 100%; border-radius: $border-radius-md; margin: 1.5em auto; display: block; }
+  p.caption { text-align: center; font-size: 0.89rem; color: $subtitle-blue; margin: -1em 0 1.5em; }
+  .katex {
+    color: rgb(255, 255, 255);
+    text-align: center;
+  }
+  strong { font-weight: 900; color: $subtitle-blue;}
 }

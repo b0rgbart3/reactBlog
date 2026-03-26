@@ -5,7 +5,7 @@ import { Users } from '@/src/models/Users';
 import { BannerNav } from '@/src/components/banner-nav';
 import { ArticleHeadlineImage } from '@/src/components/ArticleHeadlineImage';
 import parse from 'html-react-parser';
-import { splitIntoLines } from '@/src/utils/articleUtils';
+import { splitIntoLines, renderMath } from '@/src/utils/articleUtils';
 import React from 'react';
 
 export const revalidate = 3600; // regenerate at most once per hour
@@ -68,7 +68,7 @@ export default async function ArticlePageSSG({ params }: { params: Promise<{ id:
     return <div>Article not found</div>;
   }
 
-  const body = article.body ?? '';
+  const body = renderMath(article.body ?? '');
   const isHtml = /<[a-z][\s\S]*>/i.test(body);
   const paragraphs = isHtml ? [] : splitIntoLines(body);
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '@/src/styles/index.scss';
+import 'katex/dist/katex.min.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://moon-math.online'),

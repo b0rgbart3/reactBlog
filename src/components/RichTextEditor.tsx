@@ -3,7 +3,20 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import { Node, mergeAttributes } from '@tiptap/core';
 import { useEffect, useRef, useState } from 'react';
+
+const Caption = Node.create({
+  name: 'caption',
+  group: 'block',
+  content: 'inline*',
+  parseHTML() {
+    return [{ tag: 'p.caption' }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ['p', mergeAttributes(HTMLAttributes, { class: 'caption' }), 0];
+  },
+});
 
 type Props = {
   value: string;
@@ -12,7 +25,7 @@ type Props = {
 
 export function RichTextEditor({ value, onChange }: Props) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Image],
+    extensions: [StarterKit, Underline, Image, Caption],
     content: value,
     immediatelyRender: false,
     onUpdate({ editor }) {
@@ -80,6 +93,14 @@ export function RichTextEditor({ value, onChange }: Props) {
         {btn('1. List', () => editor.chain().focus().toggleOrderedList().run(), editor.isActive('orderedList'))}
         <span className="rte-divider" />
         {btn(uploading ? '…' : '🖼 Image', () => fileInputRef.current?.click(), false, uploading)}
+        {btn('∑', () => editor.chain().focus().insertContent('$  $').run(), false)}
+        {btn('Caption', () => {
+          if (editor.isActive('caption')) {
+            editor.chain().focus().setParagraph().run();
+          } else {
+            editor.chain().focus().setNode('caption').run();
+          }
+        }, editor.isActive('caption'))}
         <span className="rte-divider" />
         {btn('↩', () => editor.chain().focus().undo().run(), false)}
         {btn('↪', () => editor.chain().focus().redo().run(), false)}
