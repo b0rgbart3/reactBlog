@@ -3,8 +3,12 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import { createLowlight, common } from 'lowlight';
 import { Node, mergeAttributes } from '@tiptap/core';
 import { useEffect, useRef, useState } from 'react';
+
+const lowlight = createLowlight(common);
 
 const Caption = Node.create({
   name: 'caption',
@@ -25,7 +29,13 @@ type Props = {
 
 export function RichTextEditor({ value, onChange }: Props) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Image, Caption],
+    extensions: [
+      StarterKit.configure({ codeBlock: false }),
+      Underline,
+      Image,
+      Caption,
+      CodeBlockLowlight.configure({ lowlight }),
+    ],
     content: value,
     immediatelyRender: false,
     onUpdate({ editor }) {
@@ -91,6 +101,32 @@ export function RichTextEditor({ value, onChange }: Props) {
         <span className="rte-divider" />
         {btn('• List', () => editor.chain().focus().toggleBulletList().run(), editor.isActive('bulletList'))}
         {btn('1. List', () => editor.chain().focus().toggleOrderedList().run(), editor.isActive('orderedList'))}
+        <span className="rte-divider" />
+        {btn('`code`', () => editor.chain().focus().toggleCode().run(), editor.isActive('code'))}
+        {btn('</>', () => editor.chain().focus().toggleCodeBlock().run(), editor.isActive('codeBlock'))}
+        {editor.isActive('codeBlock') && (
+          <select
+            className="rte-lang-select"
+            value={editor.getAttributes('codeBlock').language ?? ''}
+            onChange={e => editor.chain().focus().updateAttributes('codeBlock', { language: e.target.value || null }).run()}
+          >
+            <option value="">plain</option>
+            <option value="bash">Bash</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="css">CSS</option>
+            <option value="go">Go</option>
+            <option value="html">HTML</option>
+            <option value="java">Java</option>
+            <option value="javascript">JavaScript</option>
+            <option value="json">JSON</option>
+            <option value="python">Python</option>
+            <option value="rust">Rust</option>
+            <option value="sql">SQL</option>
+            <option value="typescript">TypeScript</option>
+            <option value="xml">XML</option>
+          </select>
+        )}
         <span className="rte-divider" />
         {btn(uploading ? '…' : '🖼 Image', () => fileInputRef.current?.click(), false, uploading)}
         {btn('∑', () => editor.chain().focus().insertContent('$  $').run(), false)}

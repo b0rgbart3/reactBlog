@@ -4,9 +4,31 @@ import { Articles } from '@/src/models/Articles';
 import { Users } from '@/src/models/Users';
 import { BannerNav } from '@/src/components/banner-nav';
 import { ArticleHeadlineImage } from '@/src/components/ArticleHeadlineImage';
-import parse from 'html-react-parser';
+import parse, { Element as HtmlElement } from 'html-react-parser';
 import { splitIntoLines, renderMath } from '@/src/utils/articleUtils';
+import { CodeBlockDisplay } from '@/src/components/CodeBlockDisplay';
 import React from 'react';
+
+const parseOptions = {
+  replace(node: any) {
+    if (!(node instanceof HtmlElement) || node.name !== 'pre') return;
+    const codeEl = node.children?.find(
+      (c: any) => c instanceof HtmlElement && c.name === 'code'
+    ) as HtmlElement | undefined;
+    if (!codeEl) return;
+
+    const langClass = (codeEl.attribs?.class ?? '')
+      .split(' ')
+      .find((c: string) => c.startsWith('language-'));
+    const language = langClass ? langClass.replace('language-', '') : undefined;
+
+    const rawCode = codeEl.children
+      ?.map((c: any) => ('data' in c ? c.data : ''))
+      .join('') ?? '';
+
+    return <CodeBlockDisplay code={rawCode} language={language} />;
+  },
+};
 
 export const revalidate = 3600; // regenerate at most once per hour
 
@@ -103,7 +125,7 @@ export default async function ArticlePageSSG({ params }: { params: Promise<{ id:
           </div>
           <div className="articleBody">
             {isHtml
-              ? parse(body)
+              ? parse(body, parseOptions)
               : paragraphs.map((par, index) => (
                   <p key={index}>{parse(par)}</p>
                 ))

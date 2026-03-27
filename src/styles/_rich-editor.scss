@@ -85,6 +85,33 @@
     u { text-decoration: underline; }
     img { max-width: 100%; border-radius: $border-radius-sm; margin: 0.75em 0; display: block; }
     p.caption { font-size: 0.8rem; color: rgba($text-basic, 0.7); text-align: center; font-style: italic; margin: 0.25em 0 1em; }
+    code { font-family: $font-mono; font-size: 0.875em; background: shade($surface, 12%); border-radius: 3px; padding: 0.15em 0.35em; color: $accent; }
+    pre {
+      font-family: $font-mono;
+      font-size: 0.875rem;
+      background: #0d1117;
+      border-radius: $border-radius-sm;
+      padding: 0.75rem 1rem;
+      margin: 0.75em 0;
+      overflow-x: auto;
+      color: #e6edf3;
+      code {
+        background: none;
+        padding: 0;
+        color: inherit;
+        font-size: inherit;
+        border-radius: 0;
+      }
+      // lowlight / highlight.js token colours (github-dark palette)
+      .hljs-keyword, .hljs-selector-tag, .hljs-built_in { color: #ff7b72; }
+      .hljs-type, .hljs-class, .hljs-title.class_ { color: #ffa657; }
+      .hljs-title.function_, .hljs-function { color: #d2a8ff; }
+      .hljs-number, .hljs-literal { color: #79c0ff; }
+      .hljs-string, .hljs-attr { color: #a5d6ff; }
+      .hljs-comment { color: #8b949e; font-style: italic; }
+      .hljs-variable, .hljs-params { color: #e6edf3; }
+      .hljs-operator, .hljs-punctuation { color: #e6edf3; }
+    }
 
     &.ProseMirror-focused { outline: none; }
   }
@@ -99,9 +126,94 @@
   li { margin-bottom: 0.25em; }
   img { max-width: 100%; border-radius: $border-radius-md; margin: 1.5em auto; display: block; }
   p.caption { text-align: center; font-size: 0.89rem; color: $subtitle-blue; margin: -1em 0 1.5em; }
+  code { font-family: $font-mono; font-size: 0.875em; background: shade($surface, 12%); border-radius: 3px; padding: 0.15em 0.35em; color: $accent; }
   .katex {
     color: rgb(255, 255, 255);
     text-align: center;
   }
   strong { font-weight: 900; color: $subtitle-blue;}
+}
+
+// ── Code block display component (article page) ──────────────────────────────
+.code-block {
+  border-radius: $border-radius-sm;
+  overflow: hidden;
+  margin: 1.25em 0;
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 0.875rem;
+    background: #161b22;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__lang {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: $font-mono;
+    font-size: 0.75rem;
+    color: #8b949e;
+    letter-spacing: 0.03em;
+    svg { opacity: 0.7; }
+  }
+
+  &__copy {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #8b949e;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s, background 0.15s;
+
+    &:hover { color: #e6edf3; background: rgba(255,255,255,0.07); }
+  }
+
+  &__pre {
+    margin: 0;
+    padding: 1rem 1.125rem;
+    overflow-x: auto;
+    font-family: $font-mono;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #e6edf3;
+
+    code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    // highlight.js token colours (github-dark palette)
+    .hljs-keyword, .hljs-selector-tag, .hljs-built_in { color: #2b9080; }
+    .hljs-type, .hljs-class, .hljs-title.class_ { color: #79c0ff; }
+    .hljs-title.function_, .hljs-function { color: #2b9080; }
+    .hljs-number, .hljs-literal { color: #79c0ff; }
+    .hljs-string, .hljs-attr { color: #a5d6ff; }
+    .hljs-comment { color: #7196a9; font-style: italic; }
+    .hljs-variable, .hljs-params { color: #e6edf3; }
+    .hljs-operator, .hljs-punctuation { color: #e6edf3; }
+  }
+}
+
+// ── Language selector in toolbar ─────────────────────────────────────────────
+.rte-lang-select {
+  background: shade($surface, 8%);
+  border: 1px solid shade($surface, 15%);
+  border-radius: $border-radius-sm;
+  color: $text-basic;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  cursor: pointer;
+
+  &:focus { outline: none; border-color: $highlight; }
 }
