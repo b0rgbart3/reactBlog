@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { connectDB } from '@/src/lib/mongodb';
 import { Articles } from '@/src/models/Articles';
 import path from 'path';
@@ -40,6 +41,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const updated = await Articles.findByIdAndUpdate(id, body, { new: true });
     if (!updated) return NextResponse.json({ error: 'Article not found' }, { status: 404 });
+    revalidatePath(`/article/${id}`);
     return NextResponse.json(updated);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
