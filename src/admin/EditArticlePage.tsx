@@ -11,7 +11,7 @@ export function EditArticlePage() {
   const router = useRouter();
   const params = useParams<{ _id: string }>();
   const _id = params._id;
-  const { user, articles, setArticlesLoaded } = useStore((s) => s);
+  const { articles, setArticlesLoaded } = useStore((s) => s);
   const categories = useStore((s) => s.categories);
   const [article, setArticle] = useState<Article>(articles.find((a) => a._id === _id));
   const [newCategory, setNewCategory] = useState('');
@@ -32,20 +32,25 @@ export function EditArticlePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+
       if (selectedFile) {
-        article.headlineImage = selectedFile as any;
+        formData.append('headlineImage', selectedFile);
       }
-      article.userID = user._id;
+
       const srcRegex = /<img[^>]+src="([^"]+)"/gi;
-      const images: string[] = [];
       let match: RegExpExecArray | null;
       while ((match = srcRegex.exec(article.body ?? '')) !== null) {
-        images.push(match[1]);
+        formData.append('articleImages', match[1]);
       }
-      article.articleImages = images;
-      await axios.patch(`/api/articles/${article._id}`, article, {
-        headers: { "Content-Type": "multipart/form-data" }
+
+      const skipKeys = new Set(['headlineImage', 'articleImages', '__v']);
+      Object.entries(article as Record<string, any>).forEach(([key, value]) => {
+        if (skipKeys.has(key) || value === null || value === undefined) return;
+        formData.append(key, String(value));
       });
+
+      await axios.patch(`/api/articles/${article._id}`, formData);
       setArticlesLoaded(false);
       router.push(`/`);
     } catch (err) {
