@@ -97,7 +97,7 @@ export function BannerNav(props) {
           router.push("/memes");
           break;
         case "calculator":
-          router.push("/calculator");
+          router.push("/calculator-landing");
           break;
         case "products":
           router.push("/products");
