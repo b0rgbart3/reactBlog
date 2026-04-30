@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
           destination: '/api/serve-file/:path*',
         },
       ],
+      afterFiles: [
+        {
+          source: '/calculator',
+          destination: '/calculator/index.html',
+        },
+        {
+          source: '/calculator/:path*',
+          destination: '/calculator/:path*',
+        },
+      ],
     };
   },
 };
