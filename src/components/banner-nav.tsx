@@ -99,6 +99,9 @@ export function BannerNav(props) {
         case "calculator":
           router.push("/calculator-landing");
           break;
+        case "countdown":
+          router.push("/countdown-landing");
+          break;
         case "products":
           router.push("/products");
           break;
@@ -200,6 +203,14 @@ export function BannerNav(props) {
               onClick={itemClick}
             >
               Bitcoin Retirement Calculator
+            </div>
+            <div
+              data-nav="countdown"
+              data-type="menuItem"
+              className="innerMenuOption"
+              onClick={itemClick}
+            >
+              Millionth Block Countdown
             </div>
             {orders && orders.length > 0 && (
               <div
