@@ -1,0 +1,62 @@
+const books = [
+  {
+    title: "Gradually, then Suddenly",
+    author: "Parker Lewis",
+    image: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1704252448i/204730461.jpg",
+    link: "https://www.amazon.com/Gradually-Then-Suddenly-Parker-Lewis/dp/B0CRD86PWZ",
+  },
+  {
+    title: "Broken Money",
+    author: "Lyn Alden",
+    image: "https://cdn.prod.website-files.com/64fee27528c4095c908b5078/66192f88571bebeb4974ac89_Broken%20_money_border-min.avif", // TODO: add cover image URL
+    link: "https://www.amazon.com/Broken-Money-Financial-System-Failing/dp/B0CG83QBJ6",
+  },
+  {
+    title: "The Bitcoin Standard",
+    author: "Saifedean Ammous",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1517051735i/36448501.jpg",
+    link: "https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861",
+  },
+  {
+    title: "The Price of Tomorrow",
+    author: "Jeff Booth",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1577711076i/50157837.jpg",
+    link: "https://www.amazon.com/Price-Tomorrow-Deflation-Abundant-Future/dp/1999257405",
+  },
+  {
+    title: "Abundance Through Scarcity",
+    author: "Ioni Appelberg",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1685002488i/162107335.jpg",
+    link: "https://www.amazon.com/Abundance-Through-Scarcity-Ioni-Appelberg/dp/9916723087",
+  },
+  {
+    title: "Proof of Money",
+    author: "Terence Michael",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1683170402i/147006050.jpg",
+    link: "https://www.amazon.com/PROOF-MONEY-Behind-Bitcoin-About/dp/B0C2RM94BB",
+  },
+  {
+    title: "The Hidden Cost of Money",
+    author: "Seb Bunney",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1701891456i/203361423.jpg",
+    link: "https://www.amazon.com/Hidden-Cost-Money-Financial-Forces/dp/1738934101",
+  },
+  {
+    title: "The Genesis Book",
+    author: "Aaron Van Wirdum",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1703246002i/204250558.jpg",
+    link: "https://www.amazon.com/Genesis-Book-Projects-Inspired-Bitcoin/dp/B0CQLMQRH7",
+  },
+  {
+    title: "A Progressive's Case for Bitcoin",
+    author: "C. Jason Maier",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1681448300i/131133208.jpg",
+    link: "https://www.amazon.com/Progressives-Case-Bitcoin-Equitable-Peaceful/dp/B0C1J3DC2X",
+  },
+  {
+    title: "The Big Print",
+    author: "Larry Lepard",
+    image: "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1739028382i/227804284.jpg",
+    link: "https://www.amazon.com/Big-Print-Happened-America-Sound/dp/B0DVTCVX8J",
+  },
+];

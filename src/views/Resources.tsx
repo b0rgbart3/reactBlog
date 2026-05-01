@@ -1,5 +1,24 @@
 "use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { BannerNav } from "../components/banner-nav";
+
+function pluralize(word: string): string {
+  if (/[^aeiou]y$/i.test(word)) return word.slice(0, -1) + "ies";
+  if (/(s|sh|ch|x|z)$/i.test(word)) return word + "es";
+  return word + "s";
+}
+
+type ApiResource = {
+  _id: string;
+  title: string;
+  author?: string;
+  type: string;
+  description?: string;
+  imageURL?: string;
+  linkURL: string;
+  readyToPublish: boolean;
+};
 
 const books = [
   {
@@ -75,6 +94,71 @@ const books = [
 ];
 
 export function Resources() {
+  const [apiResources, setApiResources] = useState<ApiResource[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/resources")
+      .then((res) => {
+        const data: ApiResource[] = res.data.data ?? [];
+        setApiResources(data.filter((r) => r.readyToPublish));
+      })
+      .catch(() => {});
+  }, []);
+
+  const distinctTypes = [...new Set(apiResources.map((r) => r.type))];
+  const useDynamicMode = distinctTypes.length > 1;
+
+  if (useDynamicMode) {
+    return (
+      <>
+        <div className="siteWrapper">
+          <BannerNav page="resources" />
+          <div className="basicContainer">
+            <h1>Bitcoin related Resources</h1>
+            <p>
+              This is a short list of the resources in the bitcoin space that
+              are at top of mind for me.
+            </p>
+            {distinctTypes.map((type) => (
+              <div key={type}>
+                <h2>{pluralize(type)}</h2>
+                <div className="bookGrid">
+                  {apiResources
+                    .filter((r) => r.type === type)
+                    .map((r) => (
+                      <div key={r._id} className="bookCard">
+                        <a href={r.linkURL} target="new">
+                          {r.imageURL ? (
+                            <img
+                              className="bookThumb"
+                              src={r.imageURL}
+                              alt={r.title}
+                            />
+                          ) : (
+                            <div className="bookThumbPlaceholder">No Cover</div>
+                          )}
+                          <div className="bookTitle">{r.title}</div>
+                          {r.author && (
+                            <div className="bookAuthor">by {r.author}</div>
+                          )}
+                          {r.description && (
+                            <div className="bookDescription">
+                              {r.description}
+                            </div>
+                          )}
+                        </a>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="siteWrapper">

@@ -2,6 +2,7 @@
 // UseData.ts
 import { useCallback, useEffect } from "react";
 import { User, useStore } from "../state/useStore";
+import type { Resource } from "../state/useStore";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
@@ -16,7 +17,8 @@ export function useData() {
     setArticlesLoaded, setArticles, setProducts, setProductCategories, setCategories,
     setLoginLoaded, loginLoaded, users, setUsers, setProductsLoaded,
     setUser, setSettings, settings,
-    setPlacedOrders, placedOrdersLoaded, setPlacedOrdersLoaded } = useStore((s) => s);
+    setPlacedOrders, placedOrdersLoaded, setPlacedOrdersLoaded,
+    resourcesLoaded, setResources, setResourceTypes, setResourcesLoaded } = useStore((s) => s);
 
   const fetchSettings = useCallback(async () => {
     if (settingsLoaded) return;
@@ -174,6 +176,30 @@ export function useData() {
     }
   }, [placedOrdersLoaded]);
 
+  const fetchResources = useCallback(async () => {
+    if (resourcesLoaded) return;
+    setResourcesLoaded(true);
+    try {
+      const res = await axios.get("/api/resources");
+      const data: Resource[] = res.data.data;
+      setResources(data);
+      const types: string[] = [...new Set(
+        data.map((r) => r.type).filter((t) => t && t.trim() !== "")
+      )] as string[];
+      setResourceTypes(types);
+    } catch (err) {
+      console.error("Failed to fetch resources:", err);
+    }
+  }, [resourcesLoaded, setResourcesLoaded]);
+
+  const killResource = useCallback(async (killID: string) => {
+    try {
+      await axios.delete(`/api/resources/${killID}`);
+    } catch (err) {
+      console.error("Failed to delete resource:", killID);
+    }
+  }, []);
+
   const backUpDB = useCallback(async (auth: AuthObject) => {
     let backedUp;
     try {
@@ -200,6 +226,8 @@ export function useData() {
     fetchProducts,
     fetchSettings,
     fetchPlacedOrders,
+    fetchResources,
+    killResource,
     refresh,
     login,
     logout,

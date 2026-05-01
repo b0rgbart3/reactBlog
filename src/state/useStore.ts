@@ -86,6 +86,17 @@ export type Setting = {
   stringValue: string;
 }
 
+export type Resource = {
+  _id: string;
+  title: string;
+  author?: string;
+  type: string;
+  description?: string;
+  imageURL?: string;
+  linkURL: string;
+  readyToPublish: boolean;
+}
+
 type State = {
   articlesById: Record<string, Article>;
   usersById: Record<string, User>;
@@ -121,6 +132,13 @@ type State = {
   setPlacedOrders: (orders: PlacedOrder[]) => void;
   placedOrdersLoaded: boolean;
   setPlacedOrdersLoaded: (boolean) => void;
+  resources: Resource[];
+  resourcesById: Record<string, Resource>;
+  resourceTypes: string[];
+  resourcesLoaded: boolean;
+  setResources: (resources: Resource[]) => void;
+  setResourceTypes: (types: string[]) => void;
+  setResourcesLoaded: (loaded: boolean) => void;
 };
 
 export const useStore = create<State>()(persist((set) => ({
@@ -168,6 +186,17 @@ export const useStore = create<State>()(persist((set) => ({
   setPlacedOrders: (placedOrders: PlacedOrder[]) => set({ placedOrders }),
   placedOrdersLoaded: false,
   setPlacedOrdersLoaded: (loaded: boolean) => set({ placedOrdersLoaded: loaded }),
+  resources: [],
+  resourcesById: {},
+  resourceTypes: [],
+  resourcesLoaded: false,
+  setResources: (resources) =>
+    set({
+      resources,
+      resourcesById: Object.fromEntries(resources.map(r => [r._id, r])),
+    }),
+  setResourceTypes: (resourceTypes: string[]) => set({ resourceTypes }),
+  setResourcesLoaded: (loaded: boolean) => set({ resourcesLoaded: loaded }),
 }), {
   name: 'cart-storage',
   partialize: (state) => ({ orders: state.orders }),

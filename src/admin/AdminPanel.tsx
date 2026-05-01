@@ -1,7 +1,7 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Article, Product, useStore } from "../state/useStore";
+import { Article, Product, Resource, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import { DownloadJsonButton } from "./Download";
 import { UsersForm } from "./UsersForm";
@@ -10,7 +10,7 @@ import { ExpandableTable } from "./ExpandableTable";
 import { PlacedOrdersTable } from "./PlacedOrdersTable";
 
 export function AdminPanel() {
-  const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch } =
+  const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch, fetchResources, killResource } =
     useData();
   const {
     user,
@@ -20,7 +20,13 @@ export function AdminPanel() {
     productCategories,
     users,
     settings,
+    resources,
+    resourceTypes,
   } = useStore((s) => s);
+
+  useEffect(() => {
+    fetchResources();
+  }, []);
   const showMerch =
     settings?.find((s) => s.name === "showMerch")?.booleanValue ?? false;
   const showMerchLocal =
@@ -75,6 +81,23 @@ export function AdminPanel() {
   const newProduct = useCallback(() => {
     router.push(`/product/new`);
   }, [router]);
+  const newResource = useCallback(() => {
+    router.push(`/resource/new`);
+  }, [router]);
+
+  const editResource = useCallback((resource: Resource) => {
+    router.push(`/resource/edit/${resource._id}`);
+  }, [router]);
+
+  const killAResource = useCallback((resourceToKill: Resource) => {
+    const confirmDelete =
+      window.confirm(`Are you sure you want to delete this resource,
+            titled: ${resourceToKill.title} ?
+            \nIt will be completely deleted from the database and cannot be restored.`);
+    if (!confirmDelete) return;
+    killResource(resourceToKill._id);
+    refresh();
+  }, []);
 
   const clearOut = useCallback(async () => {
     let wiped;
@@ -124,6 +147,35 @@ export function AdminPanel() {
                         {a.title}
                       </div>
                       <div className="killButton" onClick={() => killArticle(a)}>
+                        ✕
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+        </ExpandableTable>
+
+        <ExpandableTable title="resources" open={false}>
+          <div onClick={newResource} className="newArticleButton">
+            + Add a New Resource
+          </div>
+          <div className="articlesListLabel">
+            Resources
+            <span className="articlesListCount">{resources?.length ?? 0}</span>
+          </div>
+          <div className="articlesContainer">
+            {resourceTypes?.map((type, typeIndex) => (
+              <div className="articleCategoryGroup" key={`type-${type}-${typeIndex}`}>
+                <div className="articleCategoryHeader">{type}</div>
+                {resources
+                  ?.filter((r) => r.type === type)
+                  .map((r) => (
+                    <div className="aaRow" key={r._id}>
+                      <div className="aaItem" onClick={() => editResource(r)}>
+                        {r.title}
+                      </div>
+                      <div className="killButton" onClick={() => killAResource(r)}>
                         ✕
                       </div>
                     </div>
