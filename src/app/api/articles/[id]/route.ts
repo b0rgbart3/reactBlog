@@ -36,6 +36,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       body.headlineImage = `/uploads/articles/${filename}`;
     }
 
+    delete body._id;
     body.lastModifiedDate = new Date().toISOString().split('T')[0];
     body.randomColor = getRandomHexColor();
 

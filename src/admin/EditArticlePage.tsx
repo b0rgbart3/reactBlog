@@ -44,7 +44,7 @@ export function EditArticlePage() {
         formData.append('articleImages', match[1]);
       }
 
-      const skipKeys = new Set(['headlineImage', 'articleImages', '__v']);
+      const skipKeys = new Set(['_id', 'headlineImage', 'articleImages', '__v']);
       Object.entries(article as Record<string, any>).forEach(([key, value]) => {
         if (skipKeys.has(key) || value === null || value === undefined) return;
         formData.append(key, String(value));
