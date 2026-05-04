@@ -46,6 +46,11 @@ export function Home() {
     <div className="starfield">
       <div className="siteWrapper">
         <BannerNav page="home" />
+        <div className="quickLinks">
+          <button className="quickLink" onClick={() => router.push('/resources')}>Resources</button>
+          <button className="quickLink" onClick={() => router.push('/calculator-landing')}>BTC Retirement Calculator</button>
+          <button className="quickLink" onClick={() => router.push('/countdown-landing')}>Countdown</button>
+        </div>
         <div className="home">
           <div className="mainColumn">
             {isMobile && showMerch && <ProductThumbnails linkHeader limit={2} />}
