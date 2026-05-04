@@ -85,6 +85,7 @@
     u { text-decoration: underline; }
     img { max-width: 100%; border-radius: $border-radius-sm; margin: 0.75em 0; display: block; }
     p.caption { font-size: 0.8rem; color: rgba($text-basic, 0.7); text-align: center; font-style: italic; margin: 0.25em 0 1em; }
+    a { color: $highlight; text-decoration: underline; cursor: pointer; }
     code { font-family: $font-mono; font-size: 0.875em; background: shade($surface, 12%); border-radius: 3px; padding: 0.15em 0.35em; color: $accent; }
     pre {
       font-family: $font-mono;
@@ -202,6 +203,26 @@
     .hljs-variable, .hljs-params { color: #e6edf3; }
     .hljs-operator, .hljs-punctuation { color: #e6edf3; }
   }
+}
+
+// ── Link input in toolbar ────────────────────────────────────────────────────
+.rte-link-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rte-link-url {
+  background: shade($surface, 8%);
+  border: 1px solid shade($surface, 15%);
+  border-radius: $border-radius-sm;
+  color: $text-basic;
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  width: 220px;
+
+  &:focus { outline: none; border-color: $highlight; }
 }
 
 // ── Language selector in toolbar ─────────────────────────────────────────────

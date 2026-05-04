@@ -3,6 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight, common } from 'lowlight';
 import { Node, mergeAttributes } from '@tiptap/core';
@@ -35,6 +36,7 @@ export function RichTextEditor({ value, onChange }: Props) {
       Image,
       Caption,
       CodeBlockLowlight.configure({ lowlight }),
+      Link.configure({ openOnClick: false, autolink: true }),
     ],
     content: value,
     immediatelyRender: false,
@@ -45,6 +47,33 @@ export function RichTextEditor({ value, onChange }: Props) {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [showLinkInput, setShowLinkInput] = useState(false);
+  const [linkUrl, setLinkUrl] = useState('');
+  const linkInputRef = useRef<HTMLInputElement>(null);
+
+  const openLinkInput = () => {
+    const existing = editor?.getAttributes('link').href ?? '';
+    setLinkUrl(existing);
+    setShowLinkInput(true);
+    setTimeout(() => linkInputRef.current?.focus(), 0);
+  };
+
+  const applyLink = () => {
+    if (!editor) return;
+    const url = linkUrl.trim();
+    if (url) {
+      editor.chain().focus().setLink({ href: url }).run();
+    } else {
+      editor.chain().focus().unsetLink().run();
+    }
+    setShowLinkInput(false);
+    setLinkUrl('');
+  };
+
+  const cancelLink = () => {
+    setShowLinkInput(false);
+    setLinkUrl('');
+  };
 
   // Sync external value changes (e.g. when editing an existing article loads)
   useEffect(() => {
@@ -101,6 +130,29 @@ export function RichTextEditor({ value, onChange }: Props) {
         <span className="rte-divider" />
         {btn('• List', () => editor.chain().focus().toggleBulletList().run(), editor.isActive('bulletList'))}
         {btn('1. List', () => editor.chain().focus().toggleOrderedList().run(), editor.isActive('orderedList'))}
+        <span className="rte-divider" />
+        {editor.isActive('link')
+          ? btn('Unlink', () => editor.chain().focus().unsetLink().run(), true)
+          : btn('Link', openLinkInput, false)
+        }
+        {showLinkInput && (
+          <span className="rte-link-input">
+            <input
+              ref={linkInputRef}
+              type="url"
+              value={linkUrl}
+              placeholder="https://..."
+              onChange={e => setLinkUrl(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') { e.preventDefault(); applyLink(); }
+                if (e.key === 'Escape') cancelLink();
+              }}
+              className="rte-link-url"
+            />
+            <button type="button" onClick={applyLink} className="rte-btn">Apply</button>
+            <button type="button" onClick={cancelLink} className="rte-btn">✕</button>
+          </span>
+        )}
         <span className="rte-divider" />
         {btn('`code`', () => editor.chain().focus().toggleCode().run(), editor.isActive('code'))}
         {btn('</>', () => editor.chain().focus().toggleCodeBlock().run(), editor.isActive('codeBlock'))}
