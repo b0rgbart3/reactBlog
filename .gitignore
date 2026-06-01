@@ -1,0 +1,15 @@
+node_modules/
+package-lock.json
+Portfolio_KEY_PAIR.pem
+.env
+.secrets
+backup/
+adminBackup/
+*.pem
+.next
+.env.local
+.env*
+
+dump/
+.DS_Store
+

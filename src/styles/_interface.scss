@@ -1,0 +1,82 @@
+
+
+@use 'colors' as *;
+@use 'variables' as *;
+
+
+
+button {
+  background-color: $accent; /* dark charcoal gray */
+  color: $foreground;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 0 12px $background; /* subtle blue glow */
+}
+
+button:hover {
+  box-shadow: 0 0 12px rgba($glow, 0.7); /* stronger glow on hover */
+}
+
+button:active {
+  background-color: $button-pressed;
+  box-shadow: 0 0 22px $glow; /* brightest glow when clicked */
+  transform: scale(0.97); /* slight "press down" effect */
+}
+
+.breadcrumbs {
+  // border: 2px solid orange;
+  padding:0;
+  margin:0;
+  padding-left:20px;
+  padding-right: 20px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.breadcrumbs ul {
+  // border: 2px solid red;
+  list-style: none;
+  text-align: center;
+  padding:0;
+  margin:0;
+
+}
+
+.breadcrumbs ul li {
+    display: inline-block;
+    padding: 10px;
+    color: $accent;
+    line-height: 1em;
+    padding-top:0;
+    padding-bottom:0;
+    margin: 0;
+    user-select: none;
+    cursor: pointer;
+}
+
+.breadcrumbs ul li:hover {
+  color: $highlight;
+}
+
+.breadcrumbs ul li::after {
+  padding-left: 20px;
+  content: "  |";
+}
+
+.breadcrumbs ul li:hover:after {
+  padding-left: 20px;
+  content: "  |";
+  color: $accent;
+}
+
+@media (max-width: 480px) {
+  /* Small mobile phones */
+  .breadcrumbs { 
+    display: none;
+  }
+}

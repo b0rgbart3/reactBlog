@@ -1,0 +1,308 @@
+
+@use 'colors' as *;
+@use 'variables' as *;
+
+.sizeWarning {
+  color: orange;
+}
+
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 20px;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.productBox {
+  background-color: rgba($background, .25);
+  border-radius: 12px;
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+  color: $text-basic;
+  transition: all .25s;
+  margin-bottom: 10px;
+}
+
+.productBox:hover {
+  background-color: $background;
+  box-shadow: 0 0 12px $highlight;
+}
+
+.productBoxImage {
+  width: 100%;
+  margin: auto;
+  position: relative;
+  top: -12px;
+}
+
+.productBoxImage img {
+  width: 100%;
+}
+
+
+
+.productThumbnailTitle {
+    font-family: $font-serif;
+  font-size: 20px;
+}
+
+
+.productThumbnailDescriptionBox {
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+.productThumbnailDescriptionBoxText {
+  font-family: $font-sans;
+  font-size: 16px;
+  margin-top: 14px;
+  line-height: 24px;
+}
+
+.productPageLayout {
+    display: flex;
+    flex-direction: column;
+    /* Mobile: stacked */
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.pplChild {
+    width: 100%;
+    /* Mobile: each child takes full width */
+}
+
+.pplChild-left {
+
+}
+
+.pplChild-right {
+    padding-left: 60px;
+    padding-right: 50px;
+    max-width: 100%;
+    width: 80%;
+}
+
+/* Tablet and larger */
+@media (min-width: 768px) {
+    .productPageLayout {
+        flex-direction: row;
+        /* Side-by-side */
+    }
+
+    .pplChild-left {
+        flex: 3;
+        /* ~75% width */
+    }
+
+    .pplChild-right {
+            /* border-left: 2px solid gray; */
+        flex: 2;
+  
+                padding-left:0;
+    padding-right: 50px;
+        /* ~25% width */
+    }
+}
+
+.productBeauty {
+    font-family: $font-serif;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 0 30px;
+}
+
+.productBackArrow {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0;
+    margin-bottom: 8px;
+    align-self: flex-start;
+}
+
+.productBeautyImageWrap {
+    position: relative;
+}
+
+.productBeautyNav {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.productNavArrow {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: all;
+    transition: background-color 0.2s;
+    line-height: 1;
+    padding: 0;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+}
+
+.productNavArrow--hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.productBeauty img {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+.productBeautyClickable {
+    @media (min-width: 1024px) {
+        cursor: zoom-in;
+    }
+}
+
+.beautyLightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+
+    img {
+        max-width: 90vw;
+        max-height: 90vh;
+        border-radius: 8px;
+        object-fit: contain;
+    }
+}
+
+.prodcutTitle {
+    text-align: left;
+    margin-top: 20px;
+    font-size: 28px;
+    margin-bottom: 12px;
+    padding: 0 10px;
+}
+
+.productDescriptionBlock {
+    text-align: left;
+    padding: 0 10px;
+    font-size: 1.15rem;
+}
+
+.productImagesStrip {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0 10px;
+
+  img {
+    height: 240px;
+    width: auto;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+}
+
+.productGalleryThumb {
+  cursor: zoom-in;
+}
+
+.productPrice {
+  font-size: 36px;
+  font-weight: 700;
+  color: #7ec8e3;
+  margin-bottom: 20px;
+}
+
+.addToCartSection {
+  transition: opacity 0.3s ease;
+}
+
+.addToCartSection--ghosted {
+  opacity: 0.3;
+  pointer-events: none;
+  user-select: none;
+}
+
+.sizeBoxes {
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 12px;
+    font-weight: 900;
+}
+
+.sizeBox {
+    border: 3px solid $border-neutral;
+    padding: 18px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.sizeBox:hover {
+    border: 3px solid $size-select;
+}
+
+.sizeBox.active {
+    border: 3px solid $size-select;
+    background-color: $background;
+    color: $foreground;
+}
+
+.standout {
+    font-weight: 700;
+    color: $highlight;
+}
+
+.moreProductsWrap {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.moreProductsBtn {
+  background: transparent;
+  border: 2px solid $highlight;
+  border-radius: 999px;
+  color: $highlight;
+  font-family: $font-sans;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: $highlight;
+    color: $background;
+  }
+}
