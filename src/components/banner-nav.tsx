@@ -274,13 +274,7 @@ export function BannerNav(props) {
       <div className="tagline">
         <p className="hero-title ">A blog about bitcoin.</p>
       </div>
-      {user && (
-        <div className="loggedInAs">
-          You are logged in as: {user?.userName}
-          {user?.author && " - author"}
-          {user?.sensi && " & admin"}
-        </div>
-      )}
+      {user && <div className="loggedInDot" title={`Logged in as ${user?.userName}`} />}
       {!user && page !== "login" && page !== "create" && (
         <div className="notLoggedIn"></div>
       )}

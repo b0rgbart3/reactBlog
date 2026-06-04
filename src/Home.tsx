@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useStore } from "./state/useStore";
 import { useData } from "./data/useData";
@@ -8,12 +8,19 @@ import { Articles } from "./views/Articles/Articles";
 import { Footer } from "./components/footer";
 import { ProductThumbnails } from "./views/Products/ProductThumbnails";
 import { MemeThumbnails } from "./components/MemeThumbnails";
+import { BitcoinPrice, BlockHeight, HalvingCountdown } from "bitcoin-widgets";
 
 export function Home() {
   const { fetchArticles, fetchUsers, fetchSettings } = useData();
   const {
-    user, articles, articlesLoaded, categories, products,
-    usersLoaded, settingsLoaded, settings,
+    user,
+    articles,
+    articlesLoaded,
+    categories,
+    products,
+    usersLoaded,
+    settingsLoaded,
+    settings,
   } = useStore((s) => s);
 
   const router = useRouter();
@@ -24,10 +31,11 @@ export function Home() {
     fetchSettings();
   }, [fetchArticles, fetchUsers, fetchSettings]);
 
-  const isLocal = process.env.NEXT_PUBLIC_ENV === 'local';
+  const isLocal = process.env.NEXT_PUBLIC_ENV === "local";
   const showMerch = useMemo(() => {
-    const settingName = isLocal ? 'showMerchLocal' : 'showMerch';
-    return settings?.find((setting) => setting.name === settingName)?.booleanValue;
+    const settingName = isLocal ? "showMerchLocal" : "showMerch";
+    return settings?.find((setting) => setting.name === settingName)
+      ?.booleanValue;
   }, [settings, isLocal]);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -46,21 +54,61 @@ export function Home() {
     <div className="starfield">
       <div className="siteWrapper">
         <BannerNav page="home" />
+        <div className="btcWidgets">
+          <p className="btcWidgetsLabel">BTC Live Stats:</p>
+          <BitcoinPrice theme="minimal" />
+          <BlockHeight theme="minimal" />
+          <HalvingCountdown theme="minimal" />
+        </div>
         <div className="quickLinks">
-          <button className="quickLink" onClick={() => router.push('/resources')}>Resources</button>
-          <button className="quickLink" onClick={() => router.push('/calculator-landing')}>BTC Retirement Calculator</button>
-          <button className="quickLink" onClick={() => router.push('/countdown-landing')}>Countdown</button>
-          <button className="quickLink" onClick={() => router.push('/simplcagr-landing')}>SimplCAGR</button>
+          <button
+            className="quickLink"
+            onClick={() => router.push("/resources")}
+          >
+            Resources
+          </button>
+          <button
+            className="quickLink"
+            onClick={() => router.push("/calculator-landing")}
+          >
+            BTC Retirement Calculator
+          </button>
+          <button
+            className="quickLink"
+            onClick={() => router.push("/countdown-landing")}
+          >
+            Countdown
+          </button>
+          <button
+            className="quickLink"
+            onClick={() => router.push("/simplcagr-landing")}
+          >
+            SimplCAGR
+          </button>
         </div>
         <div className="home">
           <div className="mainColumn">
-            {isMobile && showMerch && <ProductThumbnails linkHeader limit={2} />}
-            <div className="sticker sticker--link" onClick={() => router.push('/articles')}>Articles</div>
+            {isMobile && showMerch && (
+              <ProductThumbnails linkHeader limit={2} />
+            )}
+            <div
+              className="sticker sticker--link"
+              onClick={() => router.push("/articles")}
+            >
+              Articles
+            </div>
             <Articles />
             {showMerch && (
               <>
-                <div className="sticker sticker--link" onClick={() => router.push('/memes')}>Memes</div>
-                <div className="thumbnailMemes"><MemeThumbnails /></div>
+                <div
+                  className="sticker sticker--link"
+                  onClick={() => router.push("/memes")}
+                >
+                  Memes
+                </div>
+                <div className="thumbnailMemes">
+                  <MemeThumbnails />
+                </div>
               </>
             )}
           </div>
@@ -69,7 +117,9 @@ export function Home() {
             {!showMerch && (
               <>
                 <div className="sticker">Memes</div>
-                <div className="thumbnailMemes"><MemeThumbnails /></div>
+                <div className="thumbnailMemes">
+                  <MemeThumbnails />
+                </div>
               </>
             )}
           </div>
