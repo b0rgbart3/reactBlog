@@ -1,28 +1,29 @@
 'use client';
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import orangePill from "../assets/memes/orange_pill.jpeg";
-import fortune from "../assets/memes/fortune_favors.jpg";
-import elementzero from "../assets/memes/element_zero.jpg";
-import buymore from "../assets/memes/buy_more.jpg";
-import keepcalm from "../assets/memes/keep_calm.jpg";
-import unstoppable from "../assets/memes/unstoppable.jpg";
-import rigged from "../assets/memes/rigged.jpg";
+import { useData } from "../data/useData";
+import { useStore } from "../state/useStore";
 
 export function MemeThumbnails() {
   const router = useRouter();
+  const { fetchMemes } = useData();
+  const { memes } = useStore((s) => s);
+
+  useEffect(() => {
+    fetchMemes();
+  }, []);
 
   const goToMemesPage = useCallback(() => {
     router.push("/memes");
   }, [router]);
 
-  const memes = [orangePill, rigged, elementzero, buymore, keepcalm, fortune, unstoppable];
+  const published = memes.filter((m) => m.readyToPublish && m.image);
 
   return (
     <>
-      {memes.map((meme, i) => (
-        <div key={i} className="memeThumb">
-          <img src={meme.src ?? meme as any} onClick={goToMemesPage} />
+      {published.map((m) => (
+        <div key={m._id} className="memeThumb">
+          <img src={m.image} alt={m.title || "meme"} onClick={goToMemesPage} />
         </div>
       ))}
     </>
