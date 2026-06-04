@@ -111,6 +111,7 @@ export function BannerNav(props) {
         case "logout":
           logout();
           setIsMenuOpen(false);
+          router.push("/");
           break;
         case "admin":
           router.push("/admin");

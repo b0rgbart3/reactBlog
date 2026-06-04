@@ -423,6 +423,13 @@
   .heroOverlay .readMoreCta {
     color: $accent;
   }
+
+  .sideColumn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 16px 16px;
+  }
 }
 
 /* Tablet  */
