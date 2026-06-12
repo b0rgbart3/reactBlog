@@ -38,6 +38,47 @@ export async function generateStaticParams() {
   return products.map((p: any) => ({ id: String(p._id) }));
 }
 
-export default function ProductPageRoute() {
-  return <ProductPage />;
+export default async function ProductPageRoute(
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  await connectDB();
+  const product = await Products.findById(id).lean() as any;
+
+  const base = 'https://moon-math.online';
+  const images = [
+    product?.beauty,
+    ...(product?.productImages ?? []),
+  ]
+    .filter(Boolean)
+    .map((img: string) => img.startsWith('http') ? img : `${base}${img}`);
+
+  const jsonLd = product ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.productName,
+    description: product.productDescription,
+    image: images,
+    brand: { '@type': 'Brand', name: 'Moon-Math' },
+    offers: {
+      '@type': 'Offer',
+      url: `${base}/product/${id}`,
+      priceCurrency: 'USD',
+      price: (product.price / 100).toFixed(2),
+      availability: 'https://schema.org/InStock',
+      seller: { '@type': 'Organization', name: 'Moon-Math' },
+    },
+  } : null;
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      <ProductPage />
+    </>
+  );
 }
