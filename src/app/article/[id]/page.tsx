@@ -7,6 +7,7 @@ import { ArticleHeadlineImage } from '@/src/components/ArticleHeadlineImage';
 import parse, { Element as HtmlElement } from 'html-react-parser';
 import { splitIntoLines, renderMath } from '@/src/utils/articleUtils';
 import { CodeBlockDisplay } from '@/src/components/CodeBlockDisplay';
+import { ArticleViewTracker } from '@/src/components/ArticleViewTracker';
 import React from 'react';
 
 const parseOptions = {
@@ -96,6 +97,7 @@ export default async function ArticlePageSSG({ params }: { params: Promise<{ id:
 
   return (
     <>
+      <ArticleViewTracker articleId={id} articleTitle={article.title} />
       <BannerNav page="article" />
       <div className="article">
         <div className="articlePageCategory">{article.category}</div>
