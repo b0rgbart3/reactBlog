@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useData } from "../../data/useData";
 import { useStore } from "../../state/useStore";
 import { BannerNav } from "../../components/banner-nav";
+import { trackEvent } from "../../utils/trackEvent";
 
 export function ShoppingCart() {
   const { fetchProducts } = useData();
@@ -46,6 +47,7 @@ export function ShoppingCart() {
   const proceedToCheckout = useCallback(async () => {
     setLoading(true);
     setError("");
+    trackEvent({ event: 'checkout_start' });
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",

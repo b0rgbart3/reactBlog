@@ -8,6 +8,7 @@ import { UsersForm } from "./UsersForm";
 import { TableHeader } from "./TableHeader";
 import { ExpandableTable } from "./ExpandableTable";
 import { PlacedOrdersTable } from "./PlacedOrdersTable";
+import { AnalyticsTable } from "./AnalyticsTable";
 
 export function AdminPanel() {
   const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch, fetchResources, killResource, fetchMemes, killMeme } =
@@ -293,6 +294,10 @@ export function AdminPanel() {
 
         <ExpandableTable title="placed orders" open={false}>
           <PlacedOrdersTable />
+        </ExpandableTable>
+
+        <ExpandableTable title="analytics" open={false}>
+          <AnalyticsTable />
         </ExpandableTable>
 
         <ExpandableTable title="database" open={false}>

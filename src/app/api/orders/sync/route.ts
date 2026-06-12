@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { connectDB } from '@/src/lib/mongodb';
 import { PlacedOrders } from '@/src/models/PlacedOrders';
+import { AnalyticsEvent } from '@/src/models/AnalyticsEvent';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,5 +63,16 @@ export async function POST(request: NextRequest) {
   if (!result) {
     return NextResponse.json({ status: 'order_not_found' });
   }
+
+  try {
+    await AnalyticsEvent.findOneAndUpdate(
+      { event: 'order_complete', sessionId },
+      { $setOnInsert: { amountTotal: session.amount_total ?? 0 } },
+      { upsert: true }
+    );
+  } catch {
+    // Never let analytics failure break order sync
+  }
+
   return NextResponse.json({ status: 'synced', order: result });
 }

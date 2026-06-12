@@ -5,6 +5,7 @@ import { useData } from "../../data/useData";
 import { Order, useStore } from "../../state/useStore";
 import { BannerNav } from "../../components/banner-nav";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { trackEvent } from "../../utils/trackEvent";
 
 export function ProductPage() {
   const { fetchProducts } = useData();
@@ -18,6 +19,13 @@ export function ProductPage() {
 
   const { products, orders, setOrders, cartFlashCount, setCartFlashCount } =
     useStore((s) => s);
+
+  const product = products.find((p) => p._id === id);
+
+  useEffect(() => {
+    if (!product) return;
+    trackEvent({ event: 'product_view', productId: product._id, productName: product.productName });
+  }, [product?._id]);
   const [chosenSize, setChosenSize] = useState("");
   const [count, setCount] = useState<number>(1);
   const [chooseSizeWarning, setChooseSizeWarning] = useState(false);
@@ -56,6 +64,7 @@ export function ProductPage() {
       setOrders(newOrders);
       setCartFlashCount(cartFlashCount + 1);
       setAddedToCart(true);
+      trackEvent({ event: 'add_to_cart', productId: product._id, productName: product.productName });
     }
   }, [chosenSize, count, orders, cartFlashCount]);
 
@@ -76,7 +85,6 @@ export function ProductPage() {
     </>
   );
 
-  const product = products.find((p) => p._id === id);
   const currentIndex = products.findIndex((p) => p._id === id);
   const prevProduct = currentIndex > 0 ? products[currentIndex - 1] : null;
   const nextProduct =
