@@ -82,23 +82,23 @@ export function AnalyticsTable() {
               <div className="bLabel">Add to Cart</div>
               <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}>
                 <span>{summary.funnel.add_to_cart}</span>
-                <span className="bMeta">{pct(summary.funnel.add_to_cart)}</span>
+                <span className="bMeta" style={{ paddingBottom: 0 }}>{pct(summary.funnel.add_to_cart)}</span>
               </div>
             </div>
             <div className="bRow">
               <div className="bLabel">Checkout Started</div>
               <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}>
                 <span>{summary.funnel.checkout_start}</span>
-                <span className="bMeta">{pct(summary.funnel.checkout_start)}</span>
+                <span className="bMeta" style={{ paddingBottom: 0 }}>{pct(summary.funnel.checkout_start)}</span>
               </div>
             </div>
             <div className="bRow">
               <div className="bLabel">Purchased</div>
               <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}>
                 <span>{summary.funnel.order_complete}</span>
-                <span className="bMeta">{pct(summary.funnel.order_complete)}</span>
+                <span className="bMeta" style={{ paddingBottom: 0 }}>{pct(summary.funnel.order_complete)}</span>
                 {summary.revenueTotal > 0 && (
-                  <span className="bMeta">— ${(summary.revenueTotal / 100).toFixed(2)}</span>
+                  <span className="bMeta" style={{ paddingBottom: 0 }}>— ${(summary.revenueTotal / 100).toFixed(2)}</span>
                 )}
               </div>
             </div>
@@ -115,7 +115,7 @@ export function AnalyticsTable() {
 
           {productOpen && (
             summary.byProduct.length === 0
-              ? <div className="bMeta">No product data for this period.</div>
+              ? <div className="bMeta" style={{ paddingBottom: 0 }}>No product data for this period.</div>
               : summary.byProduct.map((p) => (
                 <div key={p.productId} className="bUser" style={{ marginBottom: 6 }}>
                   <div className="bUserHeader">{p.productName}</div>
@@ -125,7 +125,7 @@ export function AnalyticsTable() {
                   </div>
                   <div className="bRow">
                     <div className="bLabel">Add to Cart</div>
-                    <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}><span>{p.addToCarts}</span> <span className="bMeta">({p.conversionRate}% rate)</span></div>
+                    <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}><span>{p.addToCarts}</span> <span className="bMeta" style={{ paddingBottom: 0 }}>({p.conversionRate}% rate)</span></div>
                   </div>
                 </div>
               ))
@@ -142,7 +142,7 @@ export function AnalyticsTable() {
 
           {articleOpen && (
             summary.byArticle.length === 0
-              ? <div className="bMeta">No article data for this period.</div>
+              ? <div className="bMeta" style={{ paddingBottom: 0 }}>No article data for this period.</div>
               : summary.byArticle.map((a) => (
                 <div key={a.articleId} className="bUser" style={{ marginBottom: 6 }}>
                   <div className="bUserHeader">{a.articleTitle}</div>

@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { event, productId, productName } = body;
+  const { event, productId, productName, articleId, articleTitle } = body;
 
   if (!event) {
     return NextResponse.json({ error: 'Missing event' }, { status: 400 });
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   try {
     await connectDB();
-    await AnalyticsEvent.create({ event, productId, productName });
+    await AnalyticsEvent.create({ event, productId, productName, articleId, articleTitle });
   } catch {
     // Silently swallow — analytics must never break the shop
   }
