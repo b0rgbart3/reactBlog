@@ -12,7 +12,7 @@ export function ShoppingCart() {
   useEffect(() => {
     fetchProducts();
   }, []);
-  const { products, orders, setOrders } = useStore((s) => s);
+  const { products, orders, setOrders, user } = useStore((s) => s);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -47,7 +47,7 @@ export function ShoppingCart() {
   const proceedToCheckout = useCallback(async () => {
     setLoading(true);
     setError("");
-    trackEvent({ event: 'checkout_start' });
+    trackEvent({ event: 'checkout_start' }, !!user?.author);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",

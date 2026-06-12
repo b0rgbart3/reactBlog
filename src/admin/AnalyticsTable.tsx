@@ -15,6 +15,11 @@ interface AnalyticsSummary {
     addToCarts: number;
     conversionRate: number;
   }[];
+  byArticle: {
+    articleId: string;
+    articleTitle: string;
+    views: number;
+  }[];
   revenueTotal: number;
   period: { days: number; from: string; to: string };
 }
@@ -24,6 +29,7 @@ export function AnalyticsTable() {
   const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
   const [loading, setLoading] = useState(false);
   const [productOpen, setProductOpen] = useState(true);
+  const [articleOpen, setArticleOpen] = useState(true);
 
   const loadSummary = (d: number) => {
     setLoading(true);
@@ -74,25 +80,25 @@ export function AnalyticsTable() {
             </div>
             <div className="bRow">
               <div className="bLabel">Add to Cart</div>
-              <div className="bItem">
-                {summary.funnel.add_to_cart}
+              <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}>
+                <span>{summary.funnel.add_to_cart}</span>
                 <span className="bMeta">{pct(summary.funnel.add_to_cart)}</span>
               </div>
             </div>
             <div className="bRow">
               <div className="bLabel">Checkout Started</div>
-              <div className="bItem">
-                {summary.funnel.checkout_start}
+              <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}>
+                <span>{summary.funnel.checkout_start}</span>
                 <span className="bMeta">{pct(summary.funnel.checkout_start)}</span>
               </div>
             </div>
             <div className="bRow">
               <div className="bLabel">Purchased</div>
-              <div className="bItem">
-                {summary.funnel.order_complete}
+              <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}>
+                <span>{summary.funnel.order_complete}</span>
                 <span className="bMeta">{pct(summary.funnel.order_complete)}</span>
                 {summary.revenueTotal > 0 && (
-                  <span className="bMeta"> — ${(summary.revenueTotal / 100).toFixed(2)}</span>
+                  <span className="bMeta">— ${(summary.revenueTotal / 100).toFixed(2)}</span>
                 )}
               </div>
             </div>
@@ -119,7 +125,30 @@ export function AnalyticsTable() {
                   </div>
                   <div className="bRow">
                     <div className="bLabel">Add to Cart</div>
-                    <div className="bItem">{p.addToCarts} <span className="bMeta">({p.conversionRate}% rate)</span></div>
+                    <div className="bItem" style={{ display: 'flex', alignItems: 'center', gap: '0.4em' }}><span>{p.addToCarts}</span> <span className="bMeta">({p.conversionRate}% rate)</span></div>
+                  </div>
+                </div>
+              ))
+          )}
+
+          <div
+            className="killCategory"
+            onClick={() => setArticleOpen((v) => !v)}
+            style={{ marginTop: 16, padding: '10px 12px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}
+          >
+            <span>Articles ({summary.byArticle.length})</span>
+            <span style={{ fontSize: 12, opacity: 0.6 }}>{articleOpen ? '▲' : '▼'}</span>
+          </div>
+
+          {articleOpen && (
+            summary.byArticle.length === 0
+              ? <div className="bMeta">No article data for this period.</div>
+              : summary.byArticle.map((a) => (
+                <div key={a.articleId} className="bUser" style={{ marginBottom: 6 }}>
+                  <div className="bUserHeader">{a.articleTitle}</div>
+                  <div className="bRow">
+                    <div className="bLabel">Views</div>
+                    <div className="bItem">{a.views}</div>
                   </div>
                 </div>
               ))

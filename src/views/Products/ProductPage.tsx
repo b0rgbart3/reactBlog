@@ -17,14 +17,14 @@ export function ProductPage() {
     fetchProducts();
   }, []);
 
-  const { products, orders, setOrders, cartFlashCount, setCartFlashCount } =
+  const { products, orders, setOrders, cartFlashCount, setCartFlashCount, user } =
     useStore((s) => s);
 
   const product = products.find((p) => p._id === id);
 
   useEffect(() => {
     if (!product) return;
-    trackEvent({ event: 'product_view', productId: product._id, productName: product.productName });
+    trackEvent({ event: 'product_view', productId: product._id, productName: product.productName }, !!user?.author);
   }, [product?._id]);
   const [chosenSize, setChosenSize] = useState("");
   const [count, setCount] = useState<number>(1);
@@ -64,7 +64,7 @@ export function ProductPage() {
       setOrders(newOrders);
       setCartFlashCount(cartFlashCount + 1);
       setAddedToCart(true);
-      trackEvent({ event: 'add_to_cart', productId: product._id, productName: product.productName });
+      trackEvent({ event: 'add_to_cart', productId: product._id, productName: product.productName }, !!user?.author);
     }
   }, [chosenSize, count, orders, cartFlashCount]);
 

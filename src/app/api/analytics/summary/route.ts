@@ -54,9 +54,24 @@ export async function GET(request: NextRequest) {
     }))
     .sort((a, b) => b.views - a.views);
 
+  // Per-article breakdown
+  const articleAgg = await AnalyticsEvent.aggregate([
+    { $match: { createdAt: { $gte: from }, event: 'article_view', articleId: { $exists: true } } },
+    { $group: { _id: { articleId: '$articleId', articleTitle: '$articleTitle' }, count: { $sum: 1 } } },
+  ]);
+
+  const byArticle = articleAgg
+    .map((row) => ({
+      articleId: row._id.articleId as string,
+      articleTitle: (row._id.articleTitle ?? row._id.articleId) as string,
+      views: row.count as number,
+    }))
+    .sort((a, b) => b.views - a.views);
+
   return NextResponse.json({
     funnel,
     byProduct,
+    byArticle,
     revenueTotal,
     period: { days, from: from.toISOString(), to: new Date().toISOString() },
   });

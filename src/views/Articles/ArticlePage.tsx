@@ -6,13 +6,14 @@ import { useData } from "../../data/useData";
 import { BannerNav } from "../../components/banner-nav";
 import parse from "html-react-parser";
 import { splitIntoLines } from "../../utils/articleUtils";
+import { trackEvent } from "../../utils/trackEvent";
 
 export function ArticlePage() {
   const { fetchArticles, fetchUsers } = useData();
   const params = useParams<{ id: string }>();
   const id = params.id;
 
-  const { articlesById, articlesLoaded, usersById, usersLoaded } = useStore((s) => s);
+  const { articlesById, articlesLoaded, usersById, usersLoaded, user } = useStore((s) => s);
   const router = useRouter();
   const article = articlesById[id!];
   const authorUser = article ? usersById[article.userID] : undefined;
@@ -23,6 +24,11 @@ export function ArticlePage() {
     fetchArticles();
     fetchUsers();
   }, [fetchArticles, fetchUsers]);
+
+  useEffect(() => {
+    if (!article) return;
+    trackEvent({ event: 'article_view', articleId: article._id, articleTitle: article.title }, !!user?.author);
+  }, [article?._id]);
 
   if (!articlesLoaded) return <div>Loading article...</div>;
   if (!usersLoaded) return <div>Loading users...</div>;
