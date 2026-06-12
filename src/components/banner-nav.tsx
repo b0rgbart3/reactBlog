@@ -105,6 +105,9 @@ export function BannerNav(props) {
         case "countdown":
           router.push("/countdown-landing");
           break;
+        case "bitcoin-widgets":
+          router.push("/bitcoin-widgets-landing");
+          break;
         case "products":
           router.push("/products");
           break;
@@ -223,6 +226,14 @@ export function BannerNav(props) {
               onClick={itemClick}
             >
               Millionth Block Countdown
+            </div>
+            <div
+              data-nav="bitcoin-widgets"
+              data-type="menuItem"
+              className="innerMenuOption"
+              onClick={itemClick}
+            >
+              Bitcoin Widgets (npm)
             </div>
             {orders && orders.length > 0 && (
               <div

@@ -85,6 +85,12 @@ export function Home() {
           >
             SimplCAGR
           </button>
+          <button
+            className="quickLink"
+            onClick={() => router.push("/bitcoin-widgets-landing")}
+          >
+            Bitcoin Widgets
+          </button>
         </div>
         <div className="home">
           <div className="mainColumn">
