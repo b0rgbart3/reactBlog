@@ -105,6 +105,9 @@ export function BannerNav(props) {
         case "countdown":
           router.push("/countdown-landing");
           break;
+        case "bitcoin-globe":
+          router.push("/bitcoin-globe-landing");
+          break;
         case "bitcoin-widgets":
           router.push("/bitcoin-widgets-landing");
           break;
@@ -203,37 +206,47 @@ export function BannerNav(props) {
             >
               Merch
             </div>
-            <div
-              data-nav="calculator"
-              data-type="menuItem"
-              className="innerMenuOption"
-              onClick={itemClick}
-            >
-              Bitcoin Retirement Calculator
-            </div>
-            <div
-              data-nav="simplcagr"
-              data-type="menuItem"
-              className="innerMenuOption"
-              onClick={itemClick}
-            >
-              simplCAGR Calculator
-            </div>
-            <div
-              data-nav="countdown"
-              data-type="menuItem"
-              className="innerMenuOption"
-              onClick={itemClick}
-            >
-              Millionth Block Countdown
-            </div>
-            <div
-              data-nav="bitcoin-widgets"
-              data-type="menuItem"
-              className="innerMenuOption"
-              onClick={itemClick}
-            >
-              Bitcoin Widgets (npm)
+            <div className="menuLandingGroup">
+              <div
+                data-nav="bitcoin-globe"
+                data-type="menuItem"
+                className="innerMenuOption"
+                onClick={itemClick}
+              >
+                Bitcoin Globe
+              </div>
+              <div
+                data-nav="calculator"
+                data-type="menuItem"
+                className="innerMenuOption"
+                onClick={itemClick}
+              >
+                Bitcoin Retirement Calculator
+              </div>
+              <div
+                data-nav="simplcagr"
+                data-type="menuItem"
+                className="innerMenuOption"
+                onClick={itemClick}
+              >
+                simplCAGR Calculator
+              </div>
+              <div
+                data-nav="countdown"
+                data-type="menuItem"
+                className="innerMenuOption"
+                onClick={itemClick}
+              >
+                Millionth Block Countdown
+              </div>
+              <div
+                data-nav="bitcoin-widgets"
+                data-type="menuItem"
+                className="innerMenuOption"
+                onClick={itemClick}
+              >
+                Bitcoin Widgets (npm)
+              </div>
             </div>
             {orders && orders.length > 0 && (
               <div

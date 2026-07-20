@@ -69,6 +69,12 @@ export function Home() {
           </button>
           <button
             className="quickLink"
+            onClick={() => router.push("/bitcoin-globe-landing")}
+          >
+            Bitcoin Globe
+          </button>
+          <button
+            className="quickLink"
             onClick={() => router.push("/calculator-landing")}
           >
             BTC Retirement Calculator
