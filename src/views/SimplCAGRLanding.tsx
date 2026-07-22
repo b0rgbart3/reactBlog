@@ -7,7 +7,12 @@ export function SimplCAGRLanding() {
     <div className="siteWrapper">
       <BannerNav page="simplcagr" />
       <div className="basicContainer">
-        <h1>simplCAGR — Compound Annual Growth Rate Calculator</h1>
+        <h1>
+          SimplCAGR —{" "}
+          <span className="subhead">
+            Compound Annual Growth Rate Calculator
+          </span>
+        </h1>
         <Image
           src="/simplCAGR.jpg"
           alt="simplCAGR calculator screenshot"

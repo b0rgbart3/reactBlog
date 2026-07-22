@@ -1,16 +1,21 @@
-'use client';
+"use client";
 import { BannerNav } from "../components/banner-nav";
 import Image from "next/image";
 
-export function BitcoinGlobeLanding() {
+export function SynchronicityLanding() {
   return (
     <div className="siteWrapper">
-      <BannerNav page="bitcoin-globe" />
+      <BannerNav page="synchronicity" />
       <div className="basicContainer">
-        <h1>Bitcoin Globe</h1>
+        <h1>
+          Synchronicity:{" "}
+          <span className="subhead">
+            A Visualization of the Bitcoin Network
+          </span>
+        </h1>
         <Image
-          src="/bitcoin-globe.jpg"
-          alt="Bitcoin Globe visualization"
+          src="/synchronicity.jpg"
+          alt="Synchronicity visualization"
           width={800}
           height={450}
           style={{
@@ -21,13 +26,13 @@ export function BitcoinGlobeLanding() {
           }}
         />
         <p>
-          An interactive 3D globe visualization for Bitcoin data. See the Bitcoin
-          network come alive on a spinning globe — block activity, node distribution,
-          and live price data rendered in real time, right in your browser.
+          An interactive 3D globe visualization for Bitcoin data. See the
+          Bitcoin network come alive on a spinning globe — block activity, node
+          distribution, and live transaction data rendered in real time.
         </p>
 
         <a
-          href="https://bitcoin-globe.moon-math.online/"
+          href="https://synchronicity.moon-math.online/"
           target="_blank"
           rel="noopener noreferrer"
           style={{
@@ -42,7 +47,7 @@ export function BitcoinGlobeLanding() {
             textDecoration: "none",
           }}
         >
-          Open Bitcoin Globe
+          Open Synchronicity
         </a>
       </div>
     </div>

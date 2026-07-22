@@ -69,9 +69,9 @@ export function Home() {
           </button>
           <button
             className="quickLink"
-            onClick={() => router.push("/bitcoin-globe-landing")}
+            onClick={() => router.push("/synchronicity-landing")}
           >
-            Bitcoin Globe
+            Synchronicity
           </button>
           <button
             className="quickLink"

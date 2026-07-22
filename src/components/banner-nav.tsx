@@ -105,8 +105,8 @@ export function BannerNav(props) {
         case "countdown":
           router.push("/countdown-landing");
           break;
-        case "bitcoin-globe":
-          router.push("/bitcoin-globe-landing");
+        case "synchronicity":
+          router.push("/synchronicity-landing");
           break;
         case "bitcoin-widgets":
           router.push("/bitcoin-widgets-landing");
@@ -208,12 +208,12 @@ export function BannerNav(props) {
             </div>
             <div className="menuLandingGroup">
               <div
-                data-nav="bitcoin-globe"
+                data-nav="synchronicity"
                 data-type="menuItem"
                 className="innerMenuOption"
                 onClick={itemClick}
               >
-                Bitcoin Globe
+                Synchronicity
               </div>
               <div
                 data-nav="calculator"
