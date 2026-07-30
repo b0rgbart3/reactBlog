@@ -43,6 +43,7 @@ export function useData() {
     try {
       const res = await axios.get("/api/articles");
       setArticles(res.data.data);
+      console.log('Fetched articles:', res.data.data);
       const cats: string[] = res.data.data.map((article) => article.category);
       const uniqueCategories: string[] = [...new Set(cats)];
       if (uniqueCategories && uniqueCategories[0] !== '') {

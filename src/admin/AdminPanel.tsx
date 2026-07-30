@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Article, Meme, Product, Resource, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
@@ -9,10 +9,58 @@ import { TableHeader } from "./TableHeader";
 import { ExpandableTable } from "./ExpandableTable";
 import { PlacedOrdersTable } from "./PlacedOrdersTable";
 import { AnalyticsTable } from "./AnalyticsTable";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  createColumnHelper,
+  getSortedRowModel,
+  type SortingState,
+} from "@tanstack/react-table";
+
+const col = createColumnHelper<Article>();
+
+const articleColumns = [
+  col.accessor("title", { header: "Title" }),
+  col.accessor("category", { header: "Category" }),
+  col.accessor("readyToPublish", {
+    header: "Status",
+    cell: (info) => (info.getValue() ? "Published" : "Draft"),
+  }),
+  col.accessor("lastModifiedDate", {
+    header: "Last Modified",
+    cell: (info) => {
+      const raw = info.getValue();
+      const d = raw ? new Date(raw) : null;
+      return d && !isNaN(d.getTime()) ? d.toLocaleDateString() : "—";
+    },
+  }),
+];
 
 export function AdminPanel() {
-  const { refresh, kill, backUpDB, wipeAndSeed, killProduct, displayMerch, fetchResources, killResource, fetchMemes, killMeme } =
-    useData();
+  const {
+    refresh,
+    kill,
+    backUpDB,
+    wipeAndSeed,
+    killProduct,
+    displayMerch,
+    fetchResources,
+    killResource,
+    fetchMemes,
+    killMeme,
+  } = useData();
+
+  const { data: queryArticles, isLoading } = useQuery({
+    queryKey: ["articles"],
+    queryFn: async (): Promise<Article[]> => {
+      const res = await axios.get("/api/articles");
+      return res.data.data; // ← twice: Axios .data, then your API's .data
+    },
+  });
+
   const {
     user,
     articles,
@@ -26,6 +74,8 @@ export function AdminPanel() {
     memes,
   } = useStore((s) => s);
 
+  const [articleSorting, setArticleSorting] = useState<SortingState>([]);
+
   useEffect(() => {
     fetchResources();
     fetchMemes();
@@ -35,6 +85,15 @@ export function AdminPanel() {
   const showMerchLocal =
     settings?.find((s) => s.name === "showMerchLocal")?.booleanValue ?? false;
   const router = useRouter();
+
+  const articlesTable = useReactTable({
+    data: queryArticles ?? [],
+    columns: articleColumns,
+    state: { sorting: articleSorting },
+    onSortingChange: setArticleSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
 
   const editArticle = useCallback(
     (article: Article) => {
@@ -92,9 +151,12 @@ export function AdminPanel() {
     router.push(`/meme/new`);
   }, [router]);
 
-  const editMeme = useCallback((meme: Meme) => {
-    router.push(`/meme/edit/${meme._id}`);
-  }, [router]);
+  const editMeme = useCallback(
+    (meme: Meme) => {
+      router.push(`/meme/edit/${meme._id}`);
+    },
+    [router],
+  );
 
   const killAMeme = useCallback((memeToKill: Meme) => {
     const confirmDelete =
@@ -106,9 +168,12 @@ export function AdminPanel() {
     refresh();
   }, []);
 
-  const editResource = useCallback((resource: Resource) => {
-    router.push(`/resource/edit/${resource._id}`);
-  }, [router]);
+  const editResource = useCallback(
+    (resource: Resource) => {
+      router.push(`/resource/edit/${resource._id}`);
+    },
+    [router],
+  );
 
   const killAResource = useCallback((resourceToKill: Resource) => {
     const confirmDelete =
@@ -155,10 +220,61 @@ export function AdminPanel() {
           <div className="articlesListLabel">
             Articles
             <span className="articlesListCount">{articles?.length ?? 0}</span>
+            <span>
+              {" "}
+              (Query says: {isLoading ? "…" : (queryArticles?.length ?? 0)})
+            </span>
           </div>
           <div className="articlesContainer">
-            {categories?.map((category, categoryIndex) => (
-              <div className="articleCategoryGroup" key={`category-${category}-${categoryIndex}`}>
+            <div className="articlesContainer">
+              {isLoading ? (
+                <p>Loading…</p>
+              ) : (
+                <table className="adminArticlesTable">
+                  <thead>
+                    {articlesTable.getHeaderGroups().map((hg) => (
+                      <tr key={hg.id}>
+                        {hg.headers.map((h) => (
+                          <th
+                            key={h.id}
+                            onClick={h.column.getToggleSortingHandler()}
+                            style={{ cursor: "pointer", userSelect: "none" }}
+                          >
+                            {flexRender(
+                              h.column.columnDef.header,
+                              h.getContext(),
+                            )}
+                            {{ asc: " ▲", desc: " ▼" }[
+                              h.column.getIsSorted() as string
+                            ] ?? ""}
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody>
+                    {articlesTable.getRowModel().rows.map((row) => (
+                      <tr key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <td key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext(),
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            {/* {categories?.map((category, categoryIndex) => (
+              <div
+                className="articleCategoryGroup"
+                key={`category-${category}-${categoryIndex}`}
+              >
                 <div className="articleCategoryHeader">{category}</div>
                 {articles
                   ?.filter((a) => a.category === category)
@@ -167,13 +283,16 @@ export function AdminPanel() {
                       <div className="aaItem" onClick={() => editArticle(a)}>
                         {a.title}
                       </div>
-                      <div className="killButton" onClick={() => killArticle(a)}>
+                      <div
+                        className="killButton"
+                        onClick={() => killArticle(a)}
+                      >
                         ✕
                       </div>
                     </div>
                   ))}
               </div>
-            ))}
+            ))} */}
           </div>
         </ExpandableTable>
 
@@ -187,7 +306,10 @@ export function AdminPanel() {
           </div>
           <div className="articlesContainer">
             {resourceTypes?.map((type, typeIndex) => (
-              <div className="articleCategoryGroup" key={`type-${type}-${typeIndex}`}>
+              <div
+                className="articleCategoryGroup"
+                key={`type-${type}-${typeIndex}`}
+              >
                 <div className="articleCategoryHeader">{type}</div>
                 {resources
                   ?.filter((r) => r.type === type)
@@ -196,7 +318,10 @@ export function AdminPanel() {
                       <div className="aaItem" onClick={() => editResource(r)}>
                         {r.title}
                       </div>
-                      <div className="killButton" onClick={() => killAResource(r)}>
+                      <div
+                        className="killButton"
+                        onClick={() => killAResource(r)}
+                      >
                         ✕
                       </div>
                     </div>

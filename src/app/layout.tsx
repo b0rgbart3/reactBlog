@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/src/styles/index.scss";
 import "katex/dist/katex.min.css";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://moon-math.online"),
@@ -35,7 +36,9 @@ export default function RootLayout({
         />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
