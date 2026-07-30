@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Article, Meme, Product, Resource, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
@@ -17,12 +17,19 @@ import {
   flexRender,
   createColumnHelper,
   getSortedRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   type SortingState,
 } from "@tanstack/react-table";
+import { type ColumnDef } from "@tanstack/react-table";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const col = createColumnHelper<Article>();
 
-const articleColumns = [
+const buildArticleColumns = (
+  onEdit: (a: Article) => void,
+  onDelete: (a: Article) => void,
+): ColumnDef<Article>[] => [
   col.accessor("title", { header: "Title" }),
   col.accessor("category", { header: "Category" }),
   col.accessor("readyToPublish", {
@@ -32,10 +39,27 @@ const articleColumns = [
   col.accessor("lastModifiedDate", {
     header: "Last Modified",
     cell: (info) => {
-      const raw = info.getValue();
+      const raw = info.getValue() as string;
       const d = raw ? new Date(raw) : null;
       return d && !isNaN(d.getTime()) ? d.toLocaleDateString() : "—";
     },
+  }),
+  col.display({
+    id: "actions",
+    header: "",
+    cell: (info) => (
+      <div style={{ display: "flex", gap: 8 }}>
+        <button className="aaItem" onClick={() => onEdit(info.row.original)}>
+          Edit
+        </button>
+        <button
+          className="killButton"
+          onClick={() => onDelete(info.row.original)}
+        >
+          ✕
+        </button>
+      </div>
+    ),
   }),
 ];
 
@@ -52,6 +76,19 @@ export function AdminPanel() {
     fetchMemes,
     killMeme,
   } = useData();
+
+  const queryClient = useQueryClient();
+  const deleteArticle = useMutation({
+    mutationFn: async (id: string) => {
+      // match your existing kill() auth shape: { id, key }
+      await axios.delete(`/api/articles/${id}`, {
+        data: { id: user._id, key: user.phash },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
 
   const { data: queryArticles, isLoading } = useQuery({
     queryKey: ["articles"],
@@ -75,6 +112,7 @@ export function AdminPanel() {
   } = useStore((s) => s);
 
   const [articleSorting, setArticleSorting] = useState<SortingState>([]);
+  const [articleFilter, setArticleFilter] = useState("");
 
   useEffect(() => {
     fetchResources();
@@ -86,21 +124,40 @@ export function AdminPanel() {
     settings?.find((s) => s.name === "showMerchLocal")?.booleanValue ?? false;
   const router = useRouter();
 
-  const articlesTable = useReactTable({
-    data: queryArticles ?? [],
-    columns: articleColumns,
-    state: { sorting: articleSorting },
-    onSortingChange: setArticleSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
-
   const editArticle = useCallback(
     (article: Article) => {
       router.push(`/article/edit/${article._id}`);
     },
     [router],
   );
+
+  const handleDelete = useCallback(
+    (article: Article) => {
+      const ok = window.confirm(
+        `Delete "${article.title}"? This cannot be undone.`,
+      );
+      if (!ok) return;
+      deleteArticle.mutate(article._id);
+    },
+    [deleteArticle],
+  );
+
+  const articleColumns = useMemo(
+    () => buildArticleColumns(editArticle, handleDelete),
+    [editArticle, handleDelete],
+  );
+  const articlesTable = useReactTable({
+    data: queryArticles ?? [],
+    columns: articleColumns,
+    state: { sorting: articleSorting, globalFilter: articleFilter },
+    onSortingChange: setArticleSorting,
+    onGlobalFilterChange: setArticleFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: { pagination: { pageSize: 10 } },
+  });
 
   const editProduct = useCallback(
     (product: Product) => {
@@ -220,53 +277,83 @@ export function AdminPanel() {
           <div className="articlesListLabel">
             Articles
             <span className="articlesListCount">{articles?.length ?? 0}</span>
-            <span>
-              {" "}
-              (Query says: {isLoading ? "…" : (queryArticles?.length ?? 0)})
-            </span>
+            <input
+              value={articleFilter}
+              onChange={(e) => setArticleFilter(e.target.value)}
+              placeholder="Search articles…"
+              className="adminArticleSearch"
+              style={{ marginBottom: 12, padding: 6, width: 260 }}
+            />
           </div>
           <div className="articlesContainer">
             <div className="articlesContainer">
               {isLoading ? (
                 <p>Loading…</p>
               ) : (
-                <table className="adminArticlesTable">
-                  <thead>
-                    {articlesTable.getHeaderGroups().map((hg) => (
-                      <tr key={hg.id}>
-                        {hg.headers.map((h) => (
-                          <th
-                            key={h.id}
-                            onClick={h.column.getToggleSortingHandler()}
-                            style={{ cursor: "pointer", userSelect: "none" }}
-                          >
-                            {flexRender(
-                              h.column.columnDef.header,
-                              h.getContext(),
-                            )}
-                            {{ asc: " ▲", desc: " ▼" }[
-                              h.column.getIsSorted() as string
-                            ] ?? ""}
-                          </th>
-                        ))}
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody>
-                    {articlesTable.getRowModel().rows.map((row) => (
-                      <tr key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <>
+                  <table className="adminArticlesTable">
+                    <thead>
+                      {articlesTable.getHeaderGroups().map((hg) => (
+                        <tr key={hg.id}>
+                          {hg.headers.map((h) => (
+                            <th
+                              key={h.id}
+                              onClick={h.column.getToggleSortingHandler()}
+                              style={{ cursor: "pointer", userSelect: "none" }}
+                            >
+                              {flexRender(
+                                h.column.columnDef.header,
+                                h.getContext(),
+                              )}
+                              {{ asc: " ▲", desc: " ▼" }[
+                                h.column.getIsSorted() as string
+                              ] ?? ""}
+                            </th>
+                          ))}
+                        </tr>
+                      ))}
+                    </thead>
+                    <tbody>
+                      {articlesTable.getRowModel().rows.map((row) => (
+                        <tr key={row.id}>
+                          {row.getVisibleCells().map((cell) => (
+                            <td key={cell.id}>
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div
+                    style={{
+                      marginTop: 12,
+                      display: "flex",
+                      gap: 8,
+                      alignItems: "center",
+                    }}
+                  >
+                    <button
+                      onClick={() => articlesTable.previousPage()}
+                      disabled={!articlesTable.getCanPreviousPage()}
+                    >
+                      ‹ Prev
+                    </button>
+                    <button
+                      onClick={() => articlesTable.nextPage()}
+                      disabled={!articlesTable.getCanNextPage()}
+                    >
+                      Next ›
+                    </button>
+                    <span>
+                      Page {articlesTable.getState().pagination.pageIndex + 1}{" "}
+                      of {articlesTable.getPageCount()}
+                    </span>
+                  </div>
+                </>
               )}
             </div>
 
