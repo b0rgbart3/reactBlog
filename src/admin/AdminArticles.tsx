@@ -29,7 +29,7 @@ const buildArticleColumns = (
     cell: (info) => (info.getValue() ? "Published" : "Draft"),
   }),
   col.accessor("lastModifiedDate", {
-    header: "Last Modified",
+    header: "Modified",
     cell: (info) => {
       const raw = info.getValue() as string;
       const d = raw ? new Date(raw) : null;
@@ -105,7 +105,10 @@ export function AdminArticles() {
     [deleteArticle],
   );
 
-  const columns = useMemo(() => buildArticleColumns(handleDelete), [handleDelete]);
+  const columns = useMemo(
+    () => buildArticleColumns(handleDelete),
+    [handleDelete],
+  );
 
   const table = useReactTable({
     data: queryArticles ?? [],
@@ -154,7 +157,10 @@ export function AdminArticles() {
                           onClick={h.column.getToggleSortingHandler()}
                           style={{ cursor: "pointer", userSelect: "none" }}
                         >
-                          {flexRender(h.column.columnDef.header, h.getContext())}
+                          {flexRender(
+                            h.column.columnDef.header,
+                            h.getContext(),
+                          )}
                           {{ asc: " ▲", desc: " ▼" }[
                             h.column.getIsSorted() as string
                           ] ?? ""}
@@ -172,7 +178,10 @@ export function AdminArticles() {
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
                         </td>
                       ))}
                     </tr>
