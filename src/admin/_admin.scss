@@ -79,7 +79,7 @@
     text-transform: uppercase;
     color: rgba($admin-text, 0.5);
     margin-top: 16px;
-    margin-bottom: 6px;
+    margin-bottom: 20px;
 }
 
 .articlesListCount {
@@ -130,7 +130,7 @@
     box-sizing: border-box;
     font-size: 13px;
     color: rgba($admin-foreground, 0.9);
-    background-color: rgba($admin-neutral-color, 0.45);
+    background-color: transparent;
     outline: none;
     border-radius: $border-radius-sm;
     padding: 6px 10px;
