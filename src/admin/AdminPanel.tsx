@@ -1,12 +1,18 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Article, Meme, Product, Resource, useStore } from "../state/useStore";
 import { useData } from "../data/useData";
 import { DownloadJsonButton } from "./Download";
 import { UsersForm } from "./UsersForm";
-import { TableHeader } from "./TableHeader";
-import { ExpandableTable } from "./ExpandableTable";
+import { AdminTabs } from "./AdminTabs";
+import { AdminTable } from "./AdminTable";
 import { PlacedOrdersTable } from "./PlacedOrdersTable";
 import { AnalyticsTable } from "./AnalyticsTable";
 import { useQuery } from "@tanstack/react-query";
@@ -24,10 +30,31 @@ import {
 import { type ColumnDef } from "@tanstack/react-table";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+function TrashIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+    </svg>
+  );
+}
+
 const col = createColumnHelper<Article>();
 
 const buildArticleColumns = (
-  onEdit: (a: Article) => void,
   onDelete: (a: Article) => void,
 ): ColumnDef<Article>[] => [
   col.accessor("title", { header: "Title" }),
@@ -49,21 +76,50 @@ const buildArticleColumns = (
     header: "",
     cell: (info) => (
       <div style={{ display: "flex", gap: 8 }}>
-        <button className="aaItem" onClick={() => onEdit(info.row.original)}>
-          Edit
-        </button>
         <button
           className="killButton"
-          onClick={() => onDelete(info.row.original)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(info.row.original);
+          }}
         >
-          ✕
+          <TrashIcon />
         </button>
       </div>
     ),
   }),
 ];
 
+interface AdminTab {
+  id: string;
+  label: string;
+}
+
+const TABS: AdminTab[] = [
+  { id: "users", label: "users" },
+  { id: "articles", label: "articles" },
+  { id: "resources", label: "resources" },
+  { id: "memes", label: "memes" },
+  { id: "merchandise", label: "merchandise" },
+  { id: "placed-orders", label: "placed orders" },
+  { id: "analytics", label: "analytics" },
+  { id: "database", label: "database" },
+];
+
 export function AdminPanel() {
+  return (
+    <div className="adminPanel">
+      <div className="titleBar">Admin Panel</div>
+      <div className="adminContent">
+        <Suspense fallback={null}>
+          <AdminPanelContent />
+        </Suspense>
+      </div>
+    </div>
+  );
+}
+
+function AdminPanelContent() {
   const {
     refresh,
     kill,
@@ -78,6 +134,43 @@ export function AdminPanel() {
   } = useData();
 
   const queryClient = useQueryClient();
+
+  const {
+    user,
+    articles,
+    categories,
+    products,
+    productCategories,
+    users,
+    settings,
+    resources,
+    resourceTypes,
+    memes,
+  } = useStore((s) => s);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const visibleTabs = useMemo(
+    () =>
+      TABS.filter(
+        (t) => (t.id !== "users" && t.id !== "database") || user.sensi,
+      ),
+    [user.sensi],
+  );
+
+  const requestedTab = searchParams.get("tab");
+  const activeTab = visibleTabs.some((t) => t.id === requestedTab)
+    ? (requestedTab as string)
+    : (visibleTabs[0]?.id ?? "users");
+
+  const handleTabChange = useCallback(
+    (id: string) => {
+      router.replace(`/admin?tab=${id}`, { scroll: false });
+    },
+    [router],
+  );
+
   const deleteArticle = useMutation({
     mutationFn: async (id: string) => {
       // match your existing kill() auth shape: { id, key }
@@ -96,20 +189,8 @@ export function AdminPanel() {
       const res = await axios.get("/api/articles");
       return res.data.data; // ← twice: Axios .data, then your API's .data
     },
+    enabled: activeTab === "articles",
   });
-
-  const {
-    user,
-    articles,
-    categories,
-    products,
-    productCategories,
-    users,
-    settings,
-    resources,
-    resourceTypes,
-    memes,
-  } = useStore((s) => s);
 
   const [articleSorting, setArticleSorting] = useState<SortingState>([]);
   const [articleFilter, setArticleFilter] = useState("");
@@ -122,7 +203,6 @@ export function AdminPanel() {
     settings?.find((s) => s.name === "showMerch")?.booleanValue ?? false;
   const showMerchLocal =
     settings?.find((s) => s.name === "showMerchLocal")?.booleanValue ?? false;
-  const router = useRouter();
 
   const editArticle = useCallback(
     (article: Article) => {
@@ -143,8 +223,8 @@ export function AdminPanel() {
   );
 
   const articleColumns = useMemo(
-    () => buildArticleColumns(editArticle, handleDelete),
-    [editArticle, handleDelete],
+    () => buildArticleColumns(handleDelete),
+    [handleDelete],
   );
   const articlesTable = useReactTable({
     data: queryArticles ?? [],
@@ -262,28 +342,30 @@ export function AdminPanel() {
     }
   }, []);
 
-  return (
-    <div className="adminPanel">
-      <div className="titleBar">Admin Panel</div>
-      <div className="adminContent">
-        <ExpandableTable title="users" open={false}>
-          <UsersForm />
-        </ExpandableTable>
+  let sectionContent: React.ReactNode = null;
+  switch (activeTab) {
+    case "users":
+      sectionContent = <UsersForm />;
+      break;
 
-        <ExpandableTable title="articles" open={false}>
-          <div onClick={newArticle} className="newArticleButton">
-            + Add a New Article
-          </div>
+    case "articles":
+      sectionContent = (
+        <>
           <div className="articlesListLabel">
-            Articles
-            <span className="articlesListCount">{articles?.length ?? 0}</span>
             <input
               value={articleFilter}
               onChange={(e) => setArticleFilter(e.target.value)}
               placeholder="Search articles…"
               className="adminArticleSearch"
-              style={{ marginBottom: 12, padding: 6, width: 260 }}
             />
+            <div className="articlesListRight">
+              <span className="articlesListCount">
+                {articlesTable.getFilteredRowModel().rows.length} Articles
+              </span>
+              <div onClick={newArticle} className="adminActionButton">
+                New Article
+              </div>
+            </div>
           </div>
           <div className="articlesContainer">
             <div className="articlesContainer">
@@ -315,7 +397,11 @@ export function AdminPanel() {
                     </thead>
                     <tbody>
                       {articlesTable.getRowModel().rows.map((row) => (
-                        <tr key={row.id}>
+                        <tr
+                          key={row.id}
+                          onClick={() => editArticle(row.original)}
+                          style={{ cursor: "pointer" }}
+                        >
                           {row.getVisibleCells().map((cell) => (
                             <td key={cell.id}>
                               {flexRender(
@@ -337,12 +423,14 @@ export function AdminPanel() {
                     }}
                   >
                     <button
+                      className="adminActionButton"
                       onClick={() => articlesTable.previousPage()}
                       disabled={!articlesTable.getCanPreviousPage()}
                     >
                       ‹ Prev
                     </button>
                     <button
+                      className="adminActionButton"
                       onClick={() => articlesTable.nextPage()}
                       disabled={!articlesTable.getCanNextPage()}
                     >
@@ -356,34 +444,14 @@ export function AdminPanel() {
                 </>
               )}
             </div>
-
-            {/* {categories?.map((category, categoryIndex) => (
-              <div
-                className="articleCategoryGroup"
-                key={`category-${category}-${categoryIndex}`}
-              >
-                <div className="articleCategoryHeader">{category}</div>
-                {articles
-                  ?.filter((a) => a.category === category)
-                  .map((a) => (
-                    <div className="aaRow" key={a._id}>
-                      <div className="aaItem" onClick={() => editArticle(a)}>
-                        {a.title}
-                      </div>
-                      <div
-                        className="killButton"
-                        onClick={() => killArticle(a)}
-                      >
-                        ✕
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            ))} */}
           </div>
-        </ExpandableTable>
+        </>
+      );
+      break;
 
-        <ExpandableTable title="resources" open={false}>
+    case "resources":
+      sectionContent = (
+        <>
           <div onClick={newResource} className="newArticleButton">
             + Add a New Resource
           </div>
@@ -409,16 +477,20 @@ export function AdminPanel() {
                         className="killButton"
                         onClick={() => killAResource(r)}
                       >
-                        ✕
+                        <TrashIcon />
                       </div>
                     </div>
                   ))}
               </div>
             ))}
           </div>
-        </ExpandableTable>
+        </>
+      );
+      break;
 
-        <ExpandableTable title="memes" open={false}>
+    case "memes":
+      sectionContent = (
+        <>
           <div onClick={newMeme} className="newArticleButton">
             + Add a Meme
           </div>
@@ -433,14 +505,18 @@ export function AdminPanel() {
                   {m.title || "(untitled)"}
                 </div>
                 <div className="killButton" onClick={() => killAMeme(m)}>
-                  ✕
+                  <TrashIcon />
                 </div>
               </div>
             ))}
           </div>
-        </ExpandableTable>
+        </>
+      );
+      break;
 
-        <ExpandableTable title="merchandise" open={false}>
+    case "merchandise":
+      sectionContent = (
+        <>
           <div className="merchToggleRow">
             <div className="merchToggle" onClick={toggleMerchLocal}>
               <div
@@ -495,40 +571,51 @@ export function AdminPanel() {
                       className="killProduct"
                       onClick={() => killAProduct(product)}
                     >
-                      ✕
+                      <TrashIcon />
                     </div>
                   </div>
                 ))}
               </div>
             </>
           )}
-        </ExpandableTable>
+        </>
+      );
+      break;
 
-        <ExpandableTable title="placed orders" open={false}>
-          <PlacedOrdersTable />
-        </ExpandableTable>
+    case "placed-orders":
+      sectionContent = <PlacedOrdersTable />;
+      break;
 
-        <ExpandableTable title="analytics" open={false}>
-          <AnalyticsTable />
-        </ExpandableTable>
+    case "analytics":
+      sectionContent = <AnalyticsTable />;
+      break;
 
-        <ExpandableTable title="database" open={false}>
-          {user.sensi && (
-            <>
-              <div className="caution" onClick={() => backUp()}>
-                Backup the current DataBase.
-              </div>
-              <div className="JsonData">
-                Download data to your local download folder:<br></br>
-                <DownloadJsonButton articles={articles} users={users} />
-              </div>
-              <div className="dangerous" onClick={() => clearOut()}>
-                Wipe out the DataBase, and start over with original seed data.
-              </div>
-            </>
-          )}
-        </ExpandableTable>
-      </div>
-    </div>
+    case "database":
+      sectionContent = user.sensi ? (
+        <>
+          <div className="caution" onClick={() => backUp()}>
+            Backup the current DataBase.
+          </div>
+          <div className="JsonData">
+            Download data to your local download folder:<br></br>
+            <DownloadJsonButton articles={articles} users={users} />
+          </div>
+          <div className="dangerous" onClick={() => clearOut()}>
+            Wipe out the DataBase, and start over with original seed data.
+          </div>
+        </>
+      ) : null;
+      break;
+  }
+
+  return (
+    <>
+      <AdminTabs
+        tabs={visibleTabs}
+        activeId={activeTab}
+        onChange={handleTabChange}
+      />
+      <AdminTable>{sectionContent}</AdminTable>
+    </>
   );
 }
